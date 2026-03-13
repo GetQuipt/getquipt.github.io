@@ -1,5 +1,4 @@
 ---
-layout: docs
 title: API Reference
 nav_order: 5
 ---
