@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Application API
+nav_order: 4
 ---
 
 The Application API provides access to the aggregate data sets and cross-cutting services that underpin each subsystem. Rather than being tied to a specific workflow like orders or inventory, these services are available across all integration types and can be used by both vendors and channels.
