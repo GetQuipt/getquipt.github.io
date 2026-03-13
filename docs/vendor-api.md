@@ -1,5 +1,4 @@
 ---
-layout: docs
 title: Vendor API
 nav_order: 2
 ---
