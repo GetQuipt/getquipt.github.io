@@ -1,0 +1,45 @@
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
+  <style>
+  [id^="tag-"] {
+     scroll-margin-top: 80px; /* adjust based on your header height */
+  }
+  </style>
+</head><body>
+  <div id="swagger"></div>
+  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+  <script>
+    window.ui = SwaggerUIBundle({ url: 'openapi/openapi.yaml', dom_id: '#swagger', deepLinking: true, docExpansion: 'none', onComplete: () => {
+        if (window.location.hash) {
+          setTimeout(() => {
+            const hash = decodeURIComponent(window.location.hash);
+            const tagName = hash.startsWith('#/') ? hash.slice(2) : null;
+            if (tagName) {
+              const id = 'operations-tag-' + tagName.replace(/\s+/g, '_');
+              const el = document.getElementById(id);
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 500);
+        }
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Intercept clicks on markdown links pointing to #tag-...
+      document.body.addEventListener("click", function (e) {
+        const target = e.target.closest("a[href^='#tag-']");
+        if (target) {
+          e.preventDefault();
+          const id = 'operations-' + target.getAttribute("href").substring(1); // remove leading #
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+            // update URL fragment without reload
+            history.replaceState(null, null, "#" + id);
+          }
+        }
+      });
+    });
+  </script>
+</body></html>

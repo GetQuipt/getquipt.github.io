@@ -1,0 +1,9 @@
+title: Quipt API Documentation
+description: Documentation for the Quipt API
+baseurl: ""
+url: "https://getquipt.github.io"
+theme: jekyll-theme-cayman
+
+# Tell Jekyll which files to include
+include:
+  - "*.md"

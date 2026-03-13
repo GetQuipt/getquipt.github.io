@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quipt Category Browser</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; gap: 20px; }
+    #tree { width: 40%; border-right: 1px solid #ccc; padding-right: 10px; }
+    #details { width: 60%; padding-left: 10px; }
+    ul { list-style-type: none; padding-left: 20px; }
+    li { margin: 4px 0; cursor: pointer; }
+    .loading::after { content: " (loading...)"; font-style: italic; color: gray; }
+    .collapsed > ul { display: none; }
+    h2 { margin-top: 0; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 6px; text-align: left; }
+    .section { margin-top: 15px; }
+  </style>
+  <script>
+    async function fetchCategories(parentId = "") {
+      const url = parentId
+        ? `https://api.getquipt.com/v2/categories/${parentId}`
+        : "https://api.getquipt.com/v2/categories";
+
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.Result || [];
+    }
+
+    async function fetchAttributes(categoryId) {
+      const url = `https://api.getquipt.com/v2/categories/${categoryId}/attributes`;
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.Result || [];
+    }
+
+    async function renderTree(nodes, container) {
+      const ul = document.createElement("ul");
+
+      nodes.forEach(node => {
+        const li = document.createElement("li");
+        li.textContent = node.Name + (!node.IsLeaf ? " ▸" : "");
+        li.dataset.id = node.Id;
+        li.classList.add("collapsed");
+
+        li.addEventListener("click", async (e) => {
+          e.stopPropagation();
+
+          // 1. Always fetch attributes and show details
+          const attributes = await fetchAttributes(node.Id);
+          node.Attributes = attributes;
+          showDetails(node);
+
+          // 2. Expand/collapse if not a leaf
+          if (!node.IsLeaf) {
+            if (li.classList.contains("collapsed")) {
+              li.classList.remove("collapsed");
+              li.classList.add("loading");
+
+              if (!li.dataset.loaded) {
+                const children = await fetchCategories(node.Id);
+                await renderTree(children, li);
+                li.dataset.loaded = "true";
+              }
+
+              li.classList.remove("loading");
+            } else {
+              li.classList.add("collapsed");
+            }
+          }
+        });
+
+        ul.appendChild(li);
+      });
+
+      container.innerHTML = ""; // clear placeholder/loading text
+      container.appendChild(ul);
+    }
+
+    function showDetails(node) {
+      const details = document.getElementById("details");
+      details.innerHTML = `
+        <h2>${node.Name}</h2>
+        <p><strong>ID:</strong> ${node.Id}</p>
+        <p><strong>Leaf Node:</strong> ${node.IsLeaf}</p>
+        <p><strong>Sort:</strong> ${node.Sort}</p>
+        <p><strong>Template Ready:</strong> ${node.IsTemplateReady}</p>
+        <p><strong>Has Title/Features Builder:</strong> ${node.HasTitleAndFeaturesBuilder}</p>
+
+        <div class="section">
+          <h3>Attributes</h3>
+          ${node.Attributes && node.Attributes.length > 0
+            ? `
+              <table>
+                <tr><th>Code</th><th>Text</th><th>Required</th><th>Options</th></tr>
+                ${node.Attributes.map(a => `
+                  <tr>
+                    <td>${a.Code}</td>
+                    <td>${a.Text}</td>
+                    <td>${a.IsRequired}</td>
+                    <td>${(a.Options || []).join(", ")}</td>
+                  </tr>
+                `).join("")}
+              </table>
+            ` : "<p>None</p>"}
+        </div>
+
+        <div class="section">
+          <h3>Sections</h3>
+          ${node.Sections && node.Sections.length > 0
+            ? `<ul>${node.Sections.map(s => `<li>${s.Name}</li>`).join("")}</ul>`
+            : "<p>None</p>"}
+        </div>
+
+        <div class="section">
+          <h3>Requirements</h3>
+          <pre>${JSON.stringify(node.Requirements, null, 2)}</pre>
+        </div>
+      `;
+    }
+
+    window.onload = async () => {
+      const root = document.getElementById("tree");
+      root.innerHTML = "<p>Loading categories...</p>";
+      const rootCategories = await fetchCategories();
+      renderTree(rootCategories, root);
+    };
+  </script>
+</head>
+<body>
+  <div id="tree"><h2>Category Tree</h2></div>
+  <div id="details"><h2>Details</h2><p>Select a category to view details</p></div>
+</body>
+</html>
