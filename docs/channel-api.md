@@ -1,5 +1,4 @@
 ---
-layout: docs
 title: Channel API
 nav_order: 3
 ---
