@@ -8,7 +8,7 @@ title: API Reference
 <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
 <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
 <script>
-    SwaggerUIBundle({ url: 'openapi/openapi.yaml', dom_id: '#swagger', deepLinking: true, docExpansion: 'none', onComplete: () => {
+    SwaggerUIBundle({ url: 'openapi.yaml', dom_id: '#swagger', deepLinking: true, docExpansion: 'none', onComplete: () => {
         if (window.location.hash) {
           setTimeout(() => {
             const hash = decodeURIComponent(window.location.hash);
