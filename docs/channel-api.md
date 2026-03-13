@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Channel API
+nav_order: 3
 ---
 
 The Channel API is intended for partners that list and sell inventory through Quipt. The sections below cover each integration area available to automate the entire fulfillment life cycle — from surfacing merchant inventory on your storefront through to managing post-order requests.
