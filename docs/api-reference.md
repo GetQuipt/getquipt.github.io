@@ -6,7 +6,7 @@ nav_order: 5
 <div id="swagger"></div>
 
 <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
-<link rel="stylesheet" href="{{ '/assets/custom.scss' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/custom.css' | relative_url }}">
 
 <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
 <script>
