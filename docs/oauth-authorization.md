@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: OAuth 1.0a Authorization
 ---
 
