@@ -3,7 +3,8 @@ description: Documentation for the Quipt API
 baseurl: ""
 url: "https://getquipt.github.io"
 remote_theme: just-the-docs/just-the-docs
-
+# Navigation order
+nav_enabled: true
 # Tell Jekyll which files to include
 include:
   - "*.md"
