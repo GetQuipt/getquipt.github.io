@@ -9,52 +9,52 @@ servers:
 tags:
   - name: Vendor API - Inventory
     description: >- 
-      Perform merchant workflows. 
+      Perform vendor workflows. 
       The inventory services below provide the ability to manage inventory listings within Quipt. 
       The provided services can be used manage everything from quantity synchronization to creating, publishing, and listing the inventory on partner sites. 
     externalDocs:
-      description: Find out more about a merchant inventory integration.
+      description: Find out more about a vendor inventory integration.
       url: https://getquipt.github.io/vendor-api.html#inventory
   - name: Vendor API - Orders
     description: >-
-      The order services provide the ability to manage orders expected to be fulfilled by Quipt merchants. 
+      The order services provide the ability to manage orders expected to be fulfilled by Quipt vendors. 
       The provided services may be used to download, acknowledge, ship, invoice, and cancel orders.
     externalDocs:
-      description: Find out more about a merchant order integration.
+      description: Find out more about a vendor order integration.
       url: https://getquipt.github.io/vendor-api.html#orders  
   - name: Vendor API - Shipments
     description: >-
       The shipment services provide a mechanism to manage shipments if your company is using ‘Ship via Quipt’.
       The primary purpose is to download the necessary packing and shipment documents. 
     externalDocs:
-      description: Find out more about a merchant shipment integration.
+      description: Find out more about a vendor shipment integration.
       url: https://getquipt.github.io/vendor-api.html#shipments
   - name: Vendor API - Requests
     description: >-
-      The request services below provide the ability to manage requests expected to be completed by Quipt merchants. 
+      The request services below provide the ability to manage requests expected to be completed by Quipt vendors. 
       The provided services can be used to download, acknowledge, and close requests. 
     externalDocs:
-      description: Find out more about a merchant request integration.
+      description: Find out more about a vendor request integration.
       url: https://getquipt.github.io/vendor-api.html#requests  
   - name: Channel API - Virtual Inventory
     description: >-
       The inventory services below provide the ability to manage virtual inventory listings within Quipt.
     externalDocs:
-      description: Find out more about a retailer integration.
+      description: Find out more about a channel integration.
       url: https://getquipt.github.io/channel-api.html#inventory
   - name: Channel API - Orders
     description: >-
-      The order services provide the ability to manage orders expected to be fulfilled by Quipt merchants. 
+      The order services provide the ability to manage orders expected to be fulfilled by Quipt vendors. 
       The provided services may be used to download, acknowledge, ship, invoice, and cancel orders. 
     externalDocs:
-      description: Find out more about a retailer integration.
+      description: Find out more about a channel integration.
       url: https://getquipt.github.io/channel-api.html#orders
   - name: Channel API - Requests
     description: >-
-      The request services below provide the ability to manage requests expected to be completed by Quipt merchants. 
+      The request services below provide the ability to manage requests expected to be completed by Quipt vendors. 
       The provided services can be used to download, acknowledge, and close requests.
     externalDocs:
-      description: Find out more about a retailer integration.
+      description: Find out more about a channel integration.
       url: https://getquipt.github.io/channel-api.html#requests     
   - name: Catalog API
     description: Search product catalog.
@@ -283,7 +283,7 @@ paths:
       tags:
         - Vendor API - Orders
       summary: Get orders.
-      description: Retrieve a paged list of orders placed by a retailer.
+      description: Retrieve a paged list of orders placed by a channel.
       operationId: getFulfillmentOrders
       parameters:
         - name: pageSize
@@ -395,7 +395,7 @@ paths:
       tags:
         - Vendor API - Orders
       summary: Get order by purchase order number.
-      description: Retrieve an order by the retailer’s original order number.
+      description: Retrieve an order by the channel’s original order number.
       operationId: getFulfillmentOrdersByPO
       parameters:
         - name: channelIdOrCode
@@ -446,7 +446,7 @@ paths:
       tags:
         - Vendor API - Orders
       summary: Get orders by channel.
-      description: Retrieve a paged list of orders received by a specific retailer.
+      description: Retrieve a paged list of orders received by a specific channel.
       operationId: getFulfillmentOrdersByChannel
       parameters:
         - name: channelIdOrCode
@@ -1447,17 +1447,17 @@ paths:
       security:
         - quipt_auth:
             - read:feeds 
-  /inventory/virtual/{merchantId}/{pageSize}/{pageNumber}:
+  /inventory/virtual/{vendorId}/{pageSize}/{pageNumber}:
     get:
       tags:
         - Channel API - Virtual Inventory
       summary: Get virtual inventory items.
-      description:  Retrieve a paged list of virtual inventory items currently listed by a specific merchant.
+      description:  Retrieve a paged list of virtual inventory items currently listed by a specific vendor.
       operationId: getVirtualInventory
       parameters:
-        - name: merchantId
+        - name: vendorId
           in: path
-          description: The merchant to lookup. Can be the partner reference or the internal id.
+          description: The vendor to lookup. Can be the partner reference or the internal id.
           required: true
           schema:
             type: string
@@ -1580,7 +1580,7 @@ paths:
       tags:
         - Channel API - Orders
       summary: Get orders.
-      description: Retrieve a paged list of orders placed by a retailer.
+      description: Retrieve a paged list of orders placed by a channel.
       operationId: getPurchaseOrders
       parameters:
         - name: pageSize
@@ -1696,7 +1696,7 @@ paths:
       tags:
         - Channel API - Orders
       summary: Get orders by purchase order number.
-      description: Retrieve orders by the retailer's original order number.
+      description: Retrieve orders by the channel's original order number.
       operationId: getPurchaseOrdersByPO
       parameters:
         - name: poNumber
@@ -3075,16 +3075,16 @@ components:
           format: guid
         SKU:
           type: string
-          description: The SKU that is provided by the merchant.
+          description: The SKU that is provided by the vendor.
           x-nullable: true
         Cost:
-          description: The cost of the item to the merchant. This value is used to provide profit reporting. To exclude tracking enter a value of 0.
+          description: The cost of the item to the vendor. This value is used to provide profit reporting. To exclude tracking enter a value of 0.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
         Feeds:
           type: array
-          description: The retailer specific pricing details.
+          description: The channel specific pricing details.
           x-nullable: true
           items:
             $ref: '#components/schemas/Feed'
@@ -4019,7 +4019,7 @@ components:
 
         8 = IntegrationPartner
 
-        16 = Retailer
+        16 = Channel
 
         256 = EndPoint
       x-enumFlags: true
@@ -4029,7 +4029,7 @@ components:
       - OutsourcedBuilder
       - DailyDeal
       - IntegrationPartner
-      - Retailer
+      - Channel
       - EndPoint
       enum:
       - 0
@@ -4335,7 +4335,7 @@ components:
       additionalProperties: false
       properties:
         Promotion:
-          description: Promotional details for this retailer.
+          description: Promotional details for this channel.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/PromotionDetail'
@@ -4346,10 +4346,10 @@ components:
           x-nullable: true
         On:
           type: boolean
-          description: Whether or not to feed the item to the retailer.
+          description: Whether or not to feed the item to the channel.
           x-nullable: true
         Channel:
-          description: The retailer to receive the details.
+          description: The channel to receive the details.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Channel'
@@ -4363,11 +4363,11 @@ components:
           description: >-
             The identifier used to tie the item to the channel partner. 
 
-            This value is provided by the retailer.
+            This value is provided by the channel.
           x-nullable: true
         MapURL:
           type: string
-          description: The URL to the retailer's web site for the item.
+          description: The URL to the channel's web site for the item.
           x-nullable: true
         AltSKU:
           type: string
@@ -4376,7 +4376,7 @@ components:
           type: string
           x-nullable: true
         ARP:
-          description: The actual retailer price (ARP) as provided by channel partner.
+          description: The actual channel price (ARP) as provided by channel partner.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
@@ -4406,7 +4406,7 @@ components:
       description: >-
         Represents the details of a promotion, including pricing and allocation information for a specific item and
 
-        retailer.
+        channel.
       additionalProperties: false
       properties:
         Pricing:
@@ -4415,7 +4415,7 @@ components:
           oneOf:
           - $ref: '#components/schemas/PromoPricing'
         Allocation:
-          description: The allocation details for this retailer.
+          description: The allocation details for this channel.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/QuantityWithDate'
@@ -4850,16 +4850,16 @@ components:
           x-nullable: true
         SKU:
           type: string
-          description: The SKU that is provided by the merchant.
+          description: The SKU that is provided by the vendor.
           x-nullable: true
         Cost:
-          description: The cost of the item to the merchant. This value is used to provide profit reporting. To exclude tracking enter a value of 0.
+          description: The cost of the item to the vendor. This value is used to provide profit reporting. To exclude tracking enter a value of 0.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
         Feeds:
           type: array
-          description: The retailer specific pricing details.
+          description: The channel specific pricing details.
           x-nullable: true
           items:
             $ref: '#components/schemas/Feed'
@@ -5113,7 +5113,7 @@ components:
           format: guid
           x-nullable: true
         Summary:
-          description: Grouping of values used regularly with retailers.
+          description: Grouping of values used regularly with channels.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/SummaryDetail'
@@ -5169,7 +5169,7 @@ components:
           x-nullable: true
         MapURL:
           type: string
-          description: The URL to the retailer's web site for the item.
+          description: The URL to the channel's web site for the item.
           x-nullable: true
         Blocked:
           x-nullable: true
@@ -5200,7 +5200,7 @@ components:
           description: The last comment applied to item.
           x-nullable: true
         ARP:
-          description: Retailer pricing provided.
+          description: Channel pricing provided.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
@@ -5216,14 +5216,14 @@ components:
           - $ref: '#components/schemas/InventoryAdvStatusType'
         MapId:
           type: string
-          description: The retailer's identifier for the item.
+          description: The channel's identifier for the item.
           x-nullable: true
         SKU:
           type: string
           description: The SKU used to identify the item.
           x-nullable: true
         Vendor:
-          description: The merchant.
+          description: The vendor.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Vendor'
@@ -5260,7 +5260,7 @@ components:
           x-nullable: true
         SKU:
           type: string
-          description: The merchant's unique identifier.
+          description: The vendor's unique identifier.
           x-nullable: true
         MPN:
           type: string
@@ -5276,7 +5276,7 @@ components:
           description: The assigned UPC.
           x-nullable: true
         MSRP:
-          description: Manufacturer suggested retailer price.
+          description: Manufacturer suggested channel price.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
@@ -5620,7 +5620,7 @@ components:
       additionalProperties: false
       properties:
         ARP:
-          description: Retailer pricing provided.
+          description: Channel pricing provided.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Amount'
@@ -5636,7 +5636,7 @@ components:
           - $ref: '#components/schemas/InventoryAdvStatusType'
         MapId:
           type: string
-          description: The retailer's identifier for the item.
+          description: The channel's identifier for the item.
           x-nullable: true
         Id:
           type: string
@@ -5648,7 +5648,7 @@ components:
           description: The SKU used to identify the item.
           x-nullable: true
         Vendor:
-          description: The merchant.
+          description: The vendor.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Vendor'
@@ -5724,7 +5724,7 @@ components:
       properties:
         MapId:
           type: string
-          description: The retailer's identifier for the item.
+          description: The channel's identifier for the item.
           x-nullable: true
         Id:
           type: string
@@ -5736,7 +5736,7 @@ components:
           description: The SKU used to identify the item.
           x-nullable: true
         Vendor:
-          description: The merchant.
+          description: The vendor.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Vendor'
@@ -6095,7 +6095,7 @@ components:
           x-nullable: true
         InvoiceNumber:
           type: string
-          description: The invoice number assigned by the merchant.
+          description: The invoice number assigned by the vendor.
           x-nullable: true
         InvoicedAt:
           type: string
@@ -6185,16 +6185,16 @@ components:
           - $ref: '#components/schemas/PurchaseOrderType'
         ReferenceNumber:
           type: string
-          description: A merchant assigned document number.
+          description: A vendor assigned document number.
           x-nullable: true
         BillTo:
-          description: The retailers billing address.
+          description: The channels billing address.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/BillToAddress'
         SpecialInstructions:
           type: string
-          description: Notes provided by retailer for special handling.
+          description: Notes provided by channel for special handling.
           x-nullable: true
         SignatureOption:
           description: Whether or not to require signature on related shipments.
@@ -6208,11 +6208,11 @@ components:
           - $ref: '#components/schemas/SignatureOptionType'
         FOB:
           description: >-
-            When the retailer takes possession of the shipment. 
+            When the channel takes possession of the shipment. 
 
-            In the case of 'Destination' the merchant owns the product until delivered. 
+            In the case of 'Destination' the vendor owns the product until delivered. 
 
-            With 'Origin' the retailer owns as soon as the product leaves the merchants dock.
+            With 'Origin' the channel owns as soon as the product leaves the vendors dock.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/FreeOnboardOptionType'
@@ -6222,7 +6222,7 @@ components:
           oneOf:
           - $ref: '#components/schemas/CarrierMethodBase'
         AccountDetails:
-          description: Specifics on a retailer's carrier account.
+          description: Specifics on a channel's carrier account.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/CarrierAccount'
@@ -6231,15 +6231,15 @@ components:
           description: >-
             Custom values provided by channel. 
 
-            The data provided here varies between each retailer partner.
+            The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         Lines:
           type: array
@@ -6370,7 +6370,7 @@ components:
           format: guid
           x-nullable: true
         Channel:
-          description: The retailer.
+          description: The channel.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/CompanyBase'
@@ -6729,19 +6729,19 @@ components:
           - $ref: '#components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         RequestedShipDate:
           type: string
-          description: The date the retailer requested a shipment.
+          description: The date the channel requested a shipment.
           format: date-time
           x-nullable: true
         Status:
@@ -6769,7 +6769,7 @@ components:
       properties:
         MapId:
           type: string
-          description: The retailer's identifier for the item.
+          description: The channel's identifier for the item.
           x-nullable: true
         Id:
           type: string
@@ -6781,7 +6781,7 @@ components:
           description: The SKU used to identify the item.
           x-nullable: true
         Vendor:
-          description: The merchant.
+          description: The vendor.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Vendor'
@@ -7120,19 +7120,19 @@ components:
           - $ref: '#components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         RequestedShipDate:
           type: string
-          description: The date the retailer requested a shipment.
+          description: The date the channel requested a shipment.
           format: date-time
           x-nullable: true
         Status:
@@ -7182,7 +7182,7 @@ components:
       properties:
         MapId:
           type: string
-          description: The retailer's identifier for the item.
+          description: The channel's identifier for the item.
           x-nullable: true
         Id:
           type: string
@@ -7194,7 +7194,7 @@ components:
           description: The SKU used to identify the item.
           x-nullable: true
         Vendor:
-          description: The merchant.
+          description: The vendor.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Vendor'
@@ -7717,7 +7717,7 @@ components:
           type: boolean
         SSCC:
           type: string
-          description: The SSCC code assigned to the shipment if requested by retailer.
+          description: The SSCC code assigned to the shipment if requested by channel.
           x-nullable: true
         Id:
           type: string
@@ -8035,19 +8035,19 @@ components:
           - $ref: '#components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         RequestedShipDate:
           type: string
-          description: The date the retailer requested a shipment.
+          description: The date the channel requested a shipment.
           format: date-time
           x-nullable: true
         Status:
@@ -8263,7 +8263,7 @@ components:
           description: The invoice date.
           format: date-time
         Channel:
-          description: The retailer that placed the original order.
+          description: The channel that placed the original order.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Channel'
@@ -8322,21 +8322,21 @@ components:
           description: >-
             Custom values provided by channel. 
 
-            The data provided here varies between each retailer partner.
+            The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
           description: >-
             Custom values provided by channel. 
 
-            The data provided here varies between each retailer partner.
+            The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
           description: >-
             Custom values provided by channel. 
 
-            The data provided here varies between each retailer partner.
+            The data provided here varies between each channel partner.
           x-nullable: true
         Lines:
           type: array
@@ -8370,19 +8370,19 @@ components:
           x-nullable: true
         MapId:
           type: string
-          description: The invoiced MapId. This is a Quipt generated value synchronized with the retailer.
+          description: The invoiced MapId. This is a Quipt generated value synchronized with the channel.
           x-nullable: true
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         LineNumber:
           type: integer
@@ -8993,16 +8993,16 @@ components:
           - $ref: '#components/schemas/PurchaseOrderType'
         ReferenceNumber:
           type: string
-          description: A merchant assigned document number.
+          description: A vendor assigned document number.
           x-nullable: true
         BillTo:
-          description: The retailers billing address.
+          description: The channels billing address.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/BillToAddress'
         SpecialInstructions:
           type: string
-          description: Notes provided by retailer for special handling.
+          description: Notes provided by channel for special handling.
           x-nullable: true
         SignatureOption:
           description: Whether or not to require signature on related shipments.
@@ -9016,11 +9016,11 @@ components:
           - $ref: '#components/schemas/SignatureOptionType'
         FOB:
           description: >-
-            When the retailer takes possession of the shipment. 
+            When the channel takes possession of the shipment. 
 
-            In the case of 'Destination' the merchant owns the product until delivered. 
+            In the case of 'Destination' the vendor owns the product until delivered. 
 
-            With 'Origin' the retailer owns as soon as the product leaves the merchants dock.
+            With 'Origin' the channel owns as soon as the product leaves the vendors dock.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/FreeOnboardOptionType'
@@ -9030,7 +9030,7 @@ components:
           oneOf:
           - $ref: '#components/schemas/CarrierMethodBase'
         AccountDetails:
-          description: Specifics on a retailer's carrier account.
+          description: Specifics on a channel's carrier account.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/CarrierAccount'
@@ -9039,15 +9039,15 @@ components:
           description: >-
             Custom values provided by channel. 
 
-            The data provided here varies between each retailer partner.
+            The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each retailer partner.
+          description: Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         Lines:
           type: array
@@ -11177,7 +11177,7 @@ components:
           description: The service request action reference number.
           x-nullable: true
         FOB:
-          description: When the retailer takes possession of the shipment. In the case of 'Destination' the merchant owns the product until delivered. With 'Origin' the retailer owns as soon as the product leaves the merchants dock.
+          description: When the channel takes possession of the shipment. In the case of 'Destination' the vendor owns the product until delivered. With 'Origin' the channel owns as soon as the product leaves the vendors dock.
           oneOf:
           - $ref: '#components/schemas/FreeOnboardOptionType'
         Status:
@@ -11386,7 +11386,7 @@ components:
           description: >-
             The identifier used to tie the item to the channel partner. 
 
-            This valued is provided by the retailer.
+            This valued is provided by the channel.
           x-nullable: true
         UserDefined1:
           type: string
@@ -11594,7 +11594,7 @@ components:
           description: >-
             The identifier used to tie the item to the channel partner. 
 
-            This valued is provided by the retailer.
+            This valued is provided by the channel.
           x-nullable: true
         UserDefined1:
           type: string
@@ -12746,7 +12746,7 @@ components:
           oneOf:
           - $ref: '#components/schemas/Tracking'
         Channel:
-          description: The retailer that returned the item.
+          description: The channel that returned the item.
           x-nullable: true
           oneOf:
           - $ref: '#components/schemas/Channel'
@@ -14892,7 +14892,7 @@ components:
           - $ref: '#components/schemas/EstValueDetail'
         Channels:
           type: array
-          description: Retailer specific details.
+          description: Channel specific details.
           x-nullable: true
           items:
             $ref: '#components/schemas/Channel2'
@@ -14932,7 +14932,7 @@ components:
       properties:
         Name:
           type: string
-          description: The retailer name.
+          description: The channel name.
           x-nullable: true
         BuyBox:
           description: The buy box information.
