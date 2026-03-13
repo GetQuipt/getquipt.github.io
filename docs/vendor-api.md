@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Vendor API
+nav_order: 2
 ---
 
 The Vendor API is intended for partners that sell inventory through Quipt. The sections below cover each integration area available to automate the entire fulfillment life cycle — from listing inventory through to payment reconciliation.
