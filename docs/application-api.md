@@ -10,9 +10,9 @@ The Application API currently covers four areas:
 | Subsystem | Purpose |
 |---|---|
 | [Notifications](#notifications) | Subscribe to and monitor in-app events across all workflows |
-| [Taxonomy](https://getquipt.github.io/api-reference#operations-tag-Taxonomy_API) | Access the category and attribute structure used to classify inventory |
-| [Carriers](https://getquipt.github.io/api-reference#operations-tag-Carrier_API) | Retrieve available carriers and shipping methods |
-| [Catalog](https://getquipt.github.io/api-reference#operations-tag-Catalog_API) | Access the shared product catalog for reference data |
+| [Taxonomy](api-reference.md#operations-tag-Taxonomy_API) | Access the category and attribute structure used to classify inventory |
+| [Carriers](api-reference.md#operations-tag-Carrier_API) | Retrieve available carriers and shipping methods |
+| [Catalog](api-reference.md#operations-tag-Catalog_API) | Access the shared product catalog for reference data |
 
 ---
 
