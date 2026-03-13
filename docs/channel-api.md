@@ -5,7 +5,7 @@ title: Channel API
 
 The Channel API is intended for partners that list and sell inventory through Quipt. The sections below cover each integration area available to automate the entire fulfillment life cycle — from surfacing merchant inventory on your storefront through to managing post-order requests.
 
-A [Postman collection](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/PostmanQuiptRetailerAPI.zip) is available to explore the endpoints interactively.
+A [Postman collection](https://getquipt.github.io/images/PostmanQuiptRetailerAPI.zip) is available to explore the endpoints interactively.
 
 > Use cases throughout this document are for demonstration purposes only and are not intended to cover every possible error state.
 
@@ -21,7 +21,7 @@ A fully integrated retailer implementation spans three subsystems:
 | [Orders](#orders) | Place orders, track shipment status, communicate with the merchant, and request cancellations |
 | [Requests](#requests) | Initiate and track post-order returns, communicate updates, and manage cancellations |
 
-The Retailer API is complementary to the [Vendor API](merchant-api.md). Where the Vendor API describes the fulfillment workflow from the seller's perspective, the Retailer API describes it from the buyer's perspective. Understanding both is useful when troubleshooting cross-party workflows such as order acknowledgements and return credits.
+The Retailer API is complementary to the [Vendor API](vendor-api.md). Where the Vendor API describes the fulfillment workflow from the seller's perspective, the Retailer API describes it from the buyer's perspective. Understanding both is useful when troubleshooting cross-party workflows such as order acknowledgements and return credits.
 
 ---
 
@@ -34,7 +34,7 @@ As a retailer, you do not own the inventory — you surface it. The Inventory su
 There are two approaches to staying synchronized:
 
 - **Polling** — Periodically query for new items or availability changes and process them in batches. This is the simpler approach and works well when near-real-time accuracy is not critical.
-- **Notifications** — Subscribe to inventory change events so your system is alerted as updates occur, rather than discovering them on the next poll cycle. This reduces latency and API call volume for high-frequency catalogs. See the [Notifications](https://getquipt.github.io/WebSDK/#operations-tag-Notification_API) reference for setup details.
+- **Notifications** — Subscribe to inventory change events so your system is alerted as updates occur, rather than discovering them on the next poll cycle. This reduces latency and API call volume for high-frequency catalogs. See the [Notifications](api-reference.md#operations-tag-Notification_API) reference for setup details.
 
 Acknowledging items is an important part of the inventory workflow. An acknowledgement signals to Quipt that your system has received and processed the item or update, which allows it to be cleared from the queue and prevents it from being returned in subsequent calls.
 
@@ -42,21 +42,21 @@ Acknowledging items is an important part of the inventory workflow. An acknowled
 
 Poll for items that have been newly listed by merchants and are not yet known to your system. For each item retrieved, post an acknowledgement to confirm receipt. Store the item details locally to power your storefront without requiring a live API call on every page load.
 
-![Get new items and acknowledge](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-inventory-new.png)
+![Get new items and acknowledge](https://getquipt.github.io/images/retailer-inventory-new.png)
 
 **Use Case 2 — Get availability and acknowledge**
 
 Poll for availability changes on items already in your catalog. Availability changes include quantity updates and price changes. Acknowledge each change after processing to clear it from the queue. This is the primary mechanism for keeping your storefront's stock levels and pricing accurate.
 
-![Get availability and acknowledge](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-inventory-update.png)
+![Get availability and acknowledge](https://getquipt.github.io/images/retailer-inventory-update.png)
 
 **Use Case 3 — Using Notifications: get recently updated items, acknowledge, and archive**
 
 Rather than polling on a fixed schedule, use the Notifications subsystem to receive alerts when items are updated. Retrieve the flagged items, process the changes, acknowledge receipt, and archive the notification to remove it from the active queue. This pattern is recommended for catalogs where pricing or availability changes frequently, as it reduces unnecessary polling and ensures updates are reflected on your storefront promptly.
 
-![Get recently updated items via notifications, acknowledge, and archive](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-inventory-notification-update.png)
+![Get recently updated items via notifications, acknowledge, and archive](https://getquipt.github.io/images/retailer-inventory-notification-update.png)
 
-For full details on available endpoints see the [Inventory](https://getquipt.github.io/WebSDK/#/operations-tag-Channel_API_-_Virtual_Inventory) reference.
+For full details on available endpoints see the [Inventory](api-reference.md#operations-tag-Channel_API_-_Virtual_Inventory) reference.
 
 ---
 
@@ -80,27 +80,27 @@ The typical order flow is:
 
 Submit a new purchase order to Quipt for routing to the appropriate merchant. Include the item identifier, quantity, shipping address, and any retailer-specific reference numbers needed to reconcile the order in your system. Store the returned Quipt order identifier locally for use in subsequent status and shipment queries.
 
-![Create order](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-order-create.png)
+![Create order](https://getquipt.github.io/images/retailer-order-create.png)
 
 **Use Case 2 — Get shipments**
 
 Poll for shipment details on open orders. When the merchant ships the item, Quipt will have carrier and tracking information available. Retrieve this to update your order management system and notify your customer. Continue polling until all line items on the order have been shipped or the order is otherwise resolved.
 
-![Get shipments](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-order-status.png)
+![Get shipments](https://getquipt.github.io/images/retailer-order-status.png)
 
 **Use Case 3 — Post message**
 
 Post a message on an order to communicate with the merchant. Messages are attached to the order record and visible to both parties, creating a traceable thread for questions about fulfillment, special handling instructions, or issue resolution. This is preferable to out-of-band communication as it keeps the full context with the order.
 
-![Post message on order](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-order-message.png)
+![Post message on order](https://getquipt.github.io/images/retailer-order-message.png)
 
 **Use Case 4 — Request cancellation**
 
 Submit a cancellation request for an order that has not yet been shipped. The merchant will receive the request and confirm or deny it. Monitor the order status after submitting — a cancellation request does not guarantee cancellation, and the merchant may have already begun fulfillment.
 
-![Request order cancellation](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-order-cancel.png)
+![Request order cancellation](https://getquipt.github.io/images/retailer-order-cancel.png)
 
-For full details on available endpoints see the [Orders](https://getquipt.github.io/WebSDK/#/operations-tag-Channel_API_-_Orders) reference.
+For full details on available endpoints see the [Orders](api-reference.md#operations-tag-Channel_API_-_Orders) reference.
 
 ---
 
@@ -125,27 +125,27 @@ The key stages of a retailer-initiated return are:
 
 Submit a return request against a fulfilled order. Include the order identifier, the reason for the return, and any condition notes that will help the merchant assess the item on receipt. The request is routed to the merchant for acknowledgement.
 
-![Create new return request](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-request-return-create.png)
+![Create new return request](https://getquipt.github.io/images/retailer-request-return-create.png)
 
 **Use Case 2 — Monitor requests**
 
 Poll for status changes on open return requests. Status will progress as the merchant acknowledges the request, receives the item, and processes the credit. Store request state locally to avoid reprocessing resolved items and to drive any customer-facing status updates in your system.
 
-![Monitor request status](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-request-return-status.png)
+![Monitor request status](https://getquipt.github.io/images/retailer-request-return-status.png)
 
 **Use Case 3 — Post message**
 
 Post a message on a request to communicate with the merchant. This is the same mechanism as order messaging and serves the same purpose — keeping communication in context and auditable. Use it to provide return shipping details, clarify the return reason, or follow up on a pending credit.
 
-![Post message on request](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-request-return-message.png)
+![Post message on request](https://getquipt.github.io/images/retailer-request-return-message.png)
 
 **Use Case 4 — Request cancellation**
 
 Submit a cancellation request for a return that is no longer needed. As with order cancellations, this is a request rather than an immediate action — the merchant will confirm or deny. Monitor the request status after submitting to confirm the outcome.
 
-![Request cancellation of return](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/retailer-request-return-cancel.png)
+![Request cancellation of return](https://getquipt.github.io/images/retailer-request-return-cancel.png)
 
-For full details on available endpoints see the [Requests](https://getquipt.github.io/WebSDK/#/operations-tag-Channel_API_-_Requests) reference.
+For full details on available endpoints see the [Requests](api-reference.md#operations-tag-Channel_API_-_Requests) reference.
 
 ---
 
@@ -153,10 +153,10 @@ For full details on available endpoints see the [Requests](https://getquipt.gith
 
 With an understanding of each subsystem, the recommended integration path for a new retailer is:
 
-1. **[Set up your application](https://github.com/GetQuipt/WebSDK/wiki/Connect-to-Quipt)** and obtain your OAuth credentials.
-2. **[Authorize a user](https://github.com/GetQuipt/WebSDK/wiki/OAuth-Authorization)** to generate the token pair needed to sign API requests.
+1. **[Set up your application](application-setup.md)** and obtain your OAuth credentials.
+2. **[Authorize a user](oauth-authorization.md)** to generate the token pair needed to sign API requests.
 3. Implement **Inventory** to begin surfacing merchant listings on your storefront.
 4. Implement **Orders** to enable purchasing and order tracking.
 5. Add **Requests** to support customer returns.
 
-For context on how your orders and returns appear from the merchant's side, see the [Vendor API](https://github.com/GetQuipt/WebSDK/wiki/Vendor-Workflows) overview.
+For context on how your orders and returns appear from the merchant's side, see the [Vendor API](vendor-api.md) overview.
