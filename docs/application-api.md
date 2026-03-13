@@ -10,9 +10,9 @@ The Application API currently covers four areas:
 | Subsystem | Purpose |
 |---|---|
 | [Notifications](#notifications) | Subscribe to and monitor in-app events across all workflows |
-| [Taxonomy](https://getquipt.github.io/WebSDK/#operations-tag-Taxonomy_API) | Access the category and attribute structure used to classify inventory |
-| [Carriers](https://getquipt.github.io/WebSDK/#operations-tag-Carrier_API) | Retrieve available carriers and shipping methods |
-| [Catalog](https://getquipt.github.io/WebSDK/#operations-tag-Catalog_API) | Access the shared product catalog for reference data |
+| [Taxonomy](https://getquipt.github.io/api-reference#operations-tag-Taxonomy_API) | Access the category and attribute structure used to classify inventory |
+| [Carriers](https://getquipt.github.io/api-reference#operations-tag-Carrier_API) | Retrieve available carriers and shipping methods |
+| [Catalog](https://getquipt.github.io/api-reference#operations-tag-Catalog_API) | Access the shared product catalog for reference data |
 
 ---
 
@@ -51,13 +51,13 @@ The recommended pattern for a polling-based integration is: retrieve unread noti
 
 Poll the notification queue for unread messages, display or process them within your application, and mark each as read or archive it once handled. This is the baseline pattern for any notification-driven integration.
 
-![Get user notifications for management in a custom client](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/notification-list.png?raw=true)
+![Get user notifications for management in a custom client](https://getquipt.github.io/images/notification-list.png)
 
 **Use Case 2 — Subscribe to price change events and synchronize internal pricing**
 
 Subscribe the user to the `VirtualInventory` Price Change event (event code `44`). Poll for unread `VirtualInventory` notifications filtered to that event. For each notification received, call `GET /inventory/virtual/id/{id}` using the `RecordId` to retrieve the updated item details, then apply the new pricing to your internal systems. Archive the notification once the update has been applied.
 
-![Subscribe to price change, monitor notifications, look up item, and update pricing](hhttps://github.com/GetQuipt/WebSDK/blob/main/docs/images/notification-monitor.png)
+![Subscribe to price change, monitor notifications, look up item, and update pricing](https://getquipt.github.io/images/notification-monitor.png)
 
 ---
 
@@ -314,5 +314,5 @@ The tables below list all available event types and codes that can be subscribed
 
 ## Related
 
-- [Channel API — Inventory](https://github.com/GetQuipt/WebSDK/wiki/Channel-Workflows#inventory) — Describes how Notifications integrate into the channel inventory sync workflow.
-- [Vendor API](https://github.com/GetQuipt/WebSDK/wiki/Vendor-Workflows) — Notifications can be used to drive event-based processing across the vendor fulfillment lifecycle.
+- [Channel API — Inventory](channel-api.md#inventory) — Describes how Notifications integrate into the channel inventory sync workflow.
+- [Vendor API](vendor-api.md) — Notifications can be used to drive event-based processing across the vendor fulfillment lifecycle.
