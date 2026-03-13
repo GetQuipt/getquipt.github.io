@@ -1,5 +1,4 @@
 ---
-layout: docs
 title: Application API
 nav_order: 4
 ---
