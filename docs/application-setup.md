@@ -2,7 +2,7 @@
 layout: docs
 title: Application Setup
 parent: Getting Started
-nav_order: 3
+nav_order: 2
 ---
 
 Before connecting to Quipt users, you must register your application in Quipt to obtain the credentials required for the OAuth 1.0a authorization process.
