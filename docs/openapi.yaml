@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Quipt - OpenAPI 3.0
   description: >-
-    View the [wiki](https://github.com/GetQuipt/WebSDK/wiki/Welcome) for more details.
+    View the [wiki](https://getquipt.github.io) for more details.
   version: 2.0.0
 servers:
   - url: https://api.getquipt.com/v2
@@ -14,48 +14,48 @@ tags:
       The provided services can be used manage everything from quantity synchronization to creating, publishing, and listing the inventory on partner sites. 
     externalDocs:
       description: Find out more about a merchant inventory integration.
-      url: https://v1.getquipt.com/api/merchant-api/#inventory
+      url: https://getquipt.github.io/vendor-api.html#inventory
   - name: Vendor API - Orders
     description: >-
       The order services provide the ability to manage orders expected to be fulfilled by Quipt merchants. 
       The provided services may be used to download, acknowledge, ship, invoice, and cancel orders.
     externalDocs:
       description: Find out more about a merchant order integration.
-      url: https://v1.getquipt.com/api/merchant-api/#orders  
+      url: https://getquipt.github.io/vendor-api.html#orders  
   - name: Vendor API - Shipments
     description: >-
       The shipment services provide a mechanism to manage shipments if your company is using ‘Ship via Quipt’.
       The primary purpose is to download the necessary packing and shipment documents. 
     externalDocs:
       description: Find out more about a merchant shipment integration.
-      url: https://v1.getquipt.com/api/merchant-api/#shipments
+      url: https://getquipt.github.io/vendor-api.html#shipments
   - name: Vendor API - Requests
     description: >-
       The request services below provide the ability to manage requests expected to be completed by Quipt merchants. 
       The provided services can be used to download, acknowledge, and close requests. 
     externalDocs:
       description: Find out more about a merchant request integration.
-      url: https://v1.getquipt.com/api/merchant-api/#requests   
+      url: https://getquipt.github.io/vendor-api.html#requests  
   - name: Channel API - Virtual Inventory
     description: >-
       The inventory services below provide the ability to manage virtual inventory listings within Quipt.
     externalDocs:
       description: Find out more about a retailer integration.
-      url: https://getquipt.com/api/retailer-api/
+      url: https://getquipt.github.io/channel-api.html#inventory
   - name: Channel API - Orders
     description: >-
       The order services provide the ability to manage orders expected to be fulfilled by Quipt merchants. 
       The provided services may be used to download, acknowledge, ship, invoice, and cancel orders. 
     externalDocs:
       description: Find out more about a retailer integration.
-      url: https://getquipt.com/api/retailer-api/ 
+      url: https://getquipt.github.io/channel-api.html#orders
   - name: Channel API - Requests
     description: >-
       The request services below provide the ability to manage requests expected to be completed by Quipt merchants. 
       The provided services can be used to download, acknowledge, and close requests.
     externalDocs:
       description: Find out more about a retailer integration.
-      url: https://getquipt.com/api/retailer-api/     
+      url: https://getquipt.github.io/channel-api.html#requests     
   - name: Catalog API
     description: Search product catalog.
   - name: Notification API
@@ -86,7 +86,7 @@ tags:
       - Any category may have Attributes associated, but refer to categories with IsLeaf: true to see those required for a category.
     externalDocs:
       description: View taxonomy.
-      url: https://getquipt.github.io/WebSDK/taxonomy.html  
+      url: https://getquipt.github.io/taxonomy.html  
 paths:
   /inventory/physical:
     post:
@@ -15884,7 +15884,7 @@ components:
         Enter username and password. 
         
 
-        *Note:* Basic Authentication must be used for *'Try It Out'* requests only. Production integration must use OAuth 1.0 authentication.
+        *Note:* Basic Authentication may only be used for *'Try It Out'* requests. Production integrations must use OAuth 1.0a authorization.
 
 
         ## OAuth 1.0 Authentication
