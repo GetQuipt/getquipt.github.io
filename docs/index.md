@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Getting Started
+nav_order: 1
 ---
 
 Click [here](api-reference.md) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
