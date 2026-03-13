@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: API Reference
+nav_order: 4
 ---
 
 <div id="swagger"></div>
