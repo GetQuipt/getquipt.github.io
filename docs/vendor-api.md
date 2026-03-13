@@ -5,7 +5,7 @@ title: Vendor API
 
 The Vendor API is intended for partners that sell inventory through Quipt. The sections below cover each integration area available to automate the entire fulfillment life cycle — from listing inventory through to payment reconciliation.
 
-A [Postman collection](https://github.com/GetQuipt/WebSDK/raw/refs/heads/main/docs/images/PostmanQuiptMerchantAPI.zip) is available to explore the endpoints interactively.
+A [Postman collection](https://getquipt.github.io/images/PostmanQuiptMerchantAPI.zip) is available to explore the endpoints interactively.
 
 > Use cases throughout this document are for demonstration purposes only and are not intended to cover every possible error state.
 
@@ -42,15 +42,15 @@ The key principle: _start with what you have_. A partial automation is better th
 
 Your system pushes new or updated SKUs to Quipt. If the item already exists it is updated; if it does not exist it is created. This is the primary mechanism for keeping your Quipt catalog in sync with your internal product database.
 
-![Create or update inventory items](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-inventory-list.png)
+![Create or update inventory items](https://getquipt.github.io/images/merchant-inventory-list.png)
 
 **Use Case 2 — Monitor listed items and update cost if changed**
 
 Your system periodically polls listed inventory and compares cost against your internal pricing. If the cost has changed, an update is pushed to Quipt. This is useful for partners whose pricing fluctuates frequently and who need Quipt to reflect current cost at all times.
 
-![Monitor listed inventory and update cost](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-inventory-monitor.png)
+![Monitor listed inventory and update cost](https://getquipt.github.io/images/merchant-inventory-monitor.png)
 
-For full details on available endpoints see the [Inventory](https://getquipt.github.io/WebSDK/#operations-tag-Vendor_API_-_Inventory) reference.
+For full details on available endpoints see the [Inventory](api-reference.md#operations-tag-Vendor_API_-_Inventory) reference.
 
 ---
 
@@ -82,27 +82,27 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 
 Poll for orders in a new or open state and store them locally for processing. Storing orders locally allows downstream processes (shipment, invoicing) to operate without redundant API calls.
 
-![Get new orders cut to merchant](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-orders-list.png)
+![Get new orders cut to merchant](https://getquipt.github.io/images/merchant-orders-list.png)
 
 **Use Case 2 — Order shipped by merchant**
 
 After fulfillment, post the shipment details (carrier, tracking number, ship date) to Quipt. The retailer is notified and the order moves to a shipped state.
 
-![Order shipped by merchant](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-orders-ship.png)
+![Order shipped by merchant](https://getquipt.github.io/images/merchant-orders-ship.png)
 
 **Use Case 3 — Order canceled by merchant**
 
 If an accepted order cannot be fulfilled, submit a rejection acknowledgement to cancel it. This should be done as early as possible to allow the retailer to source the item elsewhere.
 
-![Order canceled by merchant](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-orders-cancel.png)
+![Order canceled by merchant](https://getquipt.github.io/images/merchant-orders-cancel.png)
 
 **Use Case 4 — Order invoiced by the merchant**
 
 After shipment, post the invoice details using the invoice service. Note that invoicing can alternatively be handled via the ship service or Auto Invoice — this use case demonstrates the standalone invoice service approach.
 
-![Order invoiced by merchant](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-orders-invoice.png)
+![Order invoiced by merchant](https://getquipt.github.io/images/merchant-orders-invoice.png)
 
-For full details on available endpoints see the [Orders](https://getquipt.github.io/WebSDK/#operations-tag-Vendor_API_-_Orders) reference.
+For full details on available endpoints see the [Orders](api-reference.md#operations-tag-Vendor_API_-_Orders) reference.
 
 ---
 
@@ -123,15 +123,15 @@ When shipping via Quipt, the API provides:
 
 Poll for shipments associated with open purchase orders. Download labels and packing slips for printing, then acknowledge receipt to update shipment status.
 
-![Get new shipments](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-shipments-list.png)
+![Get new shipments](https://getquipt.github.io/images/merchant-shipments-list.png)
 
 **Use Case 2 — Invoice completed shipments**
 
 After a shipment has been picked up or handed to the carrier, post invoice details at the shipment level. This is the preferred invoicing approach when orders ship in multiple packages, as each package can be invoiced independently.
 
-![Invoice completed shipments](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-shipments-invoice.png)
+![Invoice completed shipments](https://getquipt.github.io/images/merchant-shipments-invoice.png)
 
-For full details on available endpoints see the [Shipments](https://getquipt.github.io/WebSDK/#operations-tag-Vendor_API_-_Shipments) reference.
+For full details on available endpoints see the [Shipments](api-reference.md#operations-tag-Vendor_API_-_Shipments) reference.
 
 ---
 
@@ -157,11 +157,11 @@ Returns are the most common request type. There are two points of initiation:
 
 **Retailer-initiated return** — The customer contacts the retailer to request a return. The retailer approves and submits the request to Quipt. From that point, the item is expected to be shipped back to the merchant. Upon receipt and inspection, the merchant issues a credit to the retailer.
 
-![Retailer-initiated return flow](https://v1.getquipt.com/wp-content/uploads/2015/06/requests-merchant-flow-retailer-initiated.png)
+![Retailer-initiated return flow](https://getquipt.github.io/images/merchant-requests-merchant-flow-retailer-initiated.png)
 
 **Merchant-initiated (vendor-initiated) return** — The item is returned to the merchant without prior notification, such as a refused or undeliverable shipment. In this case the merchant initiates the return request in Quipt to begin the credit process.
 
-![Merchant-initiated return flow](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-requests-merchant-flow-merchant-initiated.png)
+![Merchant-initiated return flow](https://getquipt.github.io/images/merchant-requests-merchant-flow-merchant-initiated.png)
 
 ### Common Use Cases
 
@@ -169,15 +169,15 @@ Returns are the most common request type. There are two points of initiation:
 
 Poll for open requests in a new state. Store them locally and route them to the appropriate internal workflow based on request type. Centralizing request retrieval this way avoids polling separately per request type and simplifies queue management.
 
-![Get new requests assigned to merchant](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-requests-list.png)
+![Get new requests assigned to merchant](https://getquipt.github.io/images/merchant-requests-list.png)
 
 **Use Case 2 — Merchant-requested archive of a request**
 
 Once a request has been resolved and no further action is required, archive it to remove it from the active queue. Archiving does not delete the request — it remains accessible for audit and reconciliation purposes.
 
-![Merchant archive of a request](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-requests-archive.png)
+![Merchant archive of a request](https://getquipt.github.io/images/merchant-requests-archive.png)
 
-For full details on available endpoints see the [Requests](https://getquipt.github.io/WebSDK/#operations-tag-Vendor_API_-_Requests) reference.
+For full details on available endpoints see the [Requests](api-reference.md#operations-tag-Vendor_API_-_Requests) reference.
 
 ---
 
@@ -193,15 +193,15 @@ As orders are fulfilled and requests are resolved, the financial details are aut
 
 Retrieve all transactions in an open (unpaid) state. Use this to drive your internal AR process — match entries against expected revenue, flag discrepancies, and prepare payment batches.
 
-![Get open receivable transactions](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-accounting-list.png)
+![Get open receivable transactions](https://getquipt.github.io/images/merchant-accounting-list.png)
 
 **Use Case 2 — Apply a payment to receivable transactions**
 
 Post payment details against one or more open transactions to mark them as settled. This is typically run after a payment batch has been processed, allowing your AR records and the Quipt ledger to stay in sync.
 
-![Apply payment to receivable transactions](https://github.com/GetQuipt/WebSDK/blob/main/docs/images/merchant-accounting-apply.png)
+![Apply payment to receivable transactions](https://getquipt.github.io/images/merchant-accounting-apply.png)
 
-For full details on available endpoints see the [Accounting](https://getquipt.github.io/WebSDK/#operations-tag-Vendor_API_-_Accounting) reference.
+For full details on available endpoints see the [Accounting](api-reference.md#operations-tag-Vendor_API_-_Accounting) reference.
 
 ---
 
@@ -209,8 +209,8 @@ For full details on available endpoints see the [Accounting](https://getquipt.gi
 
 With an understanding of each subsystem, the recommended integration path for a new merchant is:
 
-1. **[Set up your application](https://github.com/GetQuipt/WebSDK/wiki/Connect-to-Quipt)** and obtain your OAuth credentials.
-2. **[Authorize a user](https://github.com/GetQuipt/WebSDK/wiki/OAuth-Authorization)** to generate the token pair needed to sign API requests.
+1. **[Set up your application](application-setup.md)** and obtain your OAuth credentials.
+2. **[Authorize a user](oauth-authorization.md)** to generate the token pair needed to sign API requests.
 3. Implement **Inventory** to get your catalog listed.
 4. Implement **Orders** to begin receiving and fulfilling purchase orders.
 5. Add **Shipments** if you ship via Quipt.
