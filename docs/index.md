@@ -3,27 +3,27 @@ layout: default
 title: Getting Started
 ---
 
-Click [here](https://getquipt.github.io/WebSDK/) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
+Click [here](api-reference.md) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
 
 ## Overview
 
-The [Vendor API](https://github.com/GetQuipt/WebSDK/wiki/Vendor-Workflows) is a robust and adaptable suite of tools designed to seamlessly integrate with your existing systems, enabling efficient and scalable sales management. By automating manual tasks, streamlining workflows, and providing real-time data insights, the API empowers businesses to:
+The [Vendor API](vendor-api.md) is a robust and adaptable suite of tools designed to seamlessly integrate with your existing systems, enabling efficient and scalable sales management. By automating manual tasks, streamlining workflows, and providing real-time data insights, the API empowers businesses to:
 * Enhance operational efficiency
 * Reduce costs and operational overhead
 * Drive sales growth and market reach
 * Offer an improved customer experience
     
-The [Channel API](https://github.com/GetQuipt/WebSDK/wiki/Channel-Workflows) empowers organizations to automate their purchasing functions, transforming their procurement landscape for enhanced efficiency, cost savings, and control. By automating manual tasks, streamlining workflows, and providing real-time data insights, the API empowers businesses to:
+The [Channel API](channel-api.md) empowers organizations to automate their purchasing functions, transforming their procurement landscape for enhanced efficiency, cost savings, and control. By automating manual tasks, streamlining workflows, and providing real-time data insights, the API empowers businesses to:
 * Search and compare products from diverse merchants through a centralized platform.
 * Access real-time inventory data and pricing information.
 * Streamline product selection and requisition processes.
 * Create and submit purchase orders electronically to multiple retailers.
 * Track order status, delivery updates, and invoices in real-time.
     
-The [Notification API](https://github.com/GetQuipt/WebSDK/wiki/General-Workflows#notifications) is a set of endpoints to get application events. Important the user you are using to monitor the events must be subscribed using the [web application](https://app.getquipt.com/#/Settings/MySettings). 
+The [Notification API](application-api.md#notifications) is a set of endpoints to get application events. Important the user you are using to monitor the events must be subscribed using the [web application](https://app.getquipt.com/#/Settings/MySettings). 
     
-The [Carrier API](https://getquipt.github.io/WebSDK/#tag-Carrier_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
+The [Carrier API](api-reference.md#tag-Carrier_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
     
-The [Taxonomy API](https://getquipt.github.io/WebSDK/#tag-Taxonomy_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
+The [Taxonomy API](api-reference.md#tag-Taxonomy_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
 
-All APIs with the exception of [Carrier API](https://getquipt.github.io/WebSDK/#tag-Carrier_API) and [Taxonomy API](https://getquipt.github.io/WebSDK/#tag-Taxonomy_API) require OAuth 1.0a for authorization management. Learn how to [connect to Quipt](https://github.com/GetQuipt/WebSDK/wiki/Connect-to-Quipt).   
+All APIs with the exception of [Carrier API](api-reference.md#tag-Carrier_API) and [Taxonomy API](api-reference.md#tag-Taxonomy_API) require OAuth 1.0a for authorization management. Learn how to [connect to Quipt](application-setup.md).   
