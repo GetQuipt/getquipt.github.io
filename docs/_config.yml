@@ -5,6 +5,11 @@ url: "https://getquipt.github.io"
 remote_theme: just-the-docs/just-the-docs
 # Navigation order
 nav_enabled: true
+# Optional but recommended
+color_scheme: light
+search_enabled: true
+# Footer
+footer_content: "Copyright © 2026 Quipt. All Rights Reserved."
 # Tell Jekyll which files to include
 include:
   - "*.md"
