@@ -41,4 +41,4 @@ On save, Quipt will generate a **Token** and **Secret** specific to the authoriz
 
 ## Next Steps
 
-With your credentials in hand, you are ready to begin making signed API requests. See [OAuth Authorization](https://github.com/GetQuipt/WebSDK/wiki/OAuth-Authorization) for a full walkthrough of the OAuth 1.0a flow and request signing process.
+With your credentials in hand, you are ready to begin making signed API requests. See [OAuth 1.0a Authorization](oauth-authorization.md) for a full walkthrough of the OAuth 1.0a flow and request signing process.
