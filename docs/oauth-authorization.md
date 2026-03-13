@@ -1,6 +1,8 @@
 ---
 layout: docs
 title: OAuth 1.0a Authorization
+parent: Getting Started
+nav_order: 1
 ---
 
 Quipt uses [OAuth 1.0a](http://tools.ietf.org/html/rfc5849) to authorize third-party applications to access the API on behalf of a Quipt user. OAuth 1.0a is a delegated authorization protocol — your application never handles the user's Quipt credentials directly. Instead, it exchanges signed requests for tokens that represent the user's permission to act on their behalf.
