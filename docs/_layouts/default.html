@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title }} — Quipt API</title>
+  <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">Quipt API</div>
+    <div class="nav-section">Getting Started</div>
+    <a href="{{ '/oauth-authorization' | relative_url }}">OAuth Authorization</a>
+    <a href="{{ '/application-setup' | relative_url }}">Setup an Application</a>
+    <div class="nav-section">APIs</div>
+    <a href="{{ '/vendor-api' | relative_url }}">Vendor API</a>
+    <a href="{{ '/channel-api' | relative_url }}">Channel API</a>
+    <a href="{{ '/application-api' | relative_url }}">Application API</a>
+    <div class="nav-section">Reference</div>
+    <a href="{{ '/api-reference' | relative_url }}">API Reference</a>
+  </nav>
+  <main>
+    {{ content }}
+  </main>
+</body>
+</html>
