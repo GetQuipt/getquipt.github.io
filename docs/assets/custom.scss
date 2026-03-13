@@ -6,6 +6,14 @@
   margin: 0 !important;
 }
 
+.swagger-ui .info .description .renderedMarkdown p {
+  margin: 0 !important;
+}
+
+.swagger-ui .scheme-container {
+  padding-top: 0px;
+}
+
 /* Stack tag name and description vertically */
 .swagger-ui .opblock-tag {
   flex-direction: column;
