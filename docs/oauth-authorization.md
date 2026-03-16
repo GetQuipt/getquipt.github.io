@@ -1,5 +1,4 @@
 ---
-layout: docs
 title: OAuth 1.0a Authorization
 parent: Getting Started
 nav_order: 2
