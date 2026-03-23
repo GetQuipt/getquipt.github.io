@@ -278,6 +278,60 @@ paths:
       security:
         - quipt_auth:
             - read:inventory
+  /inventory/GroupAndEnrich:
+    post:
+      tags:
+        - Vendor API - Inventory
+      summary: Group and enrich inventory items.
+      description: >-
+          The endpoint accepts an uploaded inventory file, aggregated by category, along with a selected template by name. The service parses the file, groups related inventory lines according to the template configuration, and enriches the data using Quipt’s catalog, partner pricing data, and the partne's existing inventory records.
+          The result is a normalized dataset containing matched Quipt SKUs, grouped inventory units, partner pricing insights, and an estimated recovery value based on Quipt’s pricing model.  
+      operationId: InventoryGroupAndEnrich
+      requestBody:
+        description: Data to upload and template name to use for grouping and enriching the inventory data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCompactCatalogGroupAndEnrichReq'
+        required: true
+      responses:
+        '201':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostCompactCatalogGroupAndEnrichResults'
+        '400':
+          description: Invalid input
+      security:
+        - quipt_auth:
+            - write:inventory
+  /inventory/GroupAndEnrich/report/{reportId}:
+    get:
+      tags:
+        - Vendor API - Inventory
+      summary: Get group and enrich job report details by ReportId.  
+      description: This service allows a partner to retrieve the detailed report generated when the ‘Group and Enrich Inventory’ service is used. The result of ‘Group and Enrich Inventory’ returns the {reportId} used to retrieve the report from this service.
+      operationId: getGroupAndEnrichInventoryReport
+      parameters:
+        - name: reportId
+          in: path
+          description: The ReportId provided by the groupAndEnrichInventory response.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation. Expect response Paging = null. No paging is used for this endpoint as the full results are returned in a single document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCompactCatalogGroupAndEnrichImportReportResults'
+        '400':
+          description: Invalid request.
+      security:
+        - quipt_auth:
+            - read:inventory  
   /orders/fulfillment/{pageSize}/{pageNumber}:
     get:
       tags:
@@ -4019,7 +4073,7 @@ components:
 
         8 = IntegrationPartner
 
-        16 = Channel
+        16 = Retailer (Channel)
 
         256 = EndPoint
       x-enumFlags: true
@@ -4029,7 +4083,7 @@ components:
       - OutsourcedBuilder
       - DailyDeal
       - IntegrationPartner
-      - Channel
+      - Retailer
       - EndPoint
       enum:
       - 0
@@ -15131,17 +15185,21 @@ components:
 
         8 = Option
 
+        512 = RequireImage
+
         1024 = RequestImage
       x-enumFlags: true
       x-enumNames:
       - None
       - Key
       - Option
+      - RequireImage
       - RequestImage
       enum:
       - 0
       - 2
       - 8
+      - 512
       - 1024
     AiOption:
       type: object
@@ -15872,6 +15930,115 @@ components:
           x-nullable: true
           items:
             $ref: '#components/schemas/Message'
+    PostCompactCatalogGroupAndEnrichReq:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        Request:
+          x-nullable: true
+          oneOf:
+          - $ref: '#components/schemas/CompactCatalogGroupAndEnrichImport'
+    CompactCatalogGroupAndEnrichImport:
+      type: object
+      description: Import request for compact catalog group and enrichment data.
+      additionalProperties: false
+      properties:
+        Template:
+          type: string
+          description: The template name.
+          x-nullable: true
+        Document:
+          description: "Inventory file, aggregated by category. \nCan be CSV or Excel file.\n            "
+          x-nullable: true
+          oneOf:
+          - $ref: '#components/schemas/APIDoc'
+    APIDoc:
+      type: object
+      description: Describes a document.
+      additionalProperties: false
+      properties:
+        Filename:
+          type: string
+          description: Name of the document file.
+          x-nullable: true
+        Data:
+          type: string
+          description: Binary data of the document.
+          format: byte
+          x-nullable: true
+    PostCompactCatalogGroupAndEnrichResults:
+      type: object
+      additionalProperties: false
+      properties:
+        ReportId:
+          type: string
+          format: guid
+        RecordsReceived:
+          type: integer
+          format: int32
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#components/schemas/Message'
+    GetCompactCatalogGroupAndEnrichImportReportResults:
+      type: object
+      description: >-
+        Result of compact catalog group and enrich import job.
+
+        For completed job it includes the result document that represents a normalized dataset containing matched Quipt SKUs, grouped inventory units, partner pricing insights, and an estimated recovery value based on Quipt’s pricing model.
+
+        Note: paging is not used for this report and always null as result always provided in a single document.
+      additionalProperties: false
+      properties:
+        ReportId:
+          type: string
+          format: guid
+        ReportTime:
+          type: string
+          format: date-time
+        ReportStatus:
+          $ref: '#components/schemas/BatchStatusType'
+        Paging:
+          x-nullable: true
+          oneOf:
+          - $ref: '#components/schemas/PaginationResult'
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#components/schemas/Message'
+        Document:
+          description: >-
+            The result document that represents a normalized dataset containing matched Quipt SKUs, grouped inventory units, 
+
+            partner pricing insights, and an estimated recovery value based on Quipt’s pricing model.
+          x-nullable: true
+          oneOf:
+          - $ref: '#components/schemas/APIDoc'
 ### schemas end ###   
   securitySchemes:
     quipt_auth:
