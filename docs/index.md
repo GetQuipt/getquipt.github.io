@@ -5,7 +5,7 @@ nav_order: 1
 
 Click [here](api-reference.md) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
 
-## Get Started
+## Getting Started
 
 Start [here](application-setup.html) to learn how to register your application, obtain your API credentials, and configure your environment to connect to the Quipt platform.
 
