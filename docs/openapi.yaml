@@ -3815,7 +3815,7 @@ paths:
     get:
       tags:
         - Catalog API
-       summary: Search for product details (paged).
+      summary: Search for product details (paged).
       description: |
         Returns a paginated list of products from the catalog based on search filters.  
       
