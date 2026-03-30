@@ -5,11 +5,12 @@ nav_order: 1
 
 Click [here](api-reference.md) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
 
-## [Application Setup](application-setup.html)
-Learn how to register your application, obtain your API credentials, and configure your environment to connect to the Quipt platform.
+## Get Started
+
+Start [here](application-setup.html) to learn how to register your application, obtain your API credentials, and configure your environment to connect to the Quipt platform.
 
 ## [OAuth 1.0a Authorization](oauth-authorization.html)
-Understand how to authenticate API requests using OAuth 1.0a, including signing requests and managing access tokens.
+Understand how to authenticate API requests using OAuth 1.0a, including signing requests and managing access tokens. Start [here](oauth-authorization.html) if you are unfamilar with this authorization protocal.
 
 ## Overview
 
