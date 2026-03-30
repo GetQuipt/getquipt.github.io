@@ -5,6 +5,12 @@ nav_order: 1
 
 Click [here](api-reference.md) to jump into the API documentation, otherwise if you need some additional guidance continue reading.
 
+## [Application Setup](application-setup.html)
+Learn how to register your application, obtain your API credentials, and configure your environment to connect to the Quipt platform.
+
+## [OAuth 1.0a Authorization](oauth-authorization.html)
+Understand how to authenticate API requests using OAuth 1.0a, including signing requests and managing access tokens.
+
 ## Overview
 
 The [Vendor API](vendor-api.md) is a robust and adaptable suite of tools designed to seamlessly integrate with your existing systems, enabling efficient and scalable sales management. By automating manual tasks, streamlining workflows, and providing real-time data insights, the API empowers businesses to:
