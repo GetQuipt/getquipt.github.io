@@ -5,7 +5,7 @@ info:
     View the [wiki](https://getquipt.github.io) for more details.
   version: 2.0.0
 servers:
-  - url: https://api.getquipt.com/v2
+  - url: http://staging.api.getquipt.com/v2
 tags:
   - name: Vendor API - Inventory
     description: >- 
