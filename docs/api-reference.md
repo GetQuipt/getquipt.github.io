@@ -22,6 +22,10 @@ nav_order: 5
             }
           }, 500);
         }
+      },
+      requestInterceptor: (request) => {
+        request.headers["x-api-beta"] = "on";
+        return request;
       }
     });
 </script>
