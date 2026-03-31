@@ -4129,7 +4129,11 @@ components:
           - $ref: '#/components/schemas/SeverityType'
     SeverityType:
       type: integer
-      description: Specifies the severity level for a message.
+      description: >
+      Values:
+      * `0` - Info
+      * `1` - Warning
+      * `2` - Fatal
       x-enumNames:
       - Info
       - Warning
@@ -4456,7 +4460,12 @@ components:
           x-nullable: true
     SKUType:
       type: integer
-      description: Defines the type of sku, ie MPN, UPC, etc.
+      description: >
+      Values:
+      * `5` - MPN
+      * `10` - UPC
+      * `15` - ISBN
+      * `20` - GTIN
       x-enumNames:
       - MPN
       - UPC
@@ -4590,7 +4599,9 @@ components:
           - $ref: '#/components/schemas/CurrencyUnitType'
     CurrencyUnitType:
       type: integer
-      description: Currency.
+      description: >-
+      Values:
+      * '0' = USD
       x-enumNames:
       - USD
       enum:
@@ -4639,7 +4650,13 @@ components:
           x-nullable: true
     AssetType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Image
+      * `1` - Document
+      * `2` - ShippingDocument
+      * `16` - BatchRequest
+      * `1024` - Unknown
       x-enumNames:
       - Image
       - Document
@@ -4743,7 +4760,12 @@ components:
           format: decimal
     WeightUnitType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `10` - Pounds
+      * `20` - Grams
+      * `30` - Kilograms
       x-enumNames:
       - None
       - Pounds
@@ -4776,7 +4798,10 @@ components:
           format: decimal
     DistanceUnitType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - IN
+      * `1` - CM
       x-enumNames:
       - IN
       - CM
@@ -4829,7 +4854,11 @@ components:
           x-nullable: true
     SupportType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `5` - Manufacturer
+      * `10` - Distributor
       x-enumNames:
       - None
       - Manufacturer
@@ -4908,7 +4937,13 @@ components:
           x-nullable: true
     MatchSKUType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `5` - MPN
+      * `10` - UPC
+      * `15` - ISBN
+      * `20` - GTIN
+      * `35` - CatalogId
       x-enumNames:
       - MPN
       - UPC
@@ -4976,7 +5011,15 @@ components:
           $ref: '#/components/schemas/CompanyType'
     CompanyType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Marketplace
+      * `2` - OutsourcedBuilder
+      * `4` - DailyDeal
+      * `8` - IntegrationPartner
+      * `16` - Retailer
+      * `256` - EndPoint
       x-enumFlags: true
       x-enumNames:
       - None
@@ -4996,7 +5039,11 @@ components:
       - 256
     DropShipOptionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - No
+      * `5` - Only
+      * `10` - Yes
       x-enumNames:
       - No
       - Only
@@ -5057,7 +5104,24 @@ components:
           format: decimal
     UnitOfMeasureType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Each
+      * `10` - Pounds
+      * `20` - Grams
+      * `30` - Kilograms
+      * `100` - Inches
+      * `109` - Miles
+      * `110` - Centimeters
+      * `119` - Kilometers
+      * `129` - Days
+      * `130` - Percentage
+      * `131` - Currency
+      * `950` - OneDay
+      * `1000` - SevenDays
+      * `1010` - FourteenDays
+      * `1020` - ThirtyDays
+      * `2000` - Lifetime
       x-enumNames:
       - Each
       - Pounds
@@ -5398,7 +5462,13 @@ components:
           x-nullable: true
     CatalogAdvStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `10` - Received
+      * `20` - Accepted
+      * `30` - Rejected
+      * `40` - Published
       x-enumNames:
       - None
       - Received
@@ -5419,7 +5489,15 @@ components:
           $ref: '#/components/schemas/InventoryAdvStatusType'
     InventoryAdvStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `10` - Received
+      * `20` - Accepted
+      * `30` - RejectedCatalogDoesNotExist
+      * `31` - RejectedUnauthorized
+      * `32` - RejectedAlreadyMappedToAnotherItem
+      * `33` - RejectedUnknown
       x-enumNames:
       - None
       - Received
@@ -5479,7 +5557,17 @@ components:
           - $ref: '#/components/schemas/Amount'
     CarrierServiceLevelType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `1` - Ground
+      * `2` - ThreeDay
+      * `4` - TwoDay
+      * `8` - OneDay
+      * `16` - International
+      * `32` - InternationalPriority
+      * `512` - ValueGround
+      * `1024` - Truck
+      * `2048` - TruckInternational
       x-enumFlags: true
       x-enumNames:
       - Ground
@@ -5524,7 +5612,13 @@ components:
           - $ref: '#/components/schemas/Amount'
     InventoryStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - New
+      * `10` - Completed
+      * `20` - Discontinued
+      * `30` - Published
+      * `40` - Outsourced
       x-enumNames:
       - New
       - Completed
@@ -5756,7 +5850,19 @@ components:
           format: int32
     JobStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - New
+      * `1` - Ready
+      * `4` - Queued
+      * `16` - InProgress
+      * `21` - Running
+      * `64` - Completed
+      * `256` - Failed
+      * `320` - Terminated
+      * `1024` - Downloading
+      * `2048` - Downloaded
+      * `4096` - DownloadedAgain
       x-enumFlags: true
       x-enumNames:
       - New
@@ -6202,7 +6308,13 @@ components:
           x-nullable: true
     PromotionSummaryStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `8` - Pending
+      * `64` - Completed
+      * `512` - Scheduled
+      * `8192` - Running
       x-enumNames:
       - None
       - Pending
@@ -6264,7 +6376,11 @@ components:
           description: Whether or not service is included in pricing.
     PurchaseOrderFreightCollectionOptionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - ChannelAccount
+      * `1` - FreightPrePayment
+      * `2` - Invoice
       x-enumNames:
       - ChannelAccount
       - FreightPrePayment
@@ -6697,7 +6813,12 @@ components:
           x-nullable: true
     SalesOrderAckType:
       type: integer
-      description: The type of acknowledgement.
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Message
+      * `4` - MessageAlert
+      * `8` - MessageConfirm
       x-enumNames:
       - None
       - Message
@@ -6868,7 +6989,16 @@ components:
             $ref: '#/components/schemas/FillDetails'
     ShipmentAcknowledgementType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Received
+      * `1` - Printed
+      * `2` - AwaitingPickup
+      * `3` - PickedUp
+      * `4` - Cancel
+      * `5` - Invoice
+      * `6` - Generate
+      * `7` - NoChange
       x-enumNames:
       - Received
       - Printed
@@ -7230,7 +7360,10 @@ components:
           x-nullable: true
     PurchaseOrderType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Standard
+      * `1` - Dropship
       x-enumNames:
       - Standard
       - Dropship
@@ -7359,7 +7492,10 @@ components:
           x-nullable: true
     SignatureOptionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - No
+      * `10` - Yes
       x-enumNames:
       - No
       - Yes
@@ -7368,7 +7504,11 @@ components:
       - 10
     FreeOnboardOptionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Destination
+      * `2` - Origin
       x-enumFlags: true
       x-enumNames:
       - None
@@ -7456,7 +7596,13 @@ components:
           - $ref: '#/components/schemas/CarrierAccountPaymentType'
     CarrierAccountPaymentType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - ThirdParty
+      * `2` - Recipient
+      * `3` - Prepaid
+      * `4` - Credentials
       x-enumNames:
       - None
       - ThirdParty
@@ -7582,7 +7728,14 @@ components:
           - $ref: '#/components/schemas/Vendor'
     PurchaseOrderStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Incomplete
+      * `1` - ActionRequired
+      * `2` - Pending
+      * `4` - Ordered
+      * `8` - Shipped
+      * `16` - Canceled
       x-enumFlags: true
       x-enumNames:
       - Incomplete
@@ -7600,7 +7753,35 @@ components:
       - 16
     PurchaseOrderSubStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - ValidateSKUs
+      * `16` - DuplicateCheck
+      * `64` - AllocateInventory
+      * `256` - ValidatePricing
+      * `512` - ValidateShipTo
+      * `1024` - ValidateCarrierMethod
+      * `2048` - ExecuteCustomCode
+      * `4096` - ValidatePayment
+      * `8192` - Hold
+      * `16384` - MoveToOpen
+      * `32768` - LateBackOrder
+      * `65536` - LateShipment
+      * `131072` - LatePickup
+      * `262144` - SoftCancel
+      * `524288` - ShipmentException
+      * `1048576` - CancelationRequested
+      * `2097152` - CancelationRequestResponse
+      * `4194304` - CaptureFailed
+      * `8388608` - RefundFailed
+      * `16777216` - InvalidTrackingNumber
+      * `33554432` - ChannelMessageAlert
+      * `67108864` - ChannelMessageConfirm
+      * `134217728` - ChannelMessageConfirmed
+      * `268435456` - VendorMessageAlert
+      * `536870912` - VendorMessageConfirm
+      * `1073741824` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -8037,7 +8218,11 @@ components:
           - $ref: '#/components/schemas/Quantity'
     PurchaseOrderAcknowledgementType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Accepted
+      * `2` - Rejected
       x-enumNames:
       - None
       - Accepted
@@ -8099,7 +8284,12 @@ components:
           - $ref: '#/components/schemas/PaymentWorkflowStatusType'
     PaymentWorkflowStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Pending
+      * `10` - Success
+      * `20` - Failure
+      * `30` - Disabled
       x-enumNames:
       - Pending
       - Success
@@ -8132,7 +8322,14 @@ components:
             $ref: '#/components/schemas/WarehouseResult'
     ShipmentLabelFormatType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Laser
+      * `1` - Thermal
+      * `2` - PDF
+      * `4` - ThermalZPL
+      * `8` - ThermalZPL300
+      * `13` - IsThermal
       x-enumFlags: true
       x-enumNames:
       - Laser
@@ -8246,7 +8443,26 @@ components:
           format: date-time
     ShipmentClassOptionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Class50
+      * `1` - Class55
+      * `2` - Class60
+      * `3` - Class65
+      * `4` - Class70
+      * `5` - Class77_5
+      * `6` - Class85
+      * `7` - Class92_5
+      * `8` - Class100
+      * `9` - Class110
+      * `10` - Class125
+      * `11` - Class150
+      * `12` - Class175
+      * `13` - Class200
+      * `14` - Class250
+      * `15` - Class300
+      * `16` - Class400
+      * `17` - Class500
       x-enumNames:
       - Class50
       - Class55
@@ -8302,7 +8518,13 @@ components:
           - $ref: '#/components/schemas/Rectangle'
     ShipmentShipByTruckRequestStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - New
+      * `2` - Open
+      * `8` - Accepted
+      * `64` - Rejected
+      * `256` - Canceled
       x-enumFlags: true
       x-enumNames:
       - New
@@ -8557,7 +8779,15 @@ components:
           - $ref: '#/components/schemas/LineBase'
     ShipmentFillItemStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Ordered
+      * `8` - Shipped
+      * `64` - Canceled
+      * `256` - ReturnRequested
+      * `1024` - Returned
+      * `1352` - Closed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -8577,7 +8807,14 @@ components:
       - 1352
     ShipmentFillItemPickStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Picking
+      * `8` - Picked
+      * `64` - CancelationRequested
+      * `256` - CancelConfirmed
+      * `1024` - Canceled
       x-enumFlags: true
       x-enumNames:
       - None
@@ -8723,7 +8960,20 @@ components:
           - $ref: '#/components/schemas/Quantity'
     ShipmentStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `2` - Pending
+      * `32` - New
+      * `128` - Ready
+      * `1024` - Generated
+      * `4096` - Exported
+      * `8192` - Batched
+      * `16384` - Printed
+      * `131072` - PickupRequested
+      * `524288` - PickedUp
+      * `2097152` - Error
+      * `8388608` - Canceled
+      * `33554432` - Deleted
       x-enumFlags: true
       x-enumNames:
       - Pending
@@ -8793,7 +9043,16 @@ components:
           x-nullable: true
     TrackingStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Canceled
+      * `2` - Invalid
+      * `8` - LabelGenerated
+      * `1024` - InRoute
+      * `8192` - Delivered
+      * `32768` - Exception
+      * `65536` - ReturnedToSender
       x-enumFlags: true
       x-enumNames:
       - None
@@ -9067,7 +9326,13 @@ components:
           - $ref: '#/components/schemas/PurchaseOrderLine'
     PurchaseOrderCancelRequestStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - New
+      * `10` - Approved
+      * `100` - Cancelled
+      * `150` - Removed
+      * `-1` - Failure
       x-enumNames:
       - New
       - Approved
@@ -9111,7 +9376,14 @@ components:
           x-nullable: true
     PartnerAcknowledgementType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - MessageAlert
+      * `2` - MessageConfirm
+      * `3` - MessageConfirmed
+      * `4` - SettingsError
+      * `5` - ConnectionError
       x-enumNames:
       - None
       - MessageAlert
@@ -9687,7 +9959,13 @@ components:
           x-nullable: true
     AcknowledgementType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Message
+      * `4` - MessageAlert
+      * `8` - MessageConfirm
+      * `16` - MessageConfirmed
       x-enumNames:
       - None
       - Message
@@ -9998,7 +10276,16 @@ components:
           x-nullable: true
     StatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - ActionRequired
+      * `2` - Off
+      * `4` - On
+      * `16` - Incomplete
+      * `64` - MessageAlert
+      * `128` - MessageConfirm
+      * `256` - MessageConfirmed
       x-enumNames:
       - None
       - ActionRequired
@@ -10344,7 +10631,15 @@ components:
             $ref: '#/components/schemas/CustomAttributeValue'
     DayOfWeek:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Sunday
+      * `1` - Monday
+      * `2` - Tuesday
+      * `3` - Wednesday
+      * `4` - Thursday
+      * `5` - Friday
+      * `6` - Saturday
       x-enumNames:
       - Sunday
       - Monday
@@ -10363,7 +10658,11 @@ components:
       - 6
     CompoundIntervalType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Never
+      * `950` - Daily
+      * `1000` - Weekly
       x-enumNames:
       - Never
       - Daily
@@ -10911,7 +11210,15 @@ components:
           - $ref: '#/components/schemas/RequestShippingWhoPaysType'
     RequestType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `10` - MissingAccessory
+      * `20` - Intercept
+      * `30` - LostShipments
+      * `35` - Claim
+      * `40` - PartialCredit
+      * `1000` - Return
       x-enumNames:
       - None
       - MissingAccessory
@@ -10930,7 +11237,11 @@ components:
       - 1000
     RequestShippingWhoPaysType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Vendor
+      * `2` - Channel
       x-enumNames:
       - None
       - Vendor
@@ -10977,7 +11288,15 @@ components:
           - $ref: '#/components/schemas/PrepaidOption'
     RequestReturnType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `5` - Defective
+      * `10` - BuyersRemorse
+      * `15` - Refused
+      * `20` - LostShipment
+      * `25` - Intercepted
+      * `30` - Damaged
       x-enumNames:
       - None
       - Defective
@@ -11342,7 +11661,11 @@ components:
           $ref: '#/components/schemas/PurchaseOrderCustomCodeFailureActionType'
     PurchaseOrderDuplicateActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Skip
+      * `2` - Cancel
       x-enumNames:
       - None
       - Skip
@@ -11353,7 +11676,10 @@ components:
       - 2
     PurchaseOrderInvalidInventoryActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Cancel
       x-enumNames:
       - None
       - Cancel
@@ -11362,7 +11688,14 @@ components:
       - 1
     PurchaseOrderInvalidPriceActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - UseChannelPrice
+      * `2` - UsePublishedPrice
+      * `3` - Cancel
+      * `4` - UsePriceWithinVariance
+      * `5` - UsePriceGiven
       x-enumNames:
       - None
       - UseChannelPrice
@@ -11379,7 +11712,16 @@ components:
       - 5
     PurchaseOrderInvalidAllocationActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - PurchaseMore
+      * `2` - BackOrder
+      * `3` - ShortShip
+      * `4` - Cancel
+      * `5` - Substitute
+      * `6` - SubstituteLine
+      * `7` - PurchaseMoreWithHold
       x-enumNames:
       - None
       - PurchaseMore
@@ -11400,7 +11742,11 @@ components:
       - 7
     PurchaseOrderInvalidAddressActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Skip
+      * `2` - Cancel
       x-enumNames:
       - None
       - Skip
@@ -11411,7 +11757,12 @@ components:
       - 2
     PurchaseOrderInvalidCarrierMethodActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Cancel
+      * `2` - UseAlternate
+      * `3` - Skip
       x-enumNames:
       - None
       - Cancel
@@ -11424,7 +11775,10 @@ components:
       - 3
     PurchaseOrderInvalidPaymentActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Cancel
       x-enumNames:
       - None
       - Cancel
@@ -11433,7 +11787,11 @@ components:
       - 1
     PurchaseOrderCustomCodeFailureActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Skip
+      * `2` - Cancel
       x-enumNames:
       - None
       - Skip
@@ -11455,10 +11813,16 @@ components:
             $ref: '#/components/schemas/CustomAttributeValue'
     LedgerDetailType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `2` - Total
+      * `8` - Tax
+      * `64` - Commissions
+      * `128` - OtherFees
+      * `256` - Freight
+      * `1024` - Discount
       x-enumFlags: true
       x-enumNames:
-      - DONOTUSE
       - Total
       - Tax
       - Commissions
@@ -11466,7 +11830,6 @@ components:
       - Freight
       - Discount
       enum:
-      - 0
       - 2
       - 8
       - 64
@@ -11702,7 +12065,12 @@ components:
           - $ref: '#/components/schemas/ShipToAddress'
     RequestReturnResolutionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `5` - Credit
+      * `10` - Exchange
+      * `15` - AdvancedExchange
       x-enumNames:
       - None
       - Credit
@@ -11735,7 +12103,11 @@ components:
           - $ref: '#/components/schemas/RequestMissingAccessoryResolutionType'
     RequestMissingAccessoryResolutionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `5` - Credit
+      * `10` - Send
       x-enumNames:
       - None
       - Credit
@@ -11747,9 +12119,7 @@ components:
     RequestLine:
       type: object
       description: >-
-        Represents a single request line, including item details, associated assets, and related transaction options
-  
-        such as credit, return, and missing accessory information.
+        Represents a single request line, including item details, associated assets, and related transaction options such as credit, return, and missing accessory information.
       additionalProperties: false
       properties:
         Id:
@@ -11925,7 +12295,15 @@ components:
             type: string
     RequestStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - Incomplete
+      * `1` - ActionRequired
+      * `2` - Pending
+      * `4` - Open
+      * `8` - Closed
+      * `16` - Canceled
+      * `24` - Terminated
       x-enumFlags: true
       x-enumNames:
       - Incomplete
@@ -12094,7 +12472,21 @@ components:
           - $ref: '#/components/schemas/RequestLookup'
     RequestInterceptActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - Attempt
+      * `16` - Failure
+      * `64` - SuccessInRouteToChannel
+      * `128` - SuccessDeliveredToChannel
+      * `256` - SuccessInRouteToVendor
+      * `512` - SuccessDeliveredToVendor
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12153,7 +12545,25 @@ components:
           - $ref: '#/components/schemas/RequestLookup'
     RequestLostShipmentTraceActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - TraceRequested
+      * `16` - TraceFailed
+      * `64` - InRouteToCustomer
+      * `128` - InRouteToChannel
+      * `256` - InRouteToVendor
+      * `512` - DeliveredToCustomer
+      * `1024` - DeliveredToChannel
+      * `2048` - DeliveredToVendor
+      * `4096` - OpenedClaim
+      * `8192` - Accepted
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12233,7 +12643,26 @@ components:
             type: string
     RequestMissingAccessoryActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - CreditOffered
+      * `16` - CreditAccepted
+      * `64` - CreditCountered
+      * `256` - ReturnCreated
+      * `1024` - LabelRequested
+      * `2048` - LabelGenerating
+      * `4096` - LabelGenerated
+      * `8192` - LabelError
+      * `16384` - PickupRequested
+      * `32768` - LabelRequestedDelete
+      * `65536` - Shipped
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12333,7 +12762,18 @@ components:
           - $ref: '#/components/schemas/Comment'
     RequestLostShipmentClaimActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - Opened
+      * `16` - Paid
+      * `64` - Denied
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12405,7 +12845,18 @@ components:
           x-nullable: true
     RequestPartialCreditActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - Accepted
+      * `16` - Counter
+      * `64` - Impasse
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12501,7 +12952,26 @@ components:
           - $ref: '#/components/schemas/PrintableDocument'
     RequestReturnActionType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `4` - Credited
+      * `16` - CreditOffered
+      * `64` - Exchanged
+      * `256` - Received
+      * `1024` - LabelRequested
+      * `2048` - LabelGenerating
+      * `4096` - LabelGenerated
+      * `8192` - LabelError
+      * `16384` - PickupRequested
+      * `32768` - LabelRequestedDelete
+      * `65536` - Accepted
+      * `262144` - ChannelMessageAlert
+      * `524288` - ChannelMessageConfirm
+      * `1048576` - ChannelMessageConfirmed
+      * `2097152` - VendorMessageAlert
+      * `4194304` - VendorMessageConfirm
+      * `8388608` - VendorMessageConfirmed
       x-enumFlags: true
       x-enumNames:
       - None
@@ -12600,7 +13070,11 @@ components:
           $ref: '#/components/schemas/RequestReturnToType'
     RequestReturnToType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - NotApplicable
+      * `1` - Provider
+      * `2` - Direct
       x-enumNames:
       - NotApplicable
       - Provider
@@ -12649,7 +13123,12 @@ components:
           x-nullable: true
     SalesReqAckType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Message
+      * `4` - MessageAlert
+      * `8` - MessageConfirm
       x-enumNames:
       - None
       - Message
@@ -13645,7 +14124,13 @@ components:
           x-nullable: true
     PurchaseReqAckType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Message
+      * `4` - MessageAlert
+      * `8` - MessageConfirm
+      * `16` - MessageConfirmed
       x-enumNames:
       - None
       - Message
@@ -14008,7 +14493,269 @@ components:
           - $ref: '#/components/schemas/NotificationStatusType'
     EventType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `10` - BatchStatusChange
+      * `11` - BatchStatusCompleted
+      * `12` - BatchStatusFailed
+      * `22` - InventoryCostChange
+      * `23` - InventoryDiscontinued
+      * `24` - InventoryPublished
+      * `25` - InventoryOutOfStock
+      * `26` - InventoryAddStock
+      * `27` - InventoryQuantityChange
+      * `28` - InventoryQuantityAllocatedChange
+      * `29` - InventoryOutsourced
+      * `30` - InventoryStatusChange
+      * `31` - InventoryNeedsApproval
+      * `32` - InventoryDelete
+      * `33` - InventoryDeleted
+      * `39` - FeedBuyBoxChange
+      * `40` - FeedActivationChange
+      * `41` - FeedAllocationChange
+      * `42` - FeedPromoInitialized
+      * `43` - FeedPromoRemoved
+      * `44` - FeedRecoveryChange
+      * `45` - FeedCatalogStatusChange
+      * `46` - FeedInventoryStatusChange
+      * `47` - FeedARPChange
+      * `48` - FeedPromoChange
+      * `49` - FeedRecoveryInitialized
+      * `50` - PurchaseOrderStatusChange
+      * `51` - PurchaseOrderPlaced
+      * `52` - PurchaseOrderCanceled
+      * `53` - PurchaseOrderPriceChange
+      * `54` - PurchaseOrderQuantityOrderedChange
+      * `55` - PurchaseOrderQuantityBackOrdered
+      * `56` - PurchaseOrderQuantityCanceled
+      * `59` - PurchaseOrderShipToChange
+      * `63` - PurchaseOrderShipped
+      * `64` - PurchaseOrderActionRequired
+      * `65` - PurchaseOrderCancelReqStarted
+      * `66` - PurchaseOrderCancelReqCanceled
+      * `67` - PurchaseOrderCancelReqApproved
+      * `70` - ShipmentCreated
+      * `71` - ShipmentStatusChange
+      * `72` - ShipmentTrackingChange
+      * `73` - ShipmentCarrierMethodChange
+      * `74` - ShipmentCarrierAccountChange
+      * `75` - ShipmentWeightChange
+      * `76` - ShipmentDimensionsChange
+      * `77` - ShipmentCanceled
+      * `78` - ShipmentActionRequired
+      * `90` - RequestCreated
+      * `91` - RequestTrackingChange
+      * `92` - RequestActionStatusChange
+      * `93` - RequestStatusChange
+      * `94` - RequestCommentChange
+      * `95` - RequestClosed
+      * `96` - RequestCanceled
+      * `97` - RequestActionRequired
+      * `98` - RequestVendorCreated
+      * `99` - RequestVendorClosed
+      * `100` - RequestVendorCanceled
+      * `101` - RequestVendorActionRequired
+      * `102` - RequestVendorStatusChange
+      * `103` - RequestVendorStatusActionRequiredMessageAlert
+      * `104` - RequestVendorStatusActionRequiredMessageConfirm
+      * `105` - RequestVendorStatusActionRequiredMessageCleared
+      * `106` - RequestStatusActionRequiredMessageAlert
+      * `107` - RequestStatusActionRequiredMessageConfirm
+      * `108` - RequestStatusActionRequiredMessageCleared
+      * `110` - ReportCreated
+      * `111` - ReportStatusChange
+      * `112` - ReportRemoved
+      * `113` - ReportShared
+      * `114` - ReportQueued
+      * `115` - ReportQueuedStatusChange
+      * `116` - ReportQueuedGenerated
+      * `117` - ReportQueuedDownloaded
+      * `130` - FeedPromoStarting
+      * `131` - FeedPromoEnding
+      * `132` - FeedPromoEnded
+      * `133` - FeedPromoInvited
+      * `134` - FeedPromoAccepted
+      * `135` - FeedPromoRejected
+      * `136` - FeedPromoCancelationRequested
+      * `137` - FeedPromoCanceled
+      * `138` - FeedPromoStatusChange
+      * `150` - OutsourcedInventoryCompleted
+      * `151` - OutsourcedInventoryActionRequired
+      * `153` - OutsourcedInventoryStatusChange
+      * `154` - OutsourcedInventoryFinished
+      * `155` - OutsourcedInventoryCanceled
+      * `156` - OutsourcedInventoryAdded
+      * `170` - BlogCreated
+      * `171` - BlogCreatedGeneral
+      * `172` - BlogCreatedAppUpdate
+      * `173` - BlogCreatedSchDown
+      * `174` - BlogCreatedUnSchDown
+      * `175` - AuthorizationCreated
+      * `176` - AuthorizationRevoked
+      * `177` - AuthorizationAppError
+      * `178` - AuthorizationAppSettingError
+      * `179` - AuthorizationAppConnectionError
+      * `180` - RelationshipVendorCreated
+      * `181` - RelationshipVendorOff
+      * `182` - RelationshipVendorDisabled
+      * `183` - RelationshipVendorSettingError
+      * `184` - RelationshipVendorConnectionError
+      * `185` - RelationshipChannelCreated
+      * `186` - RelationshipChannelOff
+      * `187` - RelationshipChannelDisabled
+      * `188` - RelationshipChannelSettingError
+      * `189` - RelationshipChannelConnectionError
+      * `190` - RelationshipVendorAlert
+      * `191` - RelationshipVendorConfirm
+      * `192` - RelationshipVendorCleared
+      * `193` - RelationshipChannelAlert
+      * `194` - RelationshipChannelConfirm
+      * `195` - RelationshipChannelCleared
+      * `200` - RequestInterceptAttempt
+      * `201` - RequestInterceptFailed
+      * `202` - RequestInterceptInRoute
+      * `203` - RequestInterceptDelivered
+      * `210` - RequestLostShipmentTraceRequested
+      * `211` - RequestLostShipmentTraceFailed
+      * `212` - RequestLostShipmentInRoute
+      * `213` - RequestLostShipmentDelivered
+      * `214` - RequestLostShipmentClaimOpened
+      * `215` - RequestLostShipmentClaimPaid
+      * `216` - RequestLostShipmentClaimDenied
+      * `220` - RequestMissingAccessoryCreditOffered
+      * `221` - RequestMissingAccessoryCreditCountered
+      * `222` - RequestMissingAccessoryReturnCreated
+      * `223` - RequestMissingAccessoryLabelRequested
+      * `225` - RequestMissingAccessoryLabelGenerated
+      * `226` - RequestMissingAccessoryLabelError
+      * `227` - RequestMissingAccessoryCreditAccepted
+      * `228` - RequestMissingAccessoryPickupRequested
+      * `229` - RequestMissingAccessoryShipped
+      * `240` - RequestPartialCreditAccepted
+      * `241` - RequestPartialCreditCounter
+      * `242` - RequestPartialCreditImpasse
+      * `250` - RequestReturnCredited
+      * `251` - RequestReturnCreditOffered
+      * `252` - RequestReturnExchanged
+      * `253` - RequestReturnReceived
+      * `254` - RequestReturnLabelRequested
+      * `256` - RequestReturnLabelGenerated
+      * `257` - RequestReturnLabelError
+      * `258` - RequestReturnPickupRequested
+      * `259` - RequestReturnAccepted
+      * `260` - RequestWarrantyCheck
+      * `261` - RequestAutoApprovalCheck
+      * `262` - RequestPrepaidApprovalCheck
+      * `263` - RequestReplacementShipToCheck
+      * `321` - PurchaseOrderValidateSKU
+      * `322` - PurchaseOrderDuplicateCheck
+      * `323` - PurchaseOrderAllocateInventory
+      * `324` - PurchaseOrderValidatePricing
+      * `325` - PurchaseOrderValidateShipTo
+      * `326` - PurchaseOrderValidateCarrierMethod
+      * `327` - PurchaseOrderExecuteCustomCode
+      * `328` - PurchaseOrderValidatePayment
+      * `329` - PurchaseOrderOnHold
+      * `330` - PurchaseOrderActionRequiredInvalidSKU
+      * `331` - PurchaseOrderActionRequiredDuplicate
+      * `332` - PurchaseOrderActionRequiredFailedAllocation
+      * `333` - PurchaseOrderActionRequiredInvalidPricing
+      * `334` - PurchaseOrderActionRequiredInvalidShipTo
+      * `335` - PurchaseOrderActionRequiredInvalidCarrierMethod
+      * `336` - PurchaseOrderActionRequiredExecuteCustomCode
+      * `337` - PurchaseOrderActionRequiredInvalidPayment
+      * `338` - PurchaseOrderActionRequiredOnHold
+      * `339` - PurchaseOrderActionRequiredLateBackOrder
+      * `340` - PurchaseOrderActionRequiredLateShipment
+      * `341` - PurchaseOrderActionRequiredLatePickup
+      * `342` - PurchaseOrderActionRequiredSoftCancel
+      * `343` - PurchaseOrderActionRequiredShipmentException
+      * `344` - PurchaseOrderActionRequiredCaptureFailed
+      * `345` - PurchaseOrderActionRequiredRefundFailed
+      * `346` - PurchaseOrderActionRequiredInvalidTrackingNumber
+      * `347` - PurchaseOrderActionRequiredCancelationRequested
+      * `348` - PurchaseOrderActionRequiredChannelMessageAlert
+      * `349` - PurchaseOrderActionRequiredChannelMessageConfirm
+      * `350` - PurchaseOrderActionRequiredChannelMessageCleared
+      * `351` - PurchaseOrderActionRequiredVendorMessageAlert
+      * `352` - PurchaseOrderActionRequiredVendorMessageConfirm
+      * `353` - PurchaseOrderActionRequiredVendorMessageCleared
+      * `400` - ServiceStarting
+      * `405` - ServiceStarted
+      * `410` - ServiceStopping
+      * `415` - ServiceStopped
+      * `420` - ServiceStoppedUnexpected
+      * `425` - ServiceRestarting
+      * `430` - ServiceDisabled
+      * `550` - FeedMapIdChange
+      * `551` - FeedQuantityChange
+      * `552` - FeedOutOfStock
+      * `553` - FeedPriceChange
+      * `554` - FeedPriceInitialized
+      * `555` - FeedPromoPriceChange
+      * `556` - FeedPromoPriceInitialized
+      * `557` - FeedPromoPriceRemoved
+      * `558` - VirtualInventoryQuantityChange
+      * `559` - VirtualInventoryOutOfStock
+      * `560` - FeedAllOff
+      * `561` - FeedRecoveryZero
+      * `562` - FeedAllocationReduced
+      * `600` - LedgerChannelFundsConfirmed
+      * `601` - LedgerChannelFundsInitiated
+      * `602` - LedgerChannelFundsSubmitted
+      * `603` - LedgerChannelOpen
+      * `604` - LedgerChannelSettled
+      * `605` - LedgerChannelActionRequiredOnHold
+      * `606` - LedgerChannelAcknowledged
+      * `607` - LedgerChannelActionRequiredPaymentOverdue
+      * `608` - LedgerChannelActionRequiredPaymentFailed
+      * `620` - LedgerVendorFundsConfirmed
+      * `621` - LedgerVendorFundsInitiated
+      * `622` - LedgerVendorFundsSubmitted
+      * `623` - LedgerVendorOpen
+      * `624` - LedgerVendorSettled
+      * `625` - LedgerVendorActionRequiredOnHold
+      * `626` - LedgerVendorAcknowledged
+      * `627` - LedgerVendorActionRequiredPaymentOverdue
+      * `628` - LedgerVendorActionRequiredPaymentFailed
+      * `640` - LedgerDueAtChanged
+      * `641` - LedgerSettledAtChanged
+      * `642` - LedgerBalanceChange
+      * `700` - CatalogStatusChange
+      * `701` - CatalogSubStatusChange
+      * `702` - CatalogVariantKeyChange
+      * `703` - CatalogVersionChange
+      * `704` - CatalogNeedsApproval
+      * `720` - InventoryCatalogStatusChange
+      * `721` - InventoryCatalogParentChange
+      * `722` - InventoryCatalogVersionChange
+      * `751` - VendorPublished
+      * `752` - VendorApproved
+      * `753` - VendorActionRequired
+      * `754` - VendorStatusChange
+      * `755` - VendorInvite
+      * `761` - ChannelPublished
+      * `762` - ChannelApproved
+      * `763` - ChannelActionRequired
+      * `764` - ChannelStatusChange
+      * `765` - ChannelInvite
+      * `771` - CompanyPublished
+      * `772` - CompanyApproved
+      * `773` - CompanyActionRequired
+      * `774` - CompanyStatusChange
+      * `800` - RelationshipVendorAllOnRequested
+      * `801` - RelationshipVendorAllOffRequested
+      * `802` - RelationshipVendorToggleAllRequested
+      * `803` - RelationshipVendorToggleUnpublishedRequested
+      * `804` - RelationshipVendorAllOnStart
+      * `805` - RelationshipVendorAllOffStart
+      * `806` - RelationshipVendorToggleAllStart
+      * `807` - RelationshipVendorToggleUnpublishedStart
+      * `808` - RelationshipVendorAllOnEnd
+      * `809` - RelationshipVendorAllOffEnd
+      * `810` - RelationshipVendorToggleAllEnd
+      * `811` - RelationshipVendorToggleUnpublishedEnd
       x-enumNames:
       - None
       - BatchStatusChange
@@ -14535,7 +15282,12 @@ components:
       - 811
     NotificationStatusType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `1` - Unread
+      * `2` - Read
+      * `4` - Archived
       x-enumFlags: true
       x-enumNames:
       - None
@@ -15123,7 +15875,13 @@ components:
           - $ref: '#/components/schemas/AiOption'
     CategoryAttributeVariantRoleType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - Key
+      * `8` - Option
+      * `512` - RequireImage
+      * `1024` - RequestImage
       x-enumFlags: true
       x-enumNames:
       - None
@@ -15440,7 +16198,10 @@ components:
           - $ref: '#/components/schemas/ChannelFeeStructure'
     FeedSRPStrategyType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - None
+      * `2` - IncludeFreight
       x-enumNames:
       - None
       - IncludeFreight
@@ -15449,7 +16210,10 @@ components:
       - 2
     FeedSRPAdjStrategyType:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `0` - MaintainRecovery
+      * `1` - MaintainSRP
       x-enumNames:
       - MaintainRecovery
       - MaintainSRP
@@ -15520,7 +16284,25 @@ components:
           - $ref: '#/components/schemas/Company'
     InventoryUpdateFlags:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `4` - AllocateUPC
+      * `8` - AttemptPublish
+      * `16` - BuildUsingOutsourceProvider
+      * `32` - AutoMatchByUPC
+      * `64` - AutoMatchByMPNAndManufacturer
+      * `128` - AutoMatchByCategoryAndAttributes
+      * `256` - BuildTitleAndFeatures
+      * `257` - BuildTitleAndFeaturesPlus
+      * `512` - BypassDupCheckOnPublish
+      * `1024` - AutoActivateFeedsIfConforming
+      * `2048` - AutoMatchByChannelId
+      * `4096` - AutoMatchByGTIN
+      * `8192` - AutoMatchByISBN
+      * `16384` - AutoMatchByCatalogId
+      * `30816` - AutoMatch
+      * `32768` - ForceDependantAttributeUpdate
+      * `65536` - ClearAllocationsForExcludedFeeds
       x-enumFlags: true
       x-enumNames:
         - AllocateUPC
@@ -15560,7 +16342,14 @@ components:
         - 32768
     FeedUpdateFlags:
       type: integer
-      description: ''
+      description: >
+      Values:
+      * `4` - DisableVariantKey
+      * `8` - InitializeFreight
+      * `32` - AllowConditionUpdate
+      * `64` - DecrementAllocationIfUnavailable
+      * `128` - UseAllocationEndDateOf1Year
+      * `256` - UseAllocationEndDateOf7Days
       x-enumFlags: true
       x-enumNames:
         - DisableVariantKey
