@@ -4129,11 +4129,11 @@ components:
           - $ref: '#/components/schemas/SeverityType'
     SeverityType:
       type: integer
-      description: >
-      Values:
-      * `0` - Info
-      * `1` - Warning
-      * `2` - Fatal
+      description: >-
+        Values:
+        * `0` - Info
+        * `1` - Warning
+        * `2` - Fatal
       x-enumNames:
       - Info
       - Warning
