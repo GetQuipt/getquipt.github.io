@@ -8459,7 +8459,7 @@ components:
         * `15` - Class300
         * `16` - Class400
         * `17` - Class500
-      
+      x-enumNames:
       - Class50
       - Class55
       - Class60
