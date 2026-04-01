@@ -7504,11 +7504,11 @@ components:
       - 10
     FreeOnboardOptionType:
       type: integer
-      description: >
-      Values:
-      * `0` - None
-      * `1` - Destination
-      * `2` - Origin
+      description: >-
+        Values:
+        * `0` - None
+        * `1` - Destination
+        * `2` - Origin
       x-enumFlags: true
       x-enumNames:
       - None
@@ -7523,9 +7523,7 @@ components:
     CarrierMethod:
       type: object
       description: >-
-        Represents a carrier method, including identification, carrier association, and method
-  
-        details.
+        Represents a carrier method, including identification, carrier association, and method details.
       additionalProperties: false
       properties:
         Id:
