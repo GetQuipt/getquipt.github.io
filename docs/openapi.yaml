@@ -8219,7 +8219,7 @@ components:
         * `0` - None
         * `1` - Accepted
         * `2` - Rejected
-        x-enumNames:
+      x-enumNames:
       - None
       - Accepted
       - Rejected
@@ -8286,7 +8286,7 @@ components:
         * `10` - Success
         * `20` - Failure
         * `30` - Disabled
-      x-enumNames:
+      
       - Pending
       - Success
       - Failure
@@ -8327,7 +8327,7 @@ components:
         * `8` - ThermalZPL300
         * `13` - IsThermal
       x-enumFlags: true
-      x-enumNames:
+      
       - Laser
       - Thermal
       - PDF
@@ -8459,7 +8459,7 @@ components:
         * `15` - Class300
         * `16` - Class400
         * `17` - Class500
-      x-enumNames:
+      
       - Class50
       - Class55
       - Class60
@@ -8522,7 +8522,7 @@ components:
         * `64` - Rejected
         * `256` - Canceled
       x-enumFlags: true
-      x-enumNames:
+      
       - New
       - Open
       - Accepted
@@ -8785,7 +8785,7 @@ components:
         * `1024` - Returned
         * `1352` - Closed
       x-enumFlags: true
-      x-enumNames:
+      
       - None
       - Ordered
       - Shipped
@@ -8812,7 +8812,7 @@ components:
         * `256` - CancelConfirmed
         * `1024` - Canceled
       x-enumFlags: true
-      x-enumNames:
+      
       - None
       - Picking
       - Picked
@@ -8971,7 +8971,7 @@ components:
         * `8388608` - Canceled
         * `33554432` - Deleted
       x-enumFlags: true
-      x-enumNames:
+      
       - Pending
       - New
       - Ready
@@ -9050,7 +9050,7 @@ components:
         * `32768` - Exception
         * `65536` - ReturnedToSender
       x-enumFlags: true
-      x-enumNames:
+      
       - None
       - Canceled
       - Invalid
@@ -9329,7 +9329,7 @@ components:
         * `100` - Cancelled
         * `150` - Removed
         * `-1` - Failure
-      x-enumNames:
+      
       - New
       - Approved
       - Cancelled
@@ -9380,7 +9380,7 @@ components:
         * `3` - MessageConfirmed
         * `4` - SettingsError
         * `5` - ConnectionError
-      x-enumNames:
+      
       - None
       - MessageAlert
       - MessageConfirm
@@ -9962,7 +9962,7 @@ components:
         * `4` - MessageAlert
         * `8` - MessageConfirm
         * `16` - MessageConfirmed
-      x-enumNames:
+      
       - None
       - Message
       - MessageAlert
@@ -10282,7 +10282,7 @@ components:
         * `64` - MessageAlert
         * `128` - MessageConfirm
         * `256` - MessageConfirmed
-      x-enumNames:
+      
       - None
       - ActionRequired
       - Off
@@ -10636,7 +10636,7 @@ components:
         * `4` - Thursday
         * `5` - Friday
         * `6` - Saturday
-      x-enumNames:
+      
       - Sunday
       - Monday
       - Tuesday
@@ -10659,7 +10659,7 @@ components:
         * `0` - Never
         * `950` - Daily
         * `1000` - Weekly
-      x-enumNames:
+      
       - Never
       - Daily
       - Weekly
@@ -11215,7 +11215,7 @@ components:
         * `35` - Claim
         * `40` - PartialCredit
         * `1000` - Return
-      x-enumNames:
+      
       - None
       - MissingAccessory
       - Intercept
@@ -11238,7 +11238,7 @@ components:
       * `0` - None
       * `1` - Vendor
       * `2` - Channel
-      x-enumNames:
+      
       - None
       - Vendor
       - Channel
