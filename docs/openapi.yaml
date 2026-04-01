@@ -8522,7 +8522,7 @@ components:
         * `64` - Rejected
         * `256` - Canceled
       x-enumFlags: true
-      
+      x-enumNames:
       - New
       - Open
       - Accepted
@@ -8537,9 +8537,7 @@ components:
     ShipmentResult:
       type: object
       description: >-
-        Represents a shipment, including shipment details, carrier information, item fills,
-  
-        tracking, and associated documents.
+        Represents a shipment, including shipment details, carrier information, item fills, tracking, and associated documents.
       additionalProperties: false
       properties:
         Order:
@@ -8785,7 +8783,7 @@ components:
         * `1024` - Returned
         * `1352` - Closed
       x-enumFlags: true
-      
+      x-enumNames:
       - None
       - Ordered
       - Shipped
@@ -8812,7 +8810,7 @@ components:
         * `256` - CancelConfirmed
         * `1024` - Canceled
       x-enumFlags: true
-      
+      x-enumNames:
       - None
       - Picking
       - Picked
@@ -8829,9 +8827,7 @@ components:
     InvoiceBase:
       type: object
       description: >-
-        Represents basic invoice information, such as
-  
-        identification, invoice number, and invoice date.
+        Represents basic invoice information, such as identification, invoice number, and invoice date.
       additionalProperties: false
       properties:
         Id:
@@ -8971,7 +8967,7 @@ components:
         * `8388608` - Canceled
         * `33554432` - Deleted
       x-enumFlags: true
-      
+      x-enumNames:
       - Pending
       - New
       - Ready
@@ -9050,7 +9046,7 @@ components:
         * `32768` - Exception
         * `65536` - ReturnedToSender
       x-enumFlags: true
-      
+      x-enumNames:
       - None
       - Canceled
       - Invalid
@@ -9157,23 +9153,17 @@ components:
         UserDefined1:
           type: string
           description: >-
-            Custom values provided by channel. 
-  
-            The data provided here varies between each channel partner.
+            Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
           description: >-
-            Custom values provided by channel. 
-  
-            The data provided here varies between each channel partner.
+            Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined3:
           type: string
           description: >-
-            Custom values provided by channel. 
-  
-            The data provided here varies between each channel partner.
+            Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         Lines:
           type: array
@@ -9278,9 +9268,7 @@ components:
     CancelationResult:
       type: object
       description: >-
-        Represents a purchase order cancellation, including status, quantities, reason, and associated
-  
-        line information.
+        Represents a purchase order cancellation, including status, quantities, reason, and associated line information.
       additionalProperties: false
       properties:
         Id:
@@ -9329,7 +9317,7 @@ components:
         * `100` - Cancelled
         * `150` - Removed
         * `-1` - Failure
-      
+      x-enumNames:
       - New
       - Approved
       - Cancelled
@@ -9380,7 +9368,7 @@ components:
         * `3` - MessageConfirmed
         * `4` - SettingsError
         * `5` - ConnectionError
-      
+      x-enumNames:
       - None
       - MessageAlert
       - MessageConfirm
@@ -9846,11 +9834,7 @@ components:
           - $ref: '#/components/schemas/SignatureOptionType'
         FOB:
           description: >-
-            When the channel takes possession of the shipment. 
-  
-            In the case of 'Destination' the vendor owns the product until delivered. 
-  
-            With 'Origin' the channel owns as soon as the product leaves the vendors dock.
+            When the channel takes possession of the shipment. In the case of 'Destination' the vendor owns the product until delivered. With 'Origin' the channel owns as soon as the product leaves the vendors dock.
           x-nullable: true
           oneOf:
           - $ref: '#/components/schemas/FreeOnboardOptionType'
@@ -9867,9 +9851,7 @@ components:
         UserDefined1:
           type: string
           description: >-
-            Custom values provided by channel. 
-  
-            The data provided here varies between each channel partner.
+            Custom values provided by channel. The data provided here varies between each channel partner.
           x-nullable: true
         UserDefined2:
           type: string
@@ -9962,7 +9944,7 @@ components:
         * `4` - MessageAlert
         * `8` - MessageConfirm
         * `16` - MessageConfirmed
-      
+      x-enumNames:
       - None
       - Message
       - MessageAlert
@@ -10282,7 +10264,7 @@ components:
         * `64` - MessageAlert
         * `128` - MessageConfirm
         * `256` - MessageConfirmed
-      
+      x-enumNames: 
       - None
       - ActionRequired
       - Off
@@ -10636,7 +10618,7 @@ components:
         * `4` - Thursday
         * `5` - Friday
         * `6` - Saturday
-      
+      x-enumNames:
       - Sunday
       - Monday
       - Tuesday
@@ -10659,7 +10641,7 @@ components:
         * `0` - Never
         * `950` - Daily
         * `1000` - Weekly
-      
+      x-enumNames:
       - Never
       - Daily
       - Weekly
@@ -11215,7 +11197,7 @@ components:
         * `35` - Claim
         * `40` - PartialCredit
         * `1000` - Return
-      
+      x-enumNames:
       - None
       - MissingAccessory
       - Intercept
