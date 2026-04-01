@@ -8286,7 +8286,7 @@ components:
         * `10` - Success
         * `20` - Failure
         * `30` - Disabled
-      
+      x-enumNames:
       - Pending
       - Success
       - Failure
