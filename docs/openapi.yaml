@@ -16170,10 +16170,10 @@ components:
           - $ref: '#/components/schemas/ChannelFeeStructure'
     FeedSRPStrategyType:
       type: integer
-      description: >
-      Values:
-      * `0` - None
-      * `2` - IncludeFreight
+      description: >-
+        Values:
+        * `0` - None
+        * `2` - IncludeFreight
       x-enumNames:
       - None
       - IncludeFreight
