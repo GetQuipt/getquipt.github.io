@@ -11215,12 +11215,12 @@ components:
       - 1000
     RequestShippingWhoPaysType:
       type: integer
-      description: >
-      Values:
-      * `0` - None
-      * `1` - Vendor
-      * `2` - Channel
-      
+      description: >-
+        Values:
+        * `0` - None
+        * `1` - Vendor
+        * `2` - Channel
+      x-enumNames:
       - None
       - Vendor
       - Channel
