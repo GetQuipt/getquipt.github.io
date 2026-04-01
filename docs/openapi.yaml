@@ -8327,7 +8327,7 @@ components:
         * `8` - ThermalZPL300
         * `13` - IsThermal
       x-enumFlags: true
-      
+      x-enumNames:
       - Laser
       - Thermal
       - PDF
