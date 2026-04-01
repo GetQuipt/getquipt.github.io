@@ -15254,12 +15254,12 @@ components:
       - 811
     NotificationStatusType:
       type: integer
-      description: >
-      Values:
-      * `0` - None
-      * `1` - Unread
-      * `2` - Read
-      * `4` - Archived
+      description: >-
+        Values:
+        * `0` - None
+        * `1` - Unread
+        * `2` - Read
+        * `4` - Archived
       x-enumFlags: true
       x-enumNames:
       - None
