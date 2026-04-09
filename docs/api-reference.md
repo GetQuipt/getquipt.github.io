@@ -24,7 +24,7 @@ nav_order: 5
         }
       },
       requestInterceptor: (request) => {
-        request.headers["x-api-beta"] = "on";
+        //request.headers["x-api-beta"] = "on";
         return request;
       }
     });
