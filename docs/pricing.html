@@ -1,736 +1,1040 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quipt Pricing Resolver</title>
-<style>
-  :root {
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f5f3;
-    --color-background-tertiary: #eeeee9;
-    --color-background-info: #e6f1fb;
-    --color-background-success: #eaf3de;
-    --color-background-danger: #fcebeb;
-    --color-background-warning: #faeeda;
-    --color-text-primary: #1a1a18;
-    --color-text-secondary: #5f5e5a;
-    --color-text-tertiary: #888780;
-    --color-text-info: #185fa5;
-    --color-text-success: #27500a;
-    --color-text-danger: #a32d2d;
-    --color-text-warning: #854f0b;
-    --color-border-tertiary: rgba(26,26,24,0.15);
-    --color-border-secondary: rgba(26,26,24,0.3);
-    --color-border-primary: rgba(26,26,24,0.4);
-    --color-border-info: #85b7eb;
-    --color-border-success: #97c459;
-    --color-border-danger: #f09595;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-background-primary: #1e1e1c;
-      --color-background-secondary: #2a2a28;
-      --color-background-tertiary: #333330;
-      --color-background-info: #0c2f52;
-      --color-background-success: #172e09;
-      --color-background-danger: #3b1010;
-      --color-background-warning: #3d2504;
-      --color-text-primary: #e8e8e3;
-      --color-text-secondary: #a8a79f;
-      --color-text-tertiary: #6e6d68;
-      --color-text-info: #85b7eb;
-      --color-text-success: #c0dd97;
-      --color-text-danger: #f09595;
-      --color-text-warning: #fac775;
-      --color-border-tertiary: rgba(232,232,227,0.15);
-      --color-border-secondary: rgba(232,232,227,0.3);
-      --color-border-primary: rgba(232,232,227,0.4);
-      --color-border-info: #378add;
-      --color-border-success: #639922;
-      --color-border-danger: #e24b4a;
-    }
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: var(--font-sans);
-    font-size: 14px;
-    color: var(--color-text-primary);
-    background: var(--color-background-tertiary);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
-
-  .app { max-width: 720px; margin: 0 auto; }
-
-  .page-title {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 1.75rem;
-    color: var(--color-text-primary);
-  }
-
-  /* Wizard nav */
-  .wizard-nav { display: flex; align-items: center; margin-bottom: 2rem; }
-  .wstep-wrap { display: flex; flex-direction: column; align-items: center; }
-  .wdot {
-    width: 28px; height: 28px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 500; flex-shrink: 0;
-    border: 0.5px solid var(--color-border-secondary);
-    background: var(--color-background-secondary);
-    color: var(--color-text-secondary);
-    transition: all .2s;
-  }
-  .wdot.active { background: #042C53; color: #fff; border-color: #042C53; }
-  .wdot.done { background: #173404; color: #C0DD97; border-color: #173404; }
-  .wline { flex: 1; height: 1px; background: var(--color-border-tertiary); margin: 0 4px; transition: background .3s; }
-  .wline.done { background: #3B6D11; }
-  .wlabel { font-size: 11px; color: var(--color-text-tertiary); white-space: nowrap; margin-top: 3px; }
-
-  /* Panels */
-  .panel { display: none; }
-  .panel.active { display: block; }
-
-  /* Card */
-  .card {
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-lg);
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  h3 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
-
-  /* Labels */
-  label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    margin-bottom: 4px;
-  }
-
-  /* Text / password inputs */
-  input[type=text], input[type=password] {
-    width: 100%;
-    height: 36px;
-    padding: 0 10px;
-    font-size: 13px;
-    font-family: var(--font-sans);
-    color: var(--color-text-primary);
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    outline: none;
-    transition: border-color .15s;
-  }
-  input[type=text]:hover, input[type=password]:hover { border-color: var(--color-border-primary); }
-  input[type=text]:focus, input[type=password]:focus { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
-
-  .mono {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    background: var(--color-background-secondary);
-    padding: 1px 5px;
-    border-radius: 3px;
-    color: var(--color-text-tertiary);
-    margin-left: 2px;
-  }
-
-  /* Info icon + tooltip */
-  .info-icon {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 13px; height: 13px; border-radius: 50%;
-    border: 1px solid var(--color-border-secondary);
-    color: var(--color-text-tertiary);
-    font-size: 9px; font-style: normal; cursor: default;
-    flex-shrink: 0; position: relative;
-  }
-  .info-icon:hover { border-color: var(--color-border-primary); color: var(--color-text-secondary); }
-  .info-icon .tip {
-    display: none; position: absolute;
-    bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 6px 9px; font-size: 11px; color: var(--color-text-primary);
-    white-space: normal; width: 200px; line-height: 1.4;
-    z-index: 20; pointer-events: none; font-style: normal; font-weight: 400;
-  }
-  .info-icon:hover .tip { display: block; }
-
-  /* Grid layouts */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .step3-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  @media (max-width: 520px) {
-    .two-col, .attr-grid, .step3-layout { grid-template-columns: 1fr; }
-  }
-
-  .field { margin-bottom: 0; }
-  .verr { font-size: 11px; color: var(--color-text-danger); margin-top: 3px; min-height: 14px; }
-  .hint { font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px; }
-
-  /* Buttons */
-  .btn-row { display: flex; align-items: center; gap: 10px; margin-top: 1.25rem; }
-  .btn-primary {
-    background: #042C53; color: #fff; border: none;
-    border-radius: var(--border-radius-md);
-    padding: 9px 22px; font-size: 13px; cursor: pointer;
-    font-family: var(--font-sans); transition: background .15s;
-  }
-  .btn-primary:hover { background: #0C447C; }
-  .btn-ghost {
-    background: transparent;
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 9px 18px; font-size: 13px; cursor: pointer;
-    font-family: var(--font-sans); color: var(--color-text-secondary);
-    transition: background .15s;
-  }
-  .btn-ghost:hover { background: var(--color-background-secondary); }
-
-  /* Category grid */
-  .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 7px; }
-  .cat-btn {
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-md);
-    padding: 9px 11px; text-align: left; cursor: pointer;
-    font-size: 13px; color: var(--color-text-primary);
-    font-family: var(--font-sans); transition: border-color .12s; width: 100%;
-  }
-  .cat-btn:hover { border-color: var(--color-border-primary); }
-
-  /* Breadcrumb */
-  .breadcrumb { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: .75rem; font-size: 12px; color: var(--color-text-secondary); }
-  .crumb { cursor: pointer; color: var(--color-text-info); }
-  .crumb:hover { text-decoration: underline; }
-  .bsep { color: var(--color-text-tertiary); }
-
-  /* Loading */
-  .loading { font-size: 13px; color: var(--color-text-secondary); padding: 6px 0; display: flex; align-items: center; gap: 7px; }
-  .spin { width: 13px; height: 13px; border: 2px solid var(--color-border-secondary); border-top-color: #185FA5; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
-
-  /* Selected badge */
-  .selected-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: #E6F1FB; border: 0.5px solid #85B7EB;
-    border-radius: var(--border-radius-md);
-    padding: 5px 10px; font-size: 12px; color: #042C53; margin-bottom: 1rem;
-  }
-
-  /* Searchable select */
-  .ss-wrap { position: relative; width: 100%; }
-  .ss-display {
-    display: flex; align-items: center; justify-content: space-between;
-    height: 36px; padding: 0 10px; font-size: 13px;
-    color: var(--color-text-primary);
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    cursor: pointer; user-select: none; transition: border-color .15s;
-  }
-  .ss-display:hover { border-color: var(--color-border-primary); }
-  .ss-display.open { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
-  .ss-placeholder { color: var(--color-text-tertiary); }
-  .ss-arrow { width: 12px; height: 12px; flex-shrink: 0; transition: transform .15s; color: var(--color-text-tertiary); }
-  .ss-display.open .ss-arrow { transform: rotate(180deg); }
-  .ss-dropdown {
-    display: none; position: absolute;
-    top: calc(100% + 4px); left: 0; right: 0;
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    z-index: 100; overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-  .ss-dropdown.open { display: block; }
-  .ss-search-wrap { padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .ss-search {
-    width: 100%; height: 30px; padding: 0 8px;
-    font-size: 12px; font-family: var(--font-sans);
-    color: var(--color-text-primary);
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 6px; outline: none;
-  }
-  .ss-search:focus { border-color: #185fa5; }
-  .ss-list { max-height: 180px; overflow-y: auto; }
-  .ss-option { padding: 7px 10px; font-size: 13px; color: var(--color-text-primary); cursor: pointer; }
-  .ss-option:hover { background: var(--color-background-secondary); }
-  .ss-option.selected { color: #042C53; background: #E6F1FB; }
-  .ss-none { padding: 8px 10px; font-size: 12px; color: var(--color-text-tertiary); }
-
-  /* Status messages */
-  .status { font-size: 13px; padding: 8px 12px; border-radius: var(--border-radius-md); margin-bottom: .875rem; }
-  .status.ok { background: var(--color-background-success); color: var(--color-text-success); }
-  .status.err { background: var(--color-background-danger); color: var(--color-text-danger); }
-
-  /* Response table */
-  .resp-table-wrap { overflow-x: auto; margin-top: .875rem; }
-  .resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .resp-table th {
-    text-align: left; font-weight: 500; font-size: 12px;
-    color: var(--color-text-secondary); padding: 7px 10px;
-    border-bottom: 0.5px solid var(--color-border-secondary); white-space: nowrap;
-  }
-  .resp-table td {
-    padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary);
-    color: var(--color-text-primary); vertical-align: top; word-break: break-word;
-  }
-  .resp-table tr:last-child td { border-bottom: none; }
-  .resp-table tr:hover td { background: var(--color-background-secondary); }
-
-  .pill { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-  .pill.yes { background: #EAF3DE; color: #27500A; }
-  .pill.no { background: #F1EFE8; color: #5F5E5A; }
-
-  .raw-toggle { font-size: 12px; color: var(--color-text-info); cursor: pointer; margin-top: .75rem; display: inline-block; }
-  .raw-toggle:hover { text-decoration: underline; }
-  .raw-pre {
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-md);
-    padding: .875rem; margin-top: .5rem;
-    font-family: var(--font-mono); font-size: 12px;
-    white-space: pre-wrap; word-break: break-all;
-    color: var(--color-text-primary);
-    max-height: 260px; overflow-y: auto; display: none;
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    margin-bottom: .5rem;
-  }
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="page-title">Quipt Pricing Resolver</div>
-
-  <div class="wizard-nav">
-    <div class="wstep-wrap"><div class="wdot active" id="wd1">1</div><div class="wlabel">Auth</div></div>
-    <div class="wline" id="wl1"></div>
-    <div class="wstep-wrap"><div class="wdot" id="wd2">2</div><div class="wlabel">Category</div></div>
-    <div class="wline" id="wl2"></div>
-    <div class="wstep-wrap"><div class="wdot" id="wd3">3</div><div class="wlabel">Attributes</div></div>
-  </div>
-
-  <div id="panel1" class="panel active">
-    <div class="card">
-      <h3>Authorization</h3>
-      <div class="two-col">
-        <div class="field"><label for="auth-user">Username</label><input type="text" id="auth-user" placeholder="Enter username" autocomplete="username"></div>
-        <div class="field"><label for="auth-pass">Password</label><input type="password" id="auth-pass" placeholder="Enter password" autocomplete="current-password"></div>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quipt Pricing Resolver</title>
+      <style>
+         :root {
+         --color-background-primary: #ffffff;
+         --color-background-secondary: #f5f5f3;
+         --color-background-tertiary: #eeeee9;
+         --color-background-info: #e6f1fb;
+         --color-background-success: #eaf3de;
+         --color-background-danger: #fcebeb;
+         --color-background-warning: #faeeda;
+         --color-text-primary: #1a1a18;
+         --color-text-secondary: #5f5e5a;
+         --color-text-tertiary: #888780;
+         --color-text-info: #185fa5;
+         --color-text-success: #27500a;
+         --color-text-danger: #a32d2d;
+         --color-text-warning: #854f0b;
+         --color-border-tertiary: rgba(26,26,24,0.15);
+         --color-border-secondary: rgba(26,26,24,0.3);
+         --color-border-primary: rgba(26,26,24,0.4);
+         --color-border-info: #85b7eb;
+         --color-border-success: #97c459;
+         --color-border-danger: #f09595;
+         --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+         --border-radius-md: 8px;
+         --border-radius-lg: 12px;
+         --border-radius-xl: 16px;
+         }
+         @media (prefers-color-scheme: dark) {
+         :root {
+         --color-background-primary: #1e1e1c;
+         --color-background-secondary: #2a2a28;
+         --color-background-tertiary: #333330;
+         --color-background-info: #0c2f52;
+         --color-background-success: #172e09;
+         --color-background-danger: #3b1010;
+         --color-background-warning: #3d2504;
+         --color-text-primary: #e8e8e3;
+         --color-text-secondary: #a8a79f;
+         --color-text-tertiary: #6e6d68;
+         --color-text-info: #85b7eb;
+         --color-text-success: #c0dd97;
+         --color-text-danger: #f09595;
+         --color-text-warning: #fac775;
+         --color-border-tertiary: rgba(232,232,227,0.15);
+         --color-border-secondary: rgba(232,232,227,0.3);
+         --color-border-primary: rgba(232,232,227,0.4);
+         --color-border-info: #378add;
+         --color-border-success: #639922;
+         --color-border-danger: #e24b4a;
+         }
+         }
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+         body {
+         font-family: var(--font-sans);
+         font-size: 14px;
+         color: var(--color-text-primary);
+         background: var(--color-background-tertiary);
+         min-height: 100vh;
+         padding: 2rem 1rem;
+         }
+         .app { max-width: 720px; margin: 0 auto; }
+         .page-title {
+         font-size: 18px;
+         font-weight: 500;
+         margin-bottom: 1.75rem;
+         color: var(--color-text-primary);
+         }
+         /* Wizard nav */
+         .wizard-nav { display: flex; align-items: center; margin-bottom: 2rem; }
+         .wstep-wrap { display: flex; flex-direction: column; align-items: center; }
+         .wdot {
+         width: 28px; height: 28px; border-radius: 50%;
+         display: flex; align-items: center; justify-content: center;
+         font-size: 12px; font-weight: 500; flex-shrink: 0;
+         border: 0.5px solid var(--color-border-secondary);
+         background: var(--color-background-secondary);
+         color: var(--color-text-secondary);
+         transition: all .2s;
+         }
+         .wdot.active { background: #042C53; color: #fff; border-color: #042C53; }
+         .wdot.done { background: #173404; color: #C0DD97; border-color: #173404; }
+         .wline { flex: 1; height: 1px; background: var(--color-border-tertiary); margin: 0 4px; transition: background .3s; }
+         .wline.done { background: #3B6D11; }
+         .wlabel { font-size: 11px; color: var(--color-text-tertiary); white-space: nowrap; margin-top: 3px; }
+         /* Panels */
+         .panel { display: none; }
+         .panel.active { display: block; }
+         /* Card */
+         .card {
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-tertiary);
+         border-radius: var(--border-radius-lg);
+         padding: 1.25rem;
+         margin-bottom: 1.25rem;
+         }
+         h3 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
+         /* Labels */
+         label {
+         display: flex;
+         align-items: center;
+         gap: 5px;
+         font-size: 12px;
+         color: var(--color-text-secondary);
+         margin-bottom: 4px;
+         }
+         /* Text / password inputs */
+         input[type=text], input[type=password] {
+         width: 100%;
+         height: 36px;
+         padding: 0 10px;
+         font-size: 13px;
+         font-family: var(--font-sans);
+         color: var(--color-text-primary);
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         outline: none;
+         transition: border-color .15s;
+         }
+         input[type=text]:hover, input[type=password]:hover { border-color: var(--color-border-primary); }
+         input[type=text]:focus, input[type=password]:focus { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+         .mono {
+         font-family: var(--font-mono);
+         font-size: 11px;
+         background: var(--color-background-secondary);
+         padding: 1px 5px;
+         border-radius: 3px;
+         color: var(--color-text-tertiary);
+         margin-left: 2px;
+         }
+         /* Info icon + tooltip */
+         .info-icon {
+         display: inline-flex; align-items: center; justify-content: center;
+         width: 13px; height: 13px; border-radius: 50%;
+         border: 1px solid var(--color-border-secondary);
+         color: var(--color-text-tertiary);
+         font-size: 9px; font-style: normal; cursor: default;
+         flex-shrink: 0; position: relative;
+         }
+         .info-icon:hover { border-color: var(--color-border-primary); color: var(--color-text-secondary); }
+         .info-icon .tip {
+         display: none; position: absolute;
+         bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         padding: 6px 9px; font-size: 11px; color: var(--color-text-primary);
+         white-space: normal; width: 200px; line-height: 1.4;
+         z-index: 20; pointer-events: none; font-style: normal; font-weight: 400;
+         }
+         .info-icon:hover .tip { display: block; }
+         /* Grid layouts */
+         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+         .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+         .step3-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+         @media (max-width: 520px) {
+         .two-col, .attr-grid, .step3-layout { grid-template-columns: 1fr; }
+         }
+         .field { margin-bottom: 0; }
+         .verr { font-size: 11px; color: var(--color-text-danger); margin-top: 3px; min-height: 14px; }
+         .hint { font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px; }
+         /* Buttons */
+         .btn-row { display: flex; align-items: center; gap: 10px; margin-top: 1.25rem; }
+         .btn-primary {
+         background: #042C53; color: #fff; border: none;
+         border-radius: var(--border-radius-md);
+         padding: 9px 22px; font-size: 13px; cursor: pointer;
+         font-family: var(--font-sans); transition: background .15s;
+         }
+         .btn-primary:hover { background: #0C447C; }
+         .btn-ghost {
+         background: transparent;
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         padding: 9px 18px; font-size: 13px; cursor: pointer;
+         font-family: var(--font-sans); color: var(--color-text-secondary);
+         transition: background .15s;
+         }
+         .btn-ghost:hover { background: var(--color-background-secondary); }
+         /* Category grid */
+         .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 7px; }
+         .cat-btn {
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-tertiary);
+         border-radius: var(--border-radius-md);
+         padding: 9px 11px; text-align: left; cursor: pointer;
+         font-size: 13px; color: var(--color-text-primary);
+         font-family: var(--font-sans); transition: border-color .12s; width: 100%;
+         }
+         .cat-btn:hover { border-color: var(--color-border-primary); }
+         /* Breadcrumb */
+         .breadcrumb { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: .75rem; font-size: 12px; color: var(--color-text-secondary); }
+         .crumb { cursor: pointer; color: var(--color-text-info); }
+         .crumb:hover { text-decoration: underline; }
+         .bsep { color: var(--color-text-tertiary); }
+         /* Loading */
+         .loading { font-size: 13px; color: var(--color-text-secondary); padding: 6px 0; display: flex; align-items: center; gap: 7px; }
+         .spin { width: 13px; height: 13px; border: 2px solid var(--color-border-secondary); border-top-color: #185FA5; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+         @keyframes spin { to { transform: rotate(360deg); } }
+         .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+         /* Selected badge */
+         .selected-badge {
+         display: inline-flex; align-items: center; gap: 6px;
+         background: #E6F1FB; border: 0.5px solid #85B7EB;
+         border-radius: var(--border-radius-md);
+         padding: 5px 10px; font-size: 12px; color: #042C53; margin-bottom: 1rem;
+         }
+         /* Searchable select */
+         .ss-wrap { position: relative; width: 100%; }
+         .ss-display {
+         display: flex; align-items: center; justify-content: space-between;
+         height: 36px; padding: 0 10px; font-size: 13px;
+         color: var(--color-text-primary);
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         cursor: pointer; user-select: none; transition: border-color .15s;
+         }
+         .ss-display:hover { border-color: var(--color-border-primary); }
+         .ss-display.open { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+         .ss-placeholder { color: var(--color-text-tertiary); }
+         .ss-arrow { width: 12px; height: 12px; flex-shrink: 0; transition: transform .15s; color: var(--color-text-tertiary); }
+         .ss-display.open .ss-arrow { transform: rotate(180deg); }
+         .ss-dropdown {
+         display: none; position: absolute;
+         top: calc(100% + 4px); left: 0; right: 0;
+         background: var(--color-background-primary);
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         z-index: 100; overflow: hidden;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+         }
+         .ss-dropdown.open { display: block; }
+         .ss-search-wrap { padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+         .ss-search {
+         width: 100%; height: 30px; padding: 0 8px;
+         font-size: 12px; font-family: var(--font-sans);
+         color: var(--color-text-primary);
+         background: var(--color-background-secondary);
+         border: 0.5px solid var(--color-border-tertiary);
+         border-radius: 6px; outline: none;
+         }
+         .ss-search:focus { border-color: #185fa5; }
+         .ss-list { max-height: 180px; overflow-y: auto; }
+         .ss-option { padding: 7px 10px; font-size: 13px; color: var(--color-text-primary); cursor: pointer; }
+         .ss-option:hover { background: var(--color-background-secondary); }
+         .ss-option.selected { color: #042C53; background: #E6F1FB; }
+         .ss-none { padding: 8px 10px; font-size: 12px; color: var(--color-text-tertiary); }
+         /* Status messages */
+         .status { font-size: 13px; padding: 8px 12px; border-radius: var(--border-radius-md); margin-bottom: .875rem; }
+         .status.ok { background: var(--color-background-success); color: var(--color-text-success); }
+         .status.err { background: var(--color-background-danger); color: var(--color-text-danger); }
+         /* Response table */
+         .resp-table-wrap { overflow-x: auto; margin-top: .875rem; }
+         .resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+         .resp-table th {
+         text-align: left; font-weight: 500; font-size: 12px;
+         color: var(--color-text-secondary); padding: 7px 10px;
+         border-bottom: 0.5px solid var(--color-border-secondary); white-space: nowrap;
+         }
+         .resp-table td {
+         padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary);
+         color: var(--color-text-primary); vertical-align: top; word-break: break-word;
+         }
+         .resp-table tr:last-child td { border-bottom: none; }
+         .resp-table tr:hover td { background: var(--color-background-secondary); }
+         .pill { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+         .pill.yes { background: #EAF3DE; color: #27500A; }
+         .pill.no { background: #F1EFE8; color: #5F5E5A; }
+         .raw-toggle { font-size: 12px; color: var(--color-text-info); cursor: pointer; margin-top: .75rem; display: inline-block; }
+         .raw-toggle:hover { text-decoration: underline; }
+         .raw-pre {
+         background: var(--color-background-secondary);
+         border: 0.5px solid var(--color-border-tertiary);
+         border-radius: var(--border-radius-md);
+         padding: .875rem; margin-top: .5rem;
+         font-family: var(--font-mono); font-size: 12px;
+         white-space: pre-wrap; word-break: break-all;
+         color: var(--color-text-primary);
+         max-height: 260px; overflow-y: auto; display: none;
+         }
+         .section-label {
+         font-size: 11px;
+         font-weight: 500;
+         color: var(--color-text-tertiary);
+         text-transform: uppercase;
+         letter-spacing: .04em;
+         margin-bottom: .5rem;
+         }
+         .help-nav-btn {
+         background: transparent;
+         border: 0.5px solid var(--color-border-secondary);
+         border-radius: var(--border-radius-md);
+         padding: 4px 10px;
+         font-size: 12px;
+         cursor: pointer;
+         font-family: var(--font-sans);
+         color: var(--color-text-secondary);
+         transition: background .12s, color .12s;
+         }
+         .help-nav-btn:hover { background: var(--color-background-secondary); }
+         .help-nav-btn.active {
+         background: #042C53;
+         color: #fff;
+         border-color: #042C53;
+         }
+         .help-h1 {
+         font-size: 14px;
+         font-weight: 500;
+         color: var(--color-text-primary);
+         margin-bottom: .625rem;
+         }
+         .help-h2 {
+         font-size: 12px;
+         font-weight: 500;
+         color: var(--color-text-tertiary);
+         text-transform: uppercase;
+         letter-spacing: .04em;
+         margin: 1rem 0 .5rem;
+         }
+         .help-p {
+         font-size: 13px;
+         color: var(--color-text-secondary);
+         margin-bottom: .625rem;
+         line-height: 1.65;
+         }
+         .help-note {
+         background: var(--color-background-secondary);
+         border-left: 2px solid #185FA5;
+         border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+         padding: 8px 12px;
+         font-size: 12px;
+         color: var(--color-text-secondary);
+         margin: .75rem 0;
+         line-height: 1.55;
+         }
+         .help-kv-table {
+         border: 0.5px solid var(--color-border-tertiary);
+         border-radius: var(--border-radius-md);
+         overflow: hidden;
+         margin: .5rem 0;
+         }
+         .help-kv-row {
+         display: grid;
+         grid-template-columns: 160px 1fr;
+         border-bottom: 0.5px solid var(--color-border-tertiary);
+         font-size: 12px;
+         }
+         .help-kv-row:last-child { border-bottom: none; }
+         .help-kv-key {
+         padding: 8px 10px;
+         font-weight: 500;
+         color: var(--color-text-primary);
+         background: var(--color-background-secondary);
+         border-right: 0.5px solid var(--color-border-tertiary);
+         }
+         .help-kv-val {
+         padding: 8px 10px;
+         color: var(--color-text-secondary);
+         line-height: 1.55;
+         }
+         .help-steps-mini {
+         display: flex;
+         flex-direction: column;
+         gap: 8px;
+         margin: .75rem 0;
+         }
+         .help-step-mini {
+         display: flex;
+         align-items: center;
+         gap: 10px;
+         font-size: 13px;
+         color: var(--color-text-secondary);
+         }
+         .help-dot {
+         width: 22px;
+         height: 22px;
+         border-radius: 50%;
+         background: #042C53;
+         color: #fff;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 11px;
+         font-weight: 500;
+         flex-shrink: 0;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="app">
+         <div class="page-title">Quipt Pricing Resolver</div>
+         <div class="wizard-nav">
+            <div class="wstep-wrap">
+               <div class="wdot active" id="wd1">1</div>
+               <div class="wlabel">Auth</div>
+            </div>
+            <div class="wline" id="wl1"></div>
+            <div class="wstep-wrap">
+               <div class="wdot" id="wd2">2</div>
+               <div class="wlabel">Category</div>
+            </div>
+            <div class="wline" id="wl2"></div>
+            <div class="wstep-wrap">
+               <div class="wdot" id="wd3">3</div>
+               <div class="wlabel">Attributes</div>
+            </div>
+         </div>
+         <div id="panel1" class="panel active">
+            <div class="card">
+               <h3>Authorization</h3>
+               <div class="two-col">
+                  <div class="field"><label for="auth-user">Username</label><input type="text" id="auth-user" placeholder="Enter username" autocomplete="username"></div>
+                  <div class="field"><label for="auth-pass">Password</label><input type="password" id="auth-pass" placeholder="Enter password" autocomplete="current-password"></div>
+               </div>
+               <div class="hint">Credentials are encoded as Basic Auth and sent only to the resolve endpoint.</div>
+               <div class="btn-row"><button class="btn-primary" onclick="saveAuth()">Save &amp; continue</button></div>
+               <div id="auth-err" style="font-size:11px;color:var(--color-text-danger);margin-top:6px;min-height:14px"></div>
+            </div>
+         </div>
+         <div id="panel2" class="panel">
+            <div class="card">
+               <h3>Select a category</h3>
+               <div id="bc" class="breadcrumb" style="display:none"></div>
+               <div id="cat-loading" class="loading" style="display:none">
+                  <div class="spin"></div>
+                  Loading…
+               </div>
+               <div id="cat-grid" class="cat-grid"></div>
+               <div class="btn-row"><button class="btn-ghost" onclick="goTo(1)">Back</button></div>
+            </div>
+         </div>
+         <div id="panel3" class="panel">
+            <div class="card">
+               <div id="cat-badge" class="selected-badge" style="display:none"></div>
+               <div class="step3-layout">
+                  <div>
+                     <h3>Attributes</h3>
+                     <div id="attr-loading" class="loading" style="display:none">
+                        <div class="spin"></div>
+                        Loading attributes…
+                     </div>
+                     <div id="attr-form"></div>
+                  </div>
+                  <div>
+                     <h3>Result</h3>
+                     <div id="result-area">
+                        <p style="font-size:13px;color:var(--color-text-secondary)">Submit to see results.</p>
+                     </div>
+                  </div>
+               </div>
+               <hr class="divider">
+               <div style="display:flex;align-items:center;gap:1.5rem;margin-top:1rem">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
+                  <input type="checkbox" id="chk-buybox" checked> Include buy box
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
+                  <input type="checkbox" id="chk-channelpricing" checked> Include channel pricing
+                  </label>
+               </div>
+               <hr class="divider">
+               <div class="btn-row">
+                  <button class="btn-primary" id="submit-btn" onclick="submitForm()">Submit</button>
+                  <button class="btn-ghost" onclick="goTo(2)">Back</button>
+               </div>
+            </div>
+         </div>
+         <button id="help-btn" onclick="toggleHelp()" title="Help">?</button>
       </div>
-      <div class="hint">Credentials are encoded as Basic Auth and sent only to the resolve endpoint.</div>
-      <div class="btn-row"><button class="btn-primary" onclick="saveAuth()">Save &amp; continue</button></div>
-      <div id="auth-err" style="font-size:11px;color:var(--color-text-danger);margin-top:6px;min-height:14px"></div>
-    </div>
-  </div>
-
-  <div id="panel2" class="panel">
-    <div class="card">
-      <h3>Select a category</h3>
-      <div id="bc" class="breadcrumb" style="display:none"></div>
-      <div id="cat-loading" class="loading" style="display:none"><div class="spin"></div>Loading…</div>
-      <div id="cat-grid" class="cat-grid"></div>
-      <div class="btn-row"><button class="btn-ghost" onclick="goTo(1)">Back</button></div>
-    </div>
-  </div>
-
-  <div id="panel3" class="panel">
-    <div class="card">
-      <div id="cat-badge" class="selected-badge" style="display:none"></div>
-      <div class="step3-layout">
-        <div>
-          <h3>Attributes</h3>
-          <div id="attr-loading" class="loading" style="display:none"><div class="spin"></div>Loading attributes…</div>
-          <div id="attr-form"></div>
-        </div>
-        <div>
-          <h3>Result</h3>
-          <div id="result-area"><p style="font-size:13px;color:var(--color-text-secondary)">Submit to see results.</p></div>
-        </div>
+      <script>
+         const BASE = 'https://api.getquipt.com/v2/categories';
+         const RESOLVE = 'https://api.getquipt.com/v2/inventory/groupandenrich/resolve';
+         let authToken = '', path = [], leafId = null, leafAttrs = [];
+         
+         const FIXED_ATTRS = [
+           {
+             Code: 'FIXEDMAN',
+             Text: 'Manufacturer',
+             Tooltip: null,
+             Options: null
+           },
+           {
+             Code: 'FIXEDCOND',
+             Text: 'Condition',
+             Tooltip: null,
+             Options: [
+               { Value: 'New', Label: 'New' },
+               { Value: 'Premium Refurbished', Label: 'Premium Refurbished' },
+               { Value: 'Certified Refurbished', Label: 'Certified Refurbished' },
+               { Value: 'Refurbished', Label: 'Refurbished' },
+               { Value: 'Scratch and Dent Refurbished', Label: 'Scratch and Dent Refurbished' },
+               { Value: 'New Open Box', Label: 'New Open Box' },
+               { Value: 'Used - Good', Label: 'Used - Good' }
+             ]
+           }
+         ];
+           
+         function goTo(n) {
+           [1,2,3].forEach(i => {
+             document.getElementById('panel'+i).className = 'panel' + (i===n ? ' active' : '');
+             document.getElementById('wd'+i).className = 'wdot' + (i===n ? ' active' : i<n ? ' done' : '');
+           });
+           document.getElementById('wl1').className = 'wline' + (n>1 ? ' done' : '');
+           document.getElementById('wl2').className = 'wline' + (n>2 ? ' done' : '');
+         }
+         
+         function saveAuth() {
+           const u = document.getElementById('auth-user').value.trim();
+           const p = document.getElementById('auth-pass').value;
+           const err = document.getElementById('auth-err');
+           if (!u || !p) { err.textContent = 'Both username and password are required.'; return; }
+           err.textContent = '';
+           authToken = btoa(u + ':' + p);
+           goTo(2);
+           renderCatGrid(null);
+         }
+         
+         async function fetchCats(id) {
+           try { const r = await fetch(id ? BASE+'/'+id : BASE); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
+         }
+         
+         async function fetchAttrs(id) {
+           try { const r = await fetch(BASE+'/'+id+'/Attributes'); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
+         }
+         
+         function renderBc() {
+           const el = document.getElementById('bc');
+           if (!path.length) { el.style.display = 'none'; return; }
+           el.style.display = 'flex';
+           el.innerHTML = '<span class="crumb" onclick="navTo(-1)">Root</span>';
+           path.forEach((p,i) => el.innerHTML += '<span class="bsep">›</span><span class="crumb" onclick="navTo('+i+')">'+esc(p.n)+'</span>');
+         }
+         
+         function navTo(i) {
+           if (i === -1) path = []; else path = path.slice(0, i+1);
+           renderBc();
+           renderCatGrid(path.length ? path[path.length-1].id : null);
+         }
+         
+         async function renderCatGrid(pid) {
+           const g = document.getElementById('cat-grid'), ld = document.getElementById('cat-loading');
+           g.innerHTML = ''; ld.style.display = 'flex';
+           const cats = await fetchCats(pid);
+           ld.style.display = 'none';
+           if (!cats.length) { g.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No subcategories found.</p>'; return; }
+           cats.forEach(c => {
+             const b = document.createElement('button');
+             b.className = 'cat-btn'; b.textContent = c.Name + (c.IsLeaf ? '' : ' ›');
+             b.onclick = () => pickCat(c); g.appendChild(b);
+           });
+         }
+         
+         async function pickCat(c) {
+           if (!c.IsLeaf) {
+             path.push({id: c.Id, n: c.Name}); renderBc(); renderCatGrid(c.Id);
+           } else {
+             leafId = c.Id; goTo(3);
+             const badge = document.getElementById('cat-badge');
+             badge.style.display = 'inline-flex';
+             badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' + esc([...path.map(p=>p.n), c.Name].join(' › '));
+             await loadAttrs(c.Id);
+           }
+         }
+         
+         async function loadAttrs(id) {
+           const ld = document.getElementById('attr-loading'), frm = document.getElementById('attr-form');
+           frm.innerHTML = ''; ld.style.display = 'flex';
+           const all = await fetchAttrs(id);
+           const attrs = all.filter(a => a.InUniqueSearch === true);
+           ld.style.display = 'none'; leafAttrs = attrs;
+           if (!attrs.length) { frm.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No unique-search attributes for this category.</p>'; return; }
+           buildForm(attrs, frm);
+         }
+         
+         function buildForm(attrs, frm) {
+           const grid = document.createElement('div'); grid.className = 'attr-grid';
+           const allAttrs = [...FIXED_ATTRS, ...attrs];
+           allAttrs.forEach(a => {
+             const wrap = document.createElement('div'); wrap.className = 'field';
+         
+             const lbl = document.createElement('label');
+             const ns = document.createElement('span'); ns.textContent = a.Text; lbl.appendChild(ns);
+             const cs = document.createElement('span'); cs.className = 'mono'; cs.textContent = a.Code; lbl.appendChild(cs);
+             if (a.Tooltip) {
+               const icon = document.createElement('i'); icon.className = 'info-icon'; icon.textContent = 'i';
+               const tip = document.createElement('span'); tip.className = 'tip'; tip.textContent = a.Tooltip;
+               icon.appendChild(tip); lbl.appendChild(icon);
+             }
+             wrap.appendChild(lbl);
+         
+             if (a.Options && a.Options.length) {
+               const options = a.Options.map(o => ({ value: o.Value || o, label: o.Label || o.Value || o }));
+               wrap.appendChild(buildSearchSelect('f_' + a.Code, options));
+             } else {
+               const inp = document.createElement('input'); inp.type = 'text'; inp.id = 'f_' + a.Code;
+               inp.placeholder = a.DataType === 'Decimal' || a.DataType === 'Integer' ? 'Number' : 'Value';
+               if (a.Regex) {
+                 inp.addEventListener('blur', () => {
+                   const e = document.getElementById('e_' + a.Code); if (!inp.value) { e.textContent = ''; return; }
+                   try { if (!new RegExp(a.Regex).test(inp.value)) e.textContent = 'Invalid format'; else e.textContent = ''; } catch(_) { e.textContent = ''; }
+                 });
+               }
+               wrap.appendChild(inp);
+             }
+         
+             const err = document.createElement('div'); err.className = 'verr'; err.id = 'e_' + a.Code; wrap.appendChild(err);
+             grid.appendChild(wrap);
+           });
+           frm.appendChild(grid);
+         }
+         
+         function buildSearchSelect(id, options) {
+           const wrap = document.createElement('div'); wrap.className = 'ss-wrap'; wrap.id = 'ss_wrap_' + id;
+         
+           const display = document.createElement('div'); display.className = 'ss-display';
+           display.innerHTML = '<span class="ss-val ss-placeholder">— select —</span><svg class="ss-arrow" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+         
+           const dropdown = document.createElement('div'); dropdown.className = 'ss-dropdown';
+           const searchWrap = document.createElement('div'); searchWrap.className = 'ss-search-wrap';
+           const searchInp = document.createElement('input'); searchInp.className = 'ss-search'; searchInp.type = 'text'; searchInp.placeholder = 'Search…'; searchInp.autocomplete = 'off';
+           searchWrap.appendChild(searchInp);
+           const list = document.createElement('div'); list.className = 'ss-list';
+           dropdown.appendChild(searchWrap); dropdown.appendChild(list);
+           wrap.appendChild(display); wrap.appendChild(dropdown);
+         
+           let selectedValue = '';
+         
+           function renderList(filter) {
+             const q = (filter || '').toLowerCase();
+             const filtered = q ? options.filter(o => o.label.toLowerCase().includes(q)) : options;
+             list.innerHTML = '';
+             if (!filtered.length) { list.innerHTML = '<div class="ss-none">No results</div>'; return; }
+             filtered.forEach(o => {
+               const item = document.createElement('div'); item.className = 'ss-option' + (o.value === selectedValue ? ' selected' : '');
+               item.textContent = o.label;
+               item.onclick = () => {
+                 selectedValue = o.value;
+                 display.querySelector('.ss-val').textContent = o.label;
+                 display.querySelector('.ss-val').classList.remove('ss-placeholder');
+                 closeDropdown();
+               };
+               list.appendChild(item);
+             });
+           }
+         
+           function openDropdown() { display.classList.add('open'); dropdown.classList.add('open'); searchInp.value = ''; renderList(''); setTimeout(() => searchInp.focus(), 10); }
+           function closeDropdown() { display.classList.remove('open'); dropdown.classList.remove('open'); }
+         
+           display.onclick = e => { e.stopPropagation(); dropdown.classList.contains('open') ? closeDropdown() : openDropdown(); };
+           searchInp.addEventListener('input', () => renderList(searchInp.value));
+           searchInp.onclick = e => e.stopPropagation();
+           document.addEventListener('click', () => closeDropdown());
+         
+           wrap._getRealValue = () => selectedValue;
+           renderList('');
+           return wrap;
+         }
+         
+         function getFieldValue(code) {
+           const ssWrap = document.getElementById('ss_wrap_f_' + code);
+           if (ssWrap) return ssWrap._getRealValue();
+           const el = document.getElementById('f_' + code);
+           return el ? el.value : '';
+         }
+         
+         async function submitForm() {
+           const submitBtn = document.getElementById('submit-btn');
+           submitBtn.disabled = true;
+           submitBtn.innerHTML = '<div class="btn-spin"></div>Submitting…';
+           
+           let hasErr = false;
+           const attrPayload = [];
+           [...FIXED_ATTRS, ...leafAttrs].forEach(a => {
+             const val = getFieldValue(a.Code);
+             if (a.Regex && val) {
+               try { if (!new RegExp(a.Regex).test(val)) { const e = document.getElementById('e_' + a.Code); if (e) e.textContent = 'Invalid format'; hasErr = true; } } catch(_) {}
+             }
+             if (val) attrPayload.push({ Key: a.Code, Value: val });
+           });
+           if (hasErr) return;
+         
+           const payload = { 
+             Category: { Id: leafId }, 
+             Attributes: attrPayload,
+             IncludeBuyBox: document.getElementById('chk-buybox').checked,
+             IncludeChannelPricing: document.getElementById('chk-channelpricing').checked 
+           };
+           const area = document.getElementById('result-area');
+           area.innerHTML = '<div class="loading"><div class="spin"></div>Submitting…</div>';
+         
+           try {
+             const r = await fetch(RESOLVE, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-beta': 'on', 'Authorization': 'Basic ' + authToken }, body: JSON.stringify(payload) });
+             const txt = await r.text();
+             let parsed = null; try { parsed = JSON.parse(txt); } catch(_) {}
+             if (r.ok) renderResponse(area, r.status, parsed, txt);
+             else { area.innerHTML = '<div class="status err">Error ' + r.status + (parsed && parsed.message ? ' — ' + esc(parsed.message) : '') + '</div>'; if (txt) addRaw(area, txt); }
+             submitBtn.disabled = false;
+             submitBtn.textContent = 'Submit';
+           } catch(e) {
+             area.innerHTML = '<div class="status err">Request failed: ' + esc(e.message) + '<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
+           }
+         }
+         
+         function renderResponse(area, status, data, raw) {
+           area.innerHTML = '<div class="status ok">Status ' + status + ' — success</div>';
+           if (!data) { addRaw(area, raw); return; }
+         
+           // Summary card
+           const summary = [
+             ['SKU', data.Sku],
+             ['Catalog ID', data.CatalogId],
+             ['Catalog exists', data.CatalogExists],
+             ['Inventory ID', data.InventoryId],
+             ['Inventory exists', data.InventoryExists],
+           ];
+           let html = '<table class="resp-table" style="margin-bottom:1rem"><tbody>';
+           summary.forEach(([k, v]) => {
+             const cell = typeof v === 'boolean'
+               ? '<span class="pill ' + (v ? 'yes' : 'no') + '">' + (v ? 'Yes' : 'No') + '</span>'
+               : esc(String(v ?? '—'));
+             html += '<tr><td style="color:var(--color-text-secondary);white-space:nowrap;width:140px">' + esc(k) + '</td><td>' + cell + '</td></tr>';
+           });
+           html += '</tbody></table>';
+         
+           // Messages
+           if (data.Messages) {
+             html += '<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.5">' + esc(data.Messages) + '</p>';
+           }
+         
+           area.innerHTML += html;
+         
+           // Data key/value pairs
+           if (data.Data && data.Data.length) {
+             const dataSection = document.createElement('div');
+             dataSection.innerHTML = '<div class="section-label">Data</div>';
+             let t = '<table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>';
+             data.Data.forEach(d => {
+               t += '<tr><td style="color:var(--color-text-secondary)">' + esc(d.Key) + '</td><td>' + esc(String(d.Value ?? '—')) + '</td></tr>';
+             });
+             t += '</tbody></table>';
+             dataSection.innerHTML += t;
+             area.appendChild(dataSection);
+           }
+         
+           // Channel pricing table
+           if (data.ChannelPricing && data.ChannelPricing.length) {
+             const cpSection = document.createElement('div');
+             cpSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Channel pricing</div>';
+             let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>SRP</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
+             data.ChannelPricing.forEach(r => {
+               t += '<tr>'
+                 + '<td>' + esc(r.Channel) + '</td>'
+                 + '<td>' + (r.SRP != null ? '$' + Number(r.SRP).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+                 + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+                 + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+                 + '</tr>';
+             });
+             t += '</tbody></table></div>';
+             cpSection.innerHTML += t;
+             area.appendChild(cpSection);
+           }
+         
+           // Buyboxes table
+           if (data.Buyboxes && data.Buyboxes.length) {
+             const bbSection = document.createElement('div');
+             bbSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Buyboxes</div>';
+             let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
+             data.Buyboxes.forEach(r => {
+               t += '<tr>'
+                 + '<td>' + esc(r.Channel) + '</td>'
+                 + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+                 + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+                 + '</tr>';
+             });
+             t += '</tbody></table></div>';
+             bbSection.innerHTML += t;
+             area.appendChild(bbSection);
+           }
+         
+           // Raw JSON toggle
+           const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw JSON';
+           const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = JSON.stringify(data, null, 2);
+           tog.onclick = () => { const open = pre.style.display === 'block'; pre.style.display = open ? 'none' : 'block'; tog.textContent = open ? 'Show raw JSON' : 'Hide raw JSON'; };
+           area.appendChild(tog); area.appendChild(pre);
+         }
+         
+         function extractRows(data) {
+           if (Array.isArray(data) && data.length && typeof data[0]==='object') return data;
+           for (const k of Object.keys(data)) { if (Array.isArray(data[k]) && data[k].length && typeof data[k][0]==='object') return data[k]; }
+           return [];
+         }
+         
+         function flattenObj(obj, prefix='') {
+           return Object.entries(obj).reduce((acc,[k,v]) => {
+             const key = prefix ? prefix+'.'+k : k;
+             if (v && typeof v==='object' && !Array.isArray(v)) Object.assign(acc, flattenObj(v, key));
+             else if (Array.isArray(v)) acc[key] = '['+v.length+' items]';
+             else acc[key] = v;
+             return acc;
+           }, {});
+         }
+         
+         function addRaw(area, txt) {
+           const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw response';
+           const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = txt;
+           tog.onclick = () => { const open = pre.style.display==='block'; pre.style.display = open?'none':'block'; tog.textContent = open?'Show raw response':'Hide raw response'; };
+           area.appendChild(tog); area.appendChild(pre);
+         }
+         
+         function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+         
+           function toggleHelp() {
+           const panel = document.getElementById('help-panel');
+           const overlay = document.getElementById('help-overlay');
+           const isOpen = panel.style.transform === 'translateX(0px)' || panel.style.transform === 'translateX(0%)';
+           if (isOpen) {
+             panel.style.transform = 'translateX(100%)';
+             overlay.style.display = 'none';
+           } else {
+             panel.style.transform = 'translateX(0%)';
+             overlay.style.display = 'block';
+           }
+         }
+         
+         function helpNav(btn, sectionId) {
+           document.querySelectorAll('.help-nav-btn').forEach(b => b.classList.remove('active'));
+           btn.classList.add('active');
+           document.querySelectorAll('.help-section').forEach(s => s.style.display = 'none');
+           document.getElementById(sectionId).style.display = 'block';
+           document.getElementById('help-content').scrollTop = 0;
+         }
+      </script>
+      <div id="help-overlay" onclick="toggleHelp()" style="
+         display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35);
+         z-index:300; transition:opacity .25s;
+         "></div>
+      <div id="help-panel" style="
+         position:fixed; top:0; right:0; height:100vh; width:420px; max-width:92vw;
+         background:var(--color-background-primary);
+         border-left:0.5px solid var(--color-border-secondary);
+         z-index:400; transform:translateX(100%); transition:transform .3s ease;
+         display:flex; flex-direction:column; overflow:hidden;
+         ">
+         <!-- Header -->
+         <div style="
+            display:flex; align-items:center; justify-content:space-between;
+            padding:1rem 1.25rem; border-bottom:0.5px solid var(--color-border-tertiary);
+            flex-shrink:0;
+            ">
+            <div>
+               <div style="font-size:15px;font-weight:500;color:var(--color-text-primary)">User guide</div>
+               <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Quipt inventory resolver</div>
+            </div>
+            <button onclick="toggleHelp()" style="
+               background:transparent; border:0.5px solid var(--color-border-secondary);
+               border-radius:var(--border-radius-md); padding:6px 10px; cursor:pointer;
+               font-size:12px; color:var(--color-text-secondary); font-family:var(--font-sans);
+               ">Close</button>
+         </div>
+         <!-- Nav pills -->
+         <div style="
+            display:flex; gap:6px; padding:.75rem 1.25rem;
+            border-bottom:0.5px solid var(--color-border-tertiary);
+            flex-shrink:0; flex-wrap:wrap;
+            ">
+            <button class="help-nav-btn active" onclick="helpNav(this,'help-overview')">Overview</button>
+            <button class="help-nav-btn" onclick="helpNav(this,'help-step1')">1 · Auth</button>
+            <button class="help-nav-btn" onclick="helpNav(this,'help-step2')">2 · Category</button>
+            <button class="help-nav-btn" onclick="helpNav(this,'help-step3')">3 · Attributes</button>
+            <button class="help-nav-btn" onclick="helpNav(this,'help-results')">Results</button>
+            <button class="help-nav-btn" onclick="helpNav(this,'help-trouble')">Troubleshooting</button>
+         </div>
+         <!-- Scrollable content -->
+         <div id="help-content" style="flex:1;overflow-y:auto;padding:1.25rem;font-size:13px;line-height:1.65;color:var(--color-text-primary)">
+            <!-- Overview -->
+            <div id="help-overview" class="help-section">
+               <div class="help-h1">Getting started</div>
+               <p class="help-p">The Quipt Inventory Resolver helps you look up pricing and enrichment data for a specific product. Work through the three-step wizard — enter your credentials, pick a category, fill in what you know about the product — then submit to see matched results.</p>
+               <div class="help-steps-mini">
+                  <div class="help-step-mini"><span class="help-dot">1</span><span>Enter your API credentials</span></div>
+                  <div class="help-step-mini"><span class="help-dot">2</span><span>Browse to the right product category</span></div>
+                  <div class="help-step-mini"><span class="help-dot">3</span><span>Fill in attributes and submit</span></div>
+               </div>
+               <div class="help-note">Your credentials are only used to authorize the resolve request. They are never stored between sessions.</div>
+            </div>
+            <!-- Step 1 -->
+            <div id="help-step1" class="help-section" style="display:none">
+               <div class="help-h1">Step 1 — Authorization</div>
+               <p class="help-p">Enter your Quipt API username and password, then click <strong>Save &amp; continue</strong>.</p>
+               <div class="help-note">Credentials are Base64-encoded as HTTP Basic Auth and sent only with the resolve request. They exist in memory only — reload the page and you will need to re-enter them.</div>
+            </div>
+            <!-- Step 2 -->
+            <div id="help-step2" class="help-section" style="display:none">
+               <div class="help-h1">Step 2 — Select a category</div>
+               <p class="help-p">Browse the category tree to find the correct product type.</p>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Category with ›</div>
+                     <div class="help-kv-val">Has subcategories — click to drill in</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Category without ›</div>
+                     <div class="help-kv-val">Leaf category — clicking advances to step 3</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Breadcrumb trail</div>
+                     <div class="help-kv-val">Click any crumb to navigate back up the tree</div>
+                  </div>
+               </div>
+               <p class="help-p" style="margin-top:.5rem">Example path for a laptop: <em>Electronics › Computers › Laptops &amp; Notebooks</em></p>
+            </div>
+            <!-- Step 3 -->
+            <div id="help-step3" class="help-section" style="display:none">
+               <div class="help-h1">Step 3 — Fill in attributes</div>
+               <div class="help-h2">Fixed attributes</div>
+               <p class="help-p">These two fields appear on every category:</p>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Manufacturer</div>
+                     <div class="help-kv-val">Brand name — type directly, e.g. Lenovo, Apple</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Condition</div>
+                     <div class="help-kv-val">Item condition — click to search and select</div>
+                  </div>
+               </div>
+               <div class="help-h2">Category attributes</div>
+               <p class="help-p">Additional fields depend on the category selected.</p>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Text input</div>
+                     <div class="help-kv-val">Type the value directly</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Dropdown</div>
+                     <div class="help-kv-val">Click to open, then type to filter options</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">ⓘ icon</div>
+                     <div class="help-kv-val">Hover to read a description of the field</div>
+                  </div>
+               </div>
+               <div class="help-note">You don't need to fill every field — more detail gives a more accurate result, but partial submissions are accepted.</div>
+               <div class="help-h2">Options</div>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Include buy box</div>
+                     <div class="help-kv-val">Returns current buy box prices per channel</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Include channel pricing</div>
+                     <div class="help-kv-val">Returns SRP across all sales channels</div>
+                  </div>
+               </div>
+               <p class="help-p">Both are checked by default. Click <strong>Submit</strong> when ready — a spinner shows while the request processes.</p>
+            </div>
+            <!-- Results -->
+            <div id="help-results" class="help-section" style="display:none">
+               <div class="help-h1">Understanding the results</div>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">SKU</div>
+                     <div class="help-kv-val">Quipt SKU for the matched product</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Catalog ID</div>
+                     <div class="help-kv-val">Internal catalog record identifier</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Catalog exists</div>
+                     <div class="help-kv-val">Whether a catalog record was found</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Inventory ID</div>
+                     <div class="help-kv-val">Internal inventory record identifier</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Inventory exists</div>
+                     <div class="help-kv-val">Whether an inventory record was found</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Messages</div>
+                     <div class="help-kv-val">Summary of matching steps the API performed</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Data</div>
+                     <div class="help-kv-val">Key metrics — estimated recovery value, confidence score</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Channel pricing</div>
+                     <div class="help-kv-val">SRP and buy box price per sales channel</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Buyboxes</div>
+                     <div class="help-kv-val">Current buy box prices for main marketplaces</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Show raw JSON</div>
+                     <div class="help-kv-val">Toggle to reveal the full unformatted API response</div>
+                  </div>
+               </div>
+               <div class="help-note">Edit any attribute and click Submit again to update results without starting over. Click Back to change category.</div>
+            </div>
+            <!-- Troubleshooting -->
+            <div id="help-trouble" class="help-section" style="display:none">
+               <div class="help-h1">Troubleshooting</div>
+               <div class="help-kv-table">
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">No attributes shown</div>
+                     <div class="help-kv-val">The selected category may have no unique-search attributes. Try a more specific subcategory.</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Request failed</div>
+                     <div class="help-kv-val">Check your internet connection and that your credentials are correct.</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Results differ from Postman</div>
+                     <div class="help-kv-val">Dropdown values are case-sensitive. Check Condition and other select fields match exactly.</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Spinner doesn't stop</div>
+                     <div class="help-kv-val">The API may be slow. Wait up to 30 seconds. If it continues, reload the page.</div>
+                  </div>
+                  <div class="help-kv-row">
+                     <div class="help-kv-key">Wrong results returned</div>
+                     <div class="help-kv-val">Provide more specific attributes — especially Manufacturer, Condition, and model-specific fields.</div>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
-      <hr class="divider">
-      <div style="display:flex;align-items:center;gap:1.5rem;margin-top:1rem">
-        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
-          <input type="checkbox" id="chk-buybox" checked> Include buy box
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
-          <input type="checkbox" id="chk-channelpricing" checked> Include channel pricing
-        </label>
-      </div>
-      <hr class="divider">
-      <div class="btn-row">
-        <button class="btn-primary" id="submit-btn" onclick="submitForm()">Submit</button>
-        <button class="btn-ghost" onclick="goTo(2)">Back</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-const BASE = 'https://api.getquipt.com/v2/categories';
-const RESOLVE = 'https://api.getquipt.com/v2/inventory/groupandenrich/resolve';
-let authToken = '', path = [], leafId = null, leafAttrs = [];
-
-const FIXED_ATTRS = [
-  {
-    Code: 'FIXEDMAN',
-    Text: 'Manufacturer',
-    Tooltip: null,
-    Options: null
-  },
-  {
-    Code: 'FIXEDCOND',
-    Text: 'Condition',
-    Tooltip: null,
-    Options: [
-      { Value: 'New', Label: 'New' },
-      { Value: 'Premium Refurbished', Label: 'Premium Refurbished' },
-      { Value: 'Certified Refurbished', Label: 'Certified Refurbished' },
-      { Value: 'Refurbished', Label: 'Refurbished' },
-      { Value: 'Scratch and Dent Refurbished', Label: 'Scratch and Dent Refurbished' },
-      { Value: 'New Open Box', Label: 'New Open Box' },
-      { Value: 'Used - Good', Label: 'Used - Good' }
-    ]
-  }
-];
-  
-function goTo(n) {
-  [1,2,3].forEach(i => {
-    document.getElementById('panel'+i).className = 'panel' + (i===n ? ' active' : '');
-    document.getElementById('wd'+i).className = 'wdot' + (i===n ? ' active' : i<n ? ' done' : '');
-  });
-  document.getElementById('wl1').className = 'wline' + (n>1 ? ' done' : '');
-  document.getElementById('wl2').className = 'wline' + (n>2 ? ' done' : '');
-}
-
-function saveAuth() {
-  const u = document.getElementById('auth-user').value.trim();
-  const p = document.getElementById('auth-pass').value;
-  const err = document.getElementById('auth-err');
-  if (!u || !p) { err.textContent = 'Both username and password are required.'; return; }
-  err.textContent = '';
-  authToken = btoa(u + ':' + p);
-  goTo(2);
-  renderCatGrid(null);
-}
-
-async function fetchCats(id) {
-  try { const r = await fetch(id ? BASE+'/'+id : BASE); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
-}
-
-async function fetchAttrs(id) {
-  try { const r = await fetch(BASE+'/'+id+'/Attributes'); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
-}
-
-function renderBc() {
-  const el = document.getElementById('bc');
-  if (!path.length) { el.style.display = 'none'; return; }
-  el.style.display = 'flex';
-  el.innerHTML = '<span class="crumb" onclick="navTo(-1)">Root</span>';
-  path.forEach((p,i) => el.innerHTML += '<span class="bsep">›</span><span class="crumb" onclick="navTo('+i+')">'+esc(p.n)+'</span>');
-}
-
-function navTo(i) {
-  if (i === -1) path = []; else path = path.slice(0, i+1);
-  renderBc();
-  renderCatGrid(path.length ? path[path.length-1].id : null);
-}
-
-async function renderCatGrid(pid) {
-  const g = document.getElementById('cat-grid'), ld = document.getElementById('cat-loading');
-  g.innerHTML = ''; ld.style.display = 'flex';
-  const cats = await fetchCats(pid);
-  ld.style.display = 'none';
-  if (!cats.length) { g.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No subcategories found.</p>'; return; }
-  cats.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'cat-btn'; b.textContent = c.Name + (c.IsLeaf ? '' : ' ›');
-    b.onclick = () => pickCat(c); g.appendChild(b);
-  });
-}
-
-async function pickCat(c) {
-  if (!c.IsLeaf) {
-    path.push({id: c.Id, n: c.Name}); renderBc(); renderCatGrid(c.Id);
-  } else {
-    leafId = c.Id; goTo(3);
-    const badge = document.getElementById('cat-badge');
-    badge.style.display = 'inline-flex';
-    badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' + esc([...path.map(p=>p.n), c.Name].join(' › '));
-    await loadAttrs(c.Id);
-  }
-}
-
-async function loadAttrs(id) {
-  const ld = document.getElementById('attr-loading'), frm = document.getElementById('attr-form');
-  frm.innerHTML = ''; ld.style.display = 'flex';
-  const all = await fetchAttrs(id);
-  const attrs = all.filter(a => a.InUniqueSearch === true);
-  ld.style.display = 'none'; leafAttrs = attrs;
-  if (!attrs.length) { frm.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No unique-search attributes for this category.</p>'; return; }
-  buildForm(attrs, frm);
-}
-
-function buildForm(attrs, frm) {
-  const grid = document.createElement('div'); grid.className = 'attr-grid';
-  const allAttrs = [...FIXED_ATTRS, ...attrs];
-  allAttrs.forEach(a => {
-    const wrap = document.createElement('div'); wrap.className = 'field';
-
-    const lbl = document.createElement('label');
-    const ns = document.createElement('span'); ns.textContent = a.Text; lbl.appendChild(ns);
-    const cs = document.createElement('span'); cs.className = 'mono'; cs.textContent = a.Code; lbl.appendChild(cs);
-    if (a.Tooltip) {
-      const icon = document.createElement('i'); icon.className = 'info-icon'; icon.textContent = 'i';
-      const tip = document.createElement('span'); tip.className = 'tip'; tip.textContent = a.Tooltip;
-      icon.appendChild(tip); lbl.appendChild(icon);
-    }
-    wrap.appendChild(lbl);
-
-    if (a.Options && a.Options.length) {
-      const options = a.Options.map(o => ({ value: o.Value || o, label: o.Label || o.Value || o }));
-      wrap.appendChild(buildSearchSelect('f_' + a.Code, options));
-    } else {
-      const inp = document.createElement('input'); inp.type = 'text'; inp.id = 'f_' + a.Code;
-      inp.placeholder = a.DataType === 'Decimal' || a.DataType === 'Integer' ? 'Number' : 'Value';
-      if (a.Regex) {
-        inp.addEventListener('blur', () => {
-          const e = document.getElementById('e_' + a.Code); if (!inp.value) { e.textContent = ''; return; }
-          try { if (!new RegExp(a.Regex).test(inp.value)) e.textContent = 'Invalid format'; else e.textContent = ''; } catch(_) { e.textContent = ''; }
-        });
-      }
-      wrap.appendChild(inp);
-    }
-
-    const err = document.createElement('div'); err.className = 'verr'; err.id = 'e_' + a.Code; wrap.appendChild(err);
-    grid.appendChild(wrap);
-  });
-  frm.appendChild(grid);
-}
-
-function buildSearchSelect(id, options) {
-  const wrap = document.createElement('div'); wrap.className = 'ss-wrap'; wrap.id = 'ss_wrap_' + id;
-
-  const display = document.createElement('div'); display.className = 'ss-display';
-  display.innerHTML = '<span class="ss-val ss-placeholder">— select —</span><svg class="ss-arrow" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  const dropdown = document.createElement('div'); dropdown.className = 'ss-dropdown';
-  const searchWrap = document.createElement('div'); searchWrap.className = 'ss-search-wrap';
-  const searchInp = document.createElement('input'); searchInp.className = 'ss-search'; searchInp.type = 'text'; searchInp.placeholder = 'Search…'; searchInp.autocomplete = 'off';
-  searchWrap.appendChild(searchInp);
-  const list = document.createElement('div'); list.className = 'ss-list';
-  dropdown.appendChild(searchWrap); dropdown.appendChild(list);
-  wrap.appendChild(display); wrap.appendChild(dropdown);
-
-  let selectedValue = '';
-
-  function renderList(filter) {
-    const q = (filter || '').toLowerCase();
-    const filtered = q ? options.filter(o => o.label.toLowerCase().includes(q)) : options;
-    list.innerHTML = '';
-    if (!filtered.length) { list.innerHTML = '<div class="ss-none">No results</div>'; return; }
-    filtered.forEach(o => {
-      const item = document.createElement('div'); item.className = 'ss-option' + (o.value === selectedValue ? ' selected' : '');
-      item.textContent = o.label;
-      item.onclick = () => {
-        selectedValue = o.value;
-        display.querySelector('.ss-val').textContent = o.label;
-        display.querySelector('.ss-val').classList.remove('ss-placeholder');
-        closeDropdown();
-      };
-      list.appendChild(item);
-    });
-  }
-
-  function openDropdown() { display.classList.add('open'); dropdown.classList.add('open'); searchInp.value = ''; renderList(''); setTimeout(() => searchInp.focus(), 10); }
-  function closeDropdown() { display.classList.remove('open'); dropdown.classList.remove('open'); }
-
-  display.onclick = e => { e.stopPropagation(); dropdown.classList.contains('open') ? closeDropdown() : openDropdown(); };
-  searchInp.addEventListener('input', () => renderList(searchInp.value));
-  searchInp.onclick = e => e.stopPropagation();
-  document.addEventListener('click', () => closeDropdown());
-
-  wrap._getRealValue = () => selectedValue;
-  renderList('');
-  return wrap;
-}
-
-function getFieldValue(code) {
-  const ssWrap = document.getElementById('ss_wrap_f_' + code);
-  if (ssWrap) return ssWrap._getRealValue();
-  const el = document.getElementById('f_' + code);
-  return el ? el.value : '';
-}
-
-async function submitForm() {
-  const submitBtn = document.getElementById('submit-btn');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<div class="btn-spin"></div>Submitting…';
-  
-  let hasErr = false;
-  const attrPayload = [];
-  [...FIXED_ATTRS, ...leafAttrs].forEach(a => {
-    const val = getFieldValue(a.Code);
-    if (a.Regex && val) {
-      try { if (!new RegExp(a.Regex).test(val)) { const e = document.getElementById('e_' + a.Code); if (e) e.textContent = 'Invalid format'; hasErr = true; } } catch(_) {}
-    }
-    if (val) attrPayload.push({ Key: a.Code, Value: val });
-  });
-  if (hasErr) return;
-
-  const payload = { 
-    Category: { Id: leafId }, 
-    Attributes: attrPayload,
-    IncludeBuyBox: document.getElementById('chk-buybox').checked,
-    IncludeChannelPricing: document.getElementById('chk-channelpricing').checked 
-  };
-  const area = document.getElementById('result-area');
-  area.innerHTML = '<div class="loading"><div class="spin"></div>Submitting…</div>';
-
-  try {
-    const r = await fetch(RESOLVE, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-beta': 'on', 'Authorization': 'Basic ' + authToken }, body: JSON.stringify(payload) });
-    const txt = await r.text();
-    let parsed = null; try { parsed = JSON.parse(txt); } catch(_) {}
-    if (r.ok) renderResponse(area, r.status, parsed, txt);
-    else { area.innerHTML = '<div class="status err">Error ' + r.status + (parsed && parsed.message ? ' — ' + esc(parsed.message) : '') + '</div>'; if (txt) addRaw(area, txt); }
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit';
-  } catch(e) {
-    area.innerHTML = '<div class="status err">Request failed: ' + esc(e.message) + '<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
-  }
-}
-
-function renderResponse(area, status, data, raw) {
-  area.innerHTML = '<div class="status ok">Status ' + status + ' — success</div>';
-  if (!data) { addRaw(area, raw); return; }
-
-  // Summary card
-  const summary = [
-    ['SKU', data.Sku],
-    ['Catalog ID', data.CatalogId],
-    ['Catalog exists', data.CatalogExists],
-    ['Inventory ID', data.InventoryId],
-    ['Inventory exists', data.InventoryExists],
-  ];
-  let html = '<table class="resp-table" style="margin-bottom:1rem"><tbody>';
-  summary.forEach(([k, v]) => {
-    const cell = typeof v === 'boolean'
-      ? '<span class="pill ' + (v ? 'yes' : 'no') + '">' + (v ? 'Yes' : 'No') + '</span>'
-      : esc(String(v ?? '—'));
-    html += '<tr><td style="color:var(--color-text-secondary);white-space:nowrap;width:140px">' + esc(k) + '</td><td>' + cell + '</td></tr>';
-  });
-  html += '</tbody></table>';
-
-  // Messages
-  if (data.Messages) {
-    html += '<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.5">' + esc(data.Messages) + '</p>';
-  }
-
-  area.innerHTML += html;
-
-  // Data key/value pairs
-  if (data.Data && data.Data.length) {
-    const dataSection = document.createElement('div');
-    dataSection.innerHTML = '<div class="section-label">Data</div>';
-    let t = '<table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>';
-    data.Data.forEach(d => {
-      t += '<tr><td style="color:var(--color-text-secondary)">' + esc(d.Key) + '</td><td>' + esc(String(d.Value ?? '—')) + '</td></tr>';
-    });
-    t += '</tbody></table>';
-    dataSection.innerHTML += t;
-    area.appendChild(dataSection);
-  }
-
-  // Channel pricing table
-  if (data.ChannelPricing && data.ChannelPricing.length) {
-    const cpSection = document.createElement('div');
-    cpSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Channel pricing</div>';
-    let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>SRP</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
-    data.ChannelPricing.forEach(r => {
-      t += '<tr>'
-        + '<td>' + esc(r.Channel) + '</td>'
-        + '<td>' + (r.SRP != null ? '$' + Number(r.SRP).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
-        + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
-        + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
-        + '</tr>';
-    });
-    t += '</tbody></table></div>';
-    cpSection.innerHTML += t;
-    area.appendChild(cpSection);
-  }
-
-  // Buyboxes table
-  if (data.Buyboxes && data.Buyboxes.length) {
-    const bbSection = document.createElement('div');
-    bbSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Buyboxes</div>';
-    let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
-    data.Buyboxes.forEach(r => {
-      t += '<tr>'
-        + '<td>' + esc(r.Channel) + '</td>'
-        + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
-        + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
-        + '</tr>';
-    });
-    t += '</tbody></table></div>';
-    bbSection.innerHTML += t;
-    area.appendChild(bbSection);
-  }
-
-  // Raw JSON toggle
-  const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw JSON';
-  const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = JSON.stringify(data, null, 2);
-  tog.onclick = () => { const open = pre.style.display === 'block'; pre.style.display = open ? 'none' : 'block'; tog.textContent = open ? 'Show raw JSON' : 'Hide raw JSON'; };
-  area.appendChild(tog); area.appendChild(pre);
-}
-
-function extractRows(data) {
-  if (Array.isArray(data) && data.length && typeof data[0]==='object') return data;
-  for (const k of Object.keys(data)) { if (Array.isArray(data[k]) && data[k].length && typeof data[k][0]==='object') return data[k]; }
-  return [];
-}
-
-function flattenObj(obj, prefix='') {
-  return Object.entries(obj).reduce((acc,[k,v]) => {
-    const key = prefix ? prefix+'.'+k : k;
-    if (v && typeof v==='object' && !Array.isArray(v)) Object.assign(acc, flattenObj(v, key));
-    else if (Array.isArray(v)) acc[key] = '['+v.length+' items]';
-    else acc[key] = v;
-    return acc;
-  }, {});
-}
-
-function addRaw(area, txt) {
-  const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw response';
-  const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = txt;
-  tog.onclick = () => { const open = pre.style.display==='block'; pre.style.display = open?'none':'block'; tog.textContent = open?'Show raw response':'Hide raw response'; };
-  area.appendChild(tog); area.appendChild(pre);
-}
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-</script>
-</body>
+   </body>
 </html>
