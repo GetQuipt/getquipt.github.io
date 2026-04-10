@@ -392,6 +392,25 @@
          font-weight: 500;
          flex-shrink: 0;
          }
+         .help-btn {
+         position: fixed; 
+         bottom: 1.5rem; 
+         right: 1.5rem;
+         background: #042C53; 
+         color: #fff; 
+         border: none;
+         border-radius: 50%; 
+         width: 42px; 
+         height: 42px;
+         font-size: 18px; 
+         cursor: pointer; 
+         z-index: 200;
+         display: flex; 
+         align-items: center; 
+         justify-content: center;
+         box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+         font-family: var(--font-sans);
+         }
       </style>
    </head>
    <body>
@@ -472,7 +491,7 @@
                </div>
             </div>
          </div>
-         <button id="help-btn" onclick="toggleHelp()" title="Help">?</button>
+         <button id="help-btn" class="help-btn" onclick="toggleHelp()" title="Help">?</button>
       </div>
       <script>
          const BASE = 'https://api.getquipt.com/v2/categories';
