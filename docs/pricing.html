@@ -561,7 +561,7 @@ async function submitForm() {
   area.innerHTML = '<div class="loading"><div class="spin"></div>Submitting…</div>';
 
   try {
-    const r = await fetch(RESOLVE, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-beta', 'on', 'Authorization': 'Basic ' + authToken }, body: JSON.stringify(payload) });
+    const r = await fetch(RESOLVE, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-beta': 'on', 'Authorization': 'Basic ' + authToken }, body: JSON.stringify(payload) });
     const txt = await r.text();
     let parsed = null; try { parsed = JSON.parse(txt); } catch(_) {}
     if (r.ok) renderResponse(area, r.status, parsed, txt);
