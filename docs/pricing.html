@@ -312,6 +312,15 @@
     color: var(--color-text-primary);
     max-height: 260px; overflow-y: auto; display: none;
   }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: .5rem;
+  }
 </style>
 </head>
 <body>
@@ -365,7 +374,7 @@
       </div>
       <hr class="divider">
       <div class="btn-row">
-        <button class="btn-primary" onclick="submitForm()">Submit to resolve API</button>
+        <button class="btn-primary" id="submit-btn" onclick="submitForm()">Submit</button>
         <button class="btn-ghost" onclick="goTo(2)">Back</button>
       </div>
     </div>
@@ -377,6 +386,29 @@ const BASE = 'https://api.getquipt.com/v2/categories';
 const RESOLVE = 'https://api.getquipt.com/v2/inventory/groupandenrich/resolve';
 let authToken = '', path = [], leafId = null, leafAttrs = [];
 
+const FIXED_ATTRS = [
+  {
+    Code: 'FIXEDMAN',
+    Text: 'Manufacturer',
+    Tooltip: null,
+    Options: null
+  },
+  {
+    Code: 'FIXEDCOND',
+    Text: 'Condition',
+    Tooltip: null,
+    Options: [
+      { Value: 'New', Label: 'New' },
+      { Value: 'Premium Refurbished', Label: 'Premium Refurbished' },
+      { Value: 'Certified Refurbished', Label: 'Certified Refurbished' },
+      { Value: 'Refurbished', Label: 'Refurbished' },
+      { Value: 'Scratch and Dent Refurbished', Label: 'Scratch and Dent Refurbished' },
+      { Value: 'New Open Box', Label: 'New Open Box' },
+      { Value: 'Used - Good', Label: 'Used - Good' }
+    ]
+  }
+];
+  
 function goTo(n) {
   [1,2,3].forEach(i => {
     document.getElementById('panel'+i).className = 'panel' + (i===n ? ' active' : '');
@@ -456,7 +488,8 @@ async function loadAttrs(id) {
 
 function buildForm(attrs, frm) {
   const grid = document.createElement('div'); grid.className = 'attr-grid';
-  attrs.forEach(a => {
+  const allAttrs = [...FIXED_ATTRS, ...attrs];
+  allAttrs.forEach(a => {
     const wrap = document.createElement('div'); wrap.className = 'field';
 
     const lbl = document.createElement('label');
@@ -545,6 +578,10 @@ function getFieldValue(code) {
 }
 
 async function submitForm() {
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<div class="btn-spin"></div>Submitting…';
+  
   let hasErr = false;
   const attrPayload = [];
   leafAttrs.forEach(a => {
@@ -566,6 +603,8 @@ async function submitForm() {
     let parsed = null; try { parsed = JSON.parse(txt); } catch(_) {}
     if (r.ok) renderResponse(area, r.status, parsed, txt);
     else { area.innerHTML = '<div class="status err">Error ' + r.status + (parsed && parsed.message ? ' — ' + esc(parsed.message) : '') + '</div>'; if (txt) addRaw(area, txt); }
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
   } catch(e) {
     area.innerHTML = '<div class="status err">Request failed: ' + esc(e.message) + '<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
   }
@@ -574,34 +613,83 @@ async function submitForm() {
 function renderResponse(area, status, data, raw) {
   area.innerHTML = '<div class="status ok">Status ' + status + ' — success</div>';
   if (!data) { addRaw(area, raw); return; }
-  const rows = extractRows(data);
-  const wrap = document.createElement('div'); wrap.className = 'resp-table-wrap';
-  if (rows.length) {
-    const cols = Array.from(new Set(rows.flatMap(r => Object.keys(r))));
-    let html = '<table class="resp-table"><thead><tr>' + cols.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr></thead><tbody>';
-    rows.forEach(r => {
-      html += '<tr>' + cols.map(c => {
-        const v = r[c];
-        if (v===null||v===undefined) return '<td style="color:var(--color-text-tertiary)">—</td>';
-        if (typeof v==='boolean') return '<td><span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span></td>';
-        if (typeof v==='object') return '<td><span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)">'+esc(JSON.stringify(v))+'</span></td>';
-        return '<td>'+esc(String(v))+'</td>';
-      }).join('') + '</tr>';
-    });
-    html += '</tbody></table>'; wrap.innerHTML = html;
-  } else {
-    const flat = flattenObj(data);
-    let html = '<table class="resp-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-    Object.entries(flat).forEach(([k,v]) => {
-      const isBool = typeof v==='boolean';
-      html += '<tr><td style="color:var(--color-text-secondary);white-space:nowrap">'+esc(k)+'</td><td>'+(isBool?'<span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span>':esc(String(v??'—')))+'</td></tr>';
-    });
-    html += '</tbody></table>'; wrap.innerHTML = html;
+
+  // Summary card
+  const summary = [
+    ['SKU', data.Sku],
+    ['Catalog ID', data.CatalogId],
+    ['Catalog exists', data.CatalogExists],
+    ['Inventory ID', data.InventoryId],
+    ['Inventory exists', data.InventoryExists],
+  ];
+  let html = '<table class="resp-table" style="margin-bottom:1rem"><tbody>';
+  summary.forEach(([k, v]) => {
+    const cell = typeof v === 'boolean'
+      ? '<span class="pill ' + (v ? 'yes' : 'no') + '">' + (v ? 'Yes' : 'No') + '</span>'
+      : esc(String(v ?? '—'));
+    html += '<tr><td style="color:var(--color-text-secondary);white-space:nowrap;width:140px">' + esc(k) + '</td><td>' + cell + '</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  // Messages
+  if (data.Messages) {
+    html += '<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.5">' + esc(data.Messages) + '</p>';
   }
-  area.appendChild(wrap);
+
+  area.innerHTML += html;
+
+  // Data key/value pairs
+  if (data.Data && data.Data.length) {
+    const dataSection = document.createElement('div');
+    dataSection.innerHTML = '<div class="section-label">Data</div>';
+    let t = '<table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>';
+    data.Data.forEach(d => {
+      t += '<tr><td style="color:var(--color-text-secondary)">' + esc(d.Key) + '</td><td>' + esc(String(d.Value ?? '—')) + '</td></tr>';
+    });
+    t += '</tbody></table>';
+    dataSection.innerHTML += t;
+    area.appendChild(dataSection);
+  }
+
+  // Channel pricing table
+  if (data.ChannelPricing && data.ChannelPricing.length) {
+    const cpSection = document.createElement('div');
+    cpSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Channel pricing</div>';
+    let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>SRP</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
+    data.ChannelPricing.forEach(r => {
+      t += '<tr>'
+        + '<td>' + esc(r.Channel) + '</td>'
+        + '<td>' + (r.SRP != null ? '$' + Number(r.SRP).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+        + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+        + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+        + '</tr>';
+    });
+    t += '</tbody></table></div>';
+    cpSection.innerHTML += t;
+    area.appendChild(cpSection);
+  }
+
+  // Buyboxes table
+  if (data.Buyboxes && data.Buyboxes.length) {
+    const bbSection = document.createElement('div');
+    bbSection.innerHTML = '<div class="section-label" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Buyboxes</div>';
+    let t = '<div class="resp-table-wrap"><table class="resp-table" style="margin-bottom:1rem"><thead><tr><th>Channel</th><th>Buy box</th><th>Updated</th></tr></thead><tbody>';
+    data.Buyboxes.forEach(r => {
+      t += '<tr>'
+        + '<td>' + esc(r.Channel) + '</td>'
+        + '<td>' + (r.BB != null ? '$' + Number(r.BB).toFixed(2) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+        + '<td>' + (r.UpdatedAt ? esc(r.UpdatedAt) : '<span style="color:var(--color-text-tertiary)">—</span>') + '</td>'
+        + '</tr>';
+    });
+    t += '</tbody></table></div>';
+    bbSection.innerHTML += t;
+    area.appendChild(bbSection);
+  }
+
+  // Raw JSON toggle
   const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw JSON';
   const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = JSON.stringify(data, null, 2);
-  tog.onclick = () => { const open = pre.style.display==='block'; pre.style.display = open?'none':'block'; tog.textContent = open?'Show raw JSON':'Hide raw JSON'; };
+  tog.onclick = () => { const open = pre.style.display === 'block'; pre.style.display = open ? 'none' : 'block'; tog.textContent = open ? 'Show raw JSON' : 'Hide raw JSON'; };
   area.appendChild(tog); area.appendChild(pre);
 }
 
