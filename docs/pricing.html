@@ -69,10 +69,7 @@
     padding: 2rem 1rem;
   }
 
-  .app {
-    max-width: 720px;
-    margin: 0 auto;
-  }
+  .app { max-width: 720px; margin: 0 auto; }
 
   .page-title {
     font-size: 18px;
@@ -114,13 +111,18 @@
 
   h3 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
 
-  /* Form elements */
+  /* Labels */
   label {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
   }
 
-  input[type=text], input[type=password], select {
+  /* Text / password inputs */
+  input[type=text], input[type=password] {
     width: 100%;
     height: 36px;
     padding: 0 10px;
@@ -132,20 +134,9 @@
     border-radius: var(--border-radius-md);
     outline: none;
     transition: border-color .15s;
-    appearance: none;
-    -webkit-appearance: none;
   }
-
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23888780' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 28px;
-    cursor: pointer;
-  }
-
-  input:hover, select:hover { border-color: var(--color-border-primary); }
-  input:focus, select:focus { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+  input[type=text]:hover, input[type=password]:hover { border-color: var(--color-border-primary); }
+  input[type=text]:focus, input[type=password]:focus { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
 
   .mono {
     font-family: var(--font-mono);
@@ -157,10 +148,32 @@
     margin-left: 2px;
   }
 
+  /* Info icon + tooltip */
+  .info-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 1px solid var(--color-border-secondary);
+    color: var(--color-text-tertiary);
+    font-size: 9px; font-style: normal; cursor: default;
+    flex-shrink: 0; position: relative;
+  }
+  .info-icon:hover { border-color: var(--color-border-primary); color: var(--color-text-secondary); }
+  .info-icon .tip {
+    display: none; position: absolute;
+    bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 6px 9px; font-size: 11px; color: var(--color-text-primary);
+    white-space: normal; width: 200px; line-height: 1.4;
+    z-index: 20; pointer-events: none; font-style: normal; font-weight: 400;
+  }
+  .info-icon:hover .tip { display: block; }
+
+  /* Grid layouts */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .step3-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-
   @media (max-width: 520px) {
     .two-col, .attr-grid, .step3-layout { grid-template-columns: 1fr; }
   }
@@ -171,7 +184,6 @@
 
   /* Buttons */
   .btn-row { display: flex; align-items: center; gap: 10px; margin-top: 1.25rem; }
-
   .btn-primary {
     background: #042C53; color: #fff; border: none;
     border-radius: var(--border-radius-md);
@@ -179,7 +191,6 @@
     font-family: var(--font-sans); transition: background .15s;
   }
   .btn-primary:hover { background: #0C447C; }
-
   .btn-ghost {
     background: transparent;
     border: 0.5px solid var(--color-border-secondary);
@@ -223,29 +234,49 @@
     padding: 5px 10px; font-size: 12px; color: #042C53; margin-bottom: 1rem;
   }
 
-  /* Info icon tooltip */
-  .info-icon {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 13px; height: 13px; border-radius: 50%;
-    border: 1px solid var(--color-border-secondary);
-    color: var(--color-text-tertiary);
-    font-size: 9px; font-style: normal; cursor: default;
-    flex-shrink: 0; position: relative;
-  }
-  .info-icon:hover { border-color: var(--color-border-primary); color: var(--color-text-secondary); }
-  .info-icon .tip {
-    display: none; position: absolute;
-    bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  /* Searchable select */
+  .ss-wrap { position: relative; width: 100%; }
+  .ss-display {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 36px; padding: 0 10px; font-size: 13px;
+    color: var(--color-text-primary);
     background: var(--color-background-primary);
     border: 0.5px solid var(--color-border-secondary);
     border-radius: var(--border-radius-md);
-    padding: 6px 9px; font-size: 11px; color: var(--color-text-primary);
-    white-space: normal; width: 200px; line-height: 1.4;
-    z-index: 10; pointer-events: none; font-style: normal; font-weight: 400;
+    cursor: pointer; user-select: none; transition: border-color .15s;
   }
-  .info-icon:hover .tip { display: block; }
+  .ss-display:hover { border-color: var(--color-border-primary); }
+  .ss-display.open { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+  .ss-placeholder { color: var(--color-text-tertiary); }
+  .ss-arrow { width: 12px; height: 12px; flex-shrink: 0; transition: transform .15s; color: var(--color-text-tertiary); }
+  .ss-display.open .ss-arrow { transform: rotate(180deg); }
+  .ss-dropdown {
+    display: none; position: absolute;
+    top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    z-index: 100; overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .ss-dropdown.open { display: block; }
+  .ss-search-wrap { padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .ss-search {
+    width: 100%; height: 30px; padding: 0 8px;
+    font-size: 12px; font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 6px; outline: none;
+  }
+  .ss-search:focus { border-color: #185fa5; }
+  .ss-list { max-height: 180px; overflow-y: auto; }
+  .ss-option { padding: 7px 10px; font-size: 13px; color: var(--color-text-primary); cursor: pointer; }
+  .ss-option:hover { background: var(--color-background-secondary); }
+  .ss-option.selected { color: #042C53; background: #E6F1FB; }
+  .ss-none { padding: 8px 10px; font-size: 12px; color: var(--color-text-tertiary); }
 
-  /* Status */
+  /* Status messages */
   .status { font-size: 13px; padding: 8px 12px; border-radius: var(--border-radius-md); margin-bottom: .875rem; }
   .status.ok { background: var(--color-background-success); color: var(--color-text-success); }
   .status.err { background: var(--color-background-danger); color: var(--color-text-danger); }
@@ -253,8 +284,15 @@
   /* Response table */
   .resp-table-wrap { overflow-x: auto; margin-top: .875rem; }
   .resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .resp-table th { text-align: left; font-weight: 500; font-size: 12px; color: var(--color-text-secondary); padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-secondary); white-space: nowrap; }
-  .resp-table td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: top; word-break: break-word; }
+  .resp-table th {
+    text-align: left; font-weight: 500; font-size: 12px;
+    color: var(--color-text-secondary); padding: 7px 10px;
+    border-bottom: 0.5px solid var(--color-border-secondary); white-space: nowrap;
+  }
+  .resp-table td {
+    padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-primary); vertical-align: top; word-break: break-word;
+  }
   .resp-table tr:last-child td { border-bottom: none; }
   .resp-table tr:hover td { background: var(--color-background-secondary); }
 
@@ -297,7 +335,7 @@
       </div>
       <div class="hint">Credentials are encoded as Basic Auth and sent only to the resolve endpoint.</div>
       <div class="btn-row"><button class="btn-primary" onclick="saveAuth()">Save &amp; continue</button></div>
-      <div id="auth-err" class="verr" style="margin-top:6px"></div>
+      <div id="auth-err" style="font-size:11px;color:var(--color-text-danger);margin-top:6px;min-height:14px"></div>
     </div>
   </div>
 
@@ -335,190 +373,262 @@
 </div>
 
 <script>
-const BASE='https://api.getquipt.com/v2/categories';
-const RESOLVE='http://localhost/Quipt.WebAPIv2/inventory/groupandenrich/resolve';
-let authToken='',path=[],leafId=null,leafAttrs=[];
+const BASE = 'https://api.getquipt.com/v2/categories';
+const RESOLVE = 'http://localhost/Quipt.WebAPIv2/inventory/groupandenrich/resolve';
+let authToken = '', path = [], leafId = null, leafAttrs = [];
 
-function goTo(n){
-  [1,2,3].forEach(i=>{
-    document.getElementById('panel'+i).className='panel'+(i===n?' active':'');
-    document.getElementById('wd'+i).className='wdot'+(i===n?' active':i<n?' done':'');
+function goTo(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('panel'+i).className = 'panel' + (i===n ? ' active' : '');
+    document.getElementById('wd'+i).className = 'wdot' + (i===n ? ' active' : i<n ? ' done' : '');
   });
-  document.getElementById('wl1').className='wline'+(n>1?' done':'');
-  document.getElementById('wl2').className='wline'+(n>2?' done':'');
+  document.getElementById('wl1').className = 'wline' + (n>1 ? ' done' : '');
+  document.getElementById('wl2').className = 'wline' + (n>2 ? ' done' : '');
 }
 
-function saveAuth(){
-  const u=document.getElementById('auth-user').value.trim();
-  const p=document.getElementById('auth-pass').value;
-  const err=document.getElementById('auth-err');
-  if(!u||!p){err.textContent='Both username and password are required.';return;}
-  err.textContent='';
-  authToken=btoa(u+':'+p);
+function saveAuth() {
+  const u = document.getElementById('auth-user').value.trim();
+  const p = document.getElementById('auth-pass').value;
+  const err = document.getElementById('auth-err');
+  if (!u || !p) { err.textContent = 'Both username and password are required.'; return; }
+  err.textContent = '';
+  authToken = btoa(u + ':' + p);
   goTo(2);
   renderCatGrid(null);
 }
 
-async function fetchCats(id){
-  try{const r=await fetch(id?BASE+'/'+id:BASE);const j=await r.json();return j.Result||[];}catch(e){return[];}
+async function fetchCats(id) {
+  try { const r = await fetch(id ? BASE+'/'+id : BASE); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
 }
 
-async function fetchAttrs(id){
-  try{const r=await fetch(BASE+'/'+id+'/Attributes');const j=await r.json();return j.Result||[];}catch(e){return[];}
+async function fetchAttrs(id) {
+  try { const r = await fetch(BASE+'/'+id+'/Attributes'); const j = await r.json(); return j.Result || []; } catch(e) { return []; }
 }
 
-function renderBc(){
-  const el=document.getElementById('bc');
-  if(!path.length){el.style.display='none';return;}
-  el.style.display='flex';
-  el.innerHTML='<span class="crumb" onclick="navTo(-1)">Root</span>';
-  path.forEach((p,i)=>el.innerHTML+='<span class="bsep">›</span><span class="crumb" onclick="navTo('+i+')">'+esc(p.n)+'</span>');
+function renderBc() {
+  const el = document.getElementById('bc');
+  if (!path.length) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  el.innerHTML = '<span class="crumb" onclick="navTo(-1)">Root</span>';
+  path.forEach((p,i) => el.innerHTML += '<span class="bsep">›</span><span class="crumb" onclick="navTo('+i+')">'+esc(p.n)+'</span>');
 }
 
-function navTo(i){
-  if(i===-1)path=[];else path=path.slice(0,i+1);
+function navTo(i) {
+  if (i === -1) path = []; else path = path.slice(0, i+1);
   renderBc();
-  renderCatGrid(path.length?path[path.length-1].id:null);
+  renderCatGrid(path.length ? path[path.length-1].id : null);
 }
 
-async function renderCatGrid(pid){
-  const g=document.getElementById('cat-grid'),ld=document.getElementById('cat-loading');
-  g.innerHTML='';ld.style.display='flex';
-  const cats=await fetchCats(pid);
-  ld.style.display='none';
-  if(!cats.length){g.innerHTML='<p style="font-size:13px;color:var(--color-text-secondary)">No subcategories found.</p>';return;}
-  cats.forEach(c=>{
-    const b=document.createElement('button');
-    b.className='cat-btn';b.textContent=c.Name+(c.IsLeaf?'':' ›');
-    b.onclick=()=>pickCat(c);g.appendChild(b);
+async function renderCatGrid(pid) {
+  const g = document.getElementById('cat-grid'), ld = document.getElementById('cat-loading');
+  g.innerHTML = ''; ld.style.display = 'flex';
+  const cats = await fetchCats(pid);
+  ld.style.display = 'none';
+  if (!cats.length) { g.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No subcategories found.</p>'; return; }
+  cats.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn'; b.textContent = c.Name + (c.IsLeaf ? '' : ' ›');
+    b.onclick = () => pickCat(c); g.appendChild(b);
   });
 }
 
-async function pickCat(c){
-  if(!c.IsLeaf){
-    path.push({id:c.Id,n:c.Name});renderBc();renderCatGrid(c.Id);
+async function pickCat(c) {
+  if (!c.IsLeaf) {
+    path.push({id: c.Id, n: c.Name}); renderBc(); renderCatGrid(c.Id);
   } else {
-    leafId=c.Id;
-    goTo(3);
-    const badge=document.getElementById('cat-badge');
-    badge.style.display='inline-flex';
-    const fullPath=[...path.map(p=>p.n),c.Name].join(' › ');
-    badge.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'+esc(fullPath);
+    leafId = c.Id; goTo(3);
+    const badge = document.getElementById('cat-badge');
+    badge.style.display = 'inline-flex';
+    badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' + esc([...path.map(p=>p.n), c.Name].join(' › '));
     await loadAttrs(c.Id);
   }
 }
 
-async function loadAttrs(id){
-  const ld=document.getElementById('attr-loading'),frm=document.getElementById('attr-form');
-  frm.innerHTML='';ld.style.display='flex';
-  const all=await fetchAttrs(id);
-  const attrs=all.filter(a=>a.InUniqueSearch===true);
-  ld.style.display='none';
-  leafAttrs=attrs;
-  if(!attrs.length){frm.innerHTML='<p style="font-size:13px;color:var(--color-text-secondary)">No unique-search attributes for this category.</p>';return;}
-  buildForm(attrs,frm);
+async function loadAttrs(id) {
+  const ld = document.getElementById('attr-loading'), frm = document.getElementById('attr-form');
+  frm.innerHTML = ''; ld.style.display = 'flex';
+  const all = await fetchAttrs(id);
+  const attrs = all.filter(a => a.InUniqueSearch === true);
+  ld.style.display = 'none'; leafAttrs = attrs;
+  if (!attrs.length) { frm.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary)">No unique-search attributes for this category.</p>'; return; }
+  buildForm(attrs, frm);
 }
 
-function buildForm(attrs,frm){
-  const grid=document.createElement('div');grid.className='attr-grid';
-  attrs.forEach(a=>{
-    const wrap=document.createElement('div');wrap.className='field';
-    const lbl=document.createElement('label');
-    const nameSpan=document.createElement('span');nameSpan.textContent=a.Text;lbl.appendChild(nameSpan);
-    const codeSpan=document.createElement('span');codeSpan.className='mono';codeSpan.textContent=a.Code;lbl.appendChild(codeSpan);
-    if(a.Tooltip){
-      const icon=document.createElement('i');icon.className='info-icon';icon.textContent='i';
-      const tip=document.createElement('span');tip.className='tip';tip.textContent=a.Tooltip;
-      icon.appendChild(tip);lbl.appendChild(icon);
+function buildForm(attrs, frm) {
+  const grid = document.createElement('div'); grid.className = 'attr-grid';
+  attrs.forEach(a => {
+    const wrap = document.createElement('div'); wrap.className = 'field';
+
+    const lbl = document.createElement('label');
+    const ns = document.createElement('span'); ns.textContent = a.Text; lbl.appendChild(ns);
+    const cs = document.createElement('span'); cs.className = 'mono'; cs.textContent = a.Code; lbl.appendChild(cs);
+    if (a.Tooltip) {
+      const icon = document.createElement('i'); icon.className = 'info-icon'; icon.textContent = 'i';
+      const tip = document.createElement('span'); tip.className = 'tip'; tip.textContent = a.Tooltip;
+      icon.appendChild(tip); lbl.appendChild(icon);
     }
     wrap.appendChild(lbl);
-    if(a.Options&&a.Options.length){
-      const sel=document.createElement('select');sel.id='f_'+a.Code;
-      sel.innerHTML='<option value="">— select —</option>';
-      a.Options.forEach(o=>{const op=document.createElement('option');op.value=o.Value||o;op.textContent=o.Label||o.Value||o;sel.appendChild(op);});
-      wrap.appendChild(sel);
+
+    if (a.Options && a.Options.length) {
+      const options = a.Options.map(o => ({ value: o.Value || o, label: o.Label || o.Value || o }));
+      wrap.appendChild(buildSearchSelect('f_' + a.Code, options));
     } else {
-      const inp=document.createElement('input');inp.type='text';inp.id='f_'+a.Code;
-      inp.placeholder=a.DataType==='Decimal'||a.DataType==='Integer'?'Number':'Value';
-      if(a.Regex){
-        inp.addEventListener('blur',()=>{
-          const e=document.getElementById('e_'+a.Code);if(!inp.value){e.textContent='';return;}
-          try{if(!new RegExp(a.Regex).test(inp.value))e.textContent='Invalid format';else e.textContent='';}catch(_){e.textContent='';}
+      const inp = document.createElement('input'); inp.type = 'text'; inp.id = 'f_' + a.Code;
+      inp.placeholder = a.DataType === 'Decimal' || a.DataType === 'Integer' ? 'Number' : 'Value';
+      if (a.Regex) {
+        inp.addEventListener('blur', () => {
+          const e = document.getElementById('e_' + a.Code); if (!inp.value) { e.textContent = ''; return; }
+          try { if (!new RegExp(a.Regex).test(inp.value)) e.textContent = 'Invalid format'; else e.textContent = ''; } catch(_) { e.textContent = ''; }
         });
       }
       wrap.appendChild(inp);
     }
-    const err=document.createElement('div');err.className='verr';err.id='e_'+a.Code;wrap.appendChild(err);
+
+    const err = document.createElement('div'); err.className = 'verr'; err.id = 'e_' + a.Code; wrap.appendChild(err);
     grid.appendChild(wrap);
   });
   frm.appendChild(grid);
 }
 
-async function submitForm(){
-  let hasErr=false;
-  const attrPayload=[];
-  leafAttrs.forEach(a=>{
-    const el=document.getElementById('f_'+a.Code);if(!el)return;
-    const val=el.value;
-    if(a.Regex&&val){try{if(!new RegExp(a.Regex).test(val)){const e=document.getElementById('e_'+a.Code);if(e)e.textContent='Invalid format';hasErr=true;}}catch(_){}}
-    if(val)attrPayload.push({Key:a.Code,Value:val});
+function buildSearchSelect(id, options) {
+  const wrap = document.createElement('div'); wrap.className = 'ss-wrap'; wrap.id = 'ss_wrap_' + id;
+
+  const display = document.createElement('div'); display.className = 'ss-display';
+  display.innerHTML = '<span class="ss-val ss-placeholder">— select —</span><svg class="ss-arrow" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  const dropdown = document.createElement('div'); dropdown.className = 'ss-dropdown';
+  const searchWrap = document.createElement('div'); searchWrap.className = 'ss-search-wrap';
+  const searchInp = document.createElement('input'); searchInp.className = 'ss-search'; searchInp.type = 'text'; searchInp.placeholder = 'Search…'; searchInp.autocomplete = 'off';
+  searchWrap.appendChild(searchInp);
+  const list = document.createElement('div'); list.className = 'ss-list';
+  dropdown.appendChild(searchWrap); dropdown.appendChild(list);
+  wrap.appendChild(display); wrap.appendChild(dropdown);
+
+  let selectedValue = '';
+
+  function renderList(filter) {
+    const q = (filter || '').toLowerCase();
+    const filtered = q ? options.filter(o => o.label.toLowerCase().includes(q)) : options;
+    list.innerHTML = '';
+    if (!filtered.length) { list.innerHTML = '<div class="ss-none">No results</div>'; return; }
+    filtered.forEach(o => {
+      const item = document.createElement('div'); item.className = 'ss-option' + (o.value === selectedValue ? ' selected' : '');
+      item.textContent = o.label;
+      item.onclick = () => {
+        selectedValue = o.value;
+        display.querySelector('.ss-val').textContent = o.label;
+        display.querySelector('.ss-val').classList.remove('ss-placeholder');
+        closeDropdown();
+      };
+      list.appendChild(item);
+    });
+  }
+
+  function openDropdown() { display.classList.add('open'); dropdown.classList.add('open'); searchInp.value = ''; renderList(''); setTimeout(() => searchInp.focus(), 10); }
+  function closeDropdown() { display.classList.remove('open'); dropdown.classList.remove('open'); }
+
+  display.onclick = e => { e.stopPropagation(); dropdown.classList.contains('open') ? closeDropdown() : openDropdown(); };
+  searchInp.addEventListener('input', () => renderList(searchInp.value));
+  searchInp.onclick = e => e.stopPropagation();
+  document.addEventListener('click', () => closeDropdown());
+
+  wrap._getRealValue = () => selectedValue;
+  renderList('');
+  return wrap;
+}
+
+function getFieldValue(code) {
+  const ssWrap = document.getElementById('ss_wrap_f_' + code);
+  if (ssWrap) return ssWrap._getRealValue();
+  const el = document.getElementById('f_' + code);
+  return el ? el.value : '';
+}
+
+async function submitForm() {
+  let hasErr = false;
+  const attrPayload = [];
+  leafAttrs.forEach(a => {
+    const val = getFieldValue(a.Code);
+    if (a.Regex && val) {
+      try { if (!new RegExp(a.Regex).test(val)) { const e = document.getElementById('e_' + a.Code); if (e) e.textContent = 'Invalid format'; hasErr = true; } } catch(_) {}
+    }
+    if (val) attrPayload.push({ Key: a.Code, Value: val });
   });
-  if(hasErr)return;
-  const payload={Category:{Id:leafId},Attributes:attrPayload};
-  const area=document.getElementById('result-area');
-  area.innerHTML='<div class="loading"><div class="spin"></div>Submitting…</div>';
-  try{
-    const r=await fetch(RESOLVE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Basic '+authToken},body:JSON.stringify(payload)});
-    const txt=await r.text();
-    let parsed=null;try{parsed=JSON.parse(txt);}catch(_){}
-    if(r.ok)renderResponse(area,r.status,parsed,txt);
-    else{area.innerHTML='<div class="status err">Error '+r.status+(parsed&&parsed.message?' — '+esc(parsed.message):'')+'</div>';if(txt)addRaw(area,txt);}
-  }catch(e){
-    area.innerHTML='<div class="status err">Request failed: '+esc(e.message)+'<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
+  if (hasErr) return;
+
+  const payload = { Category: { Id: leafId }, Attributes: attrPayload };
+  const area = document.getElementById('result-area');
+  area.innerHTML = '<div class="loading"><div class="spin"></div>Submitting…</div>';
+
+  try {
+    const r = await fetch(RESOLVE, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ' + authToken }, body: JSON.stringify(payload) });
+    const txt = await r.text();
+    let parsed = null; try { parsed = JSON.parse(txt); } catch(_) {}
+    if (r.ok) renderResponse(area, r.status, parsed, txt);
+    else { area.innerHTML = '<div class="status err">Error ' + r.status + (parsed && parsed.message ? ' — ' + esc(parsed.message) : '') + '</div>'; if (txt) addRaw(area, txt); }
+  } catch(e) {
+    area.innerHTML = '<div class="status err">Request failed: ' + esc(e.message) + '<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
   }
 }
 
-function renderResponse(area,status,data,raw){
-  area.innerHTML='<div class="status ok">Status '+status+' — success</div>';
-  if(!data){addRaw(area,raw);return;}
-  const rows=extractRows(data);
-  const wrap=document.createElement('div');wrap.className='resp-table-wrap';
-  if(rows.length){
-    const cols=Array.from(new Set(rows.flatMap(r=>Object.keys(r))));
-    let html='<table class="resp-table"><thead><tr>'+cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
-    rows.forEach(r=>{html+='<tr>'+cols.map(c=>{const v=r[c];if(v===null||v===undefined)return'<td style="color:var(--color-text-tertiary)">—</td>';if(typeof v==='boolean')return'<td><span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span></td>';if(typeof v==='object')return'<td><span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)">'+esc(JSON.stringify(v))+'</span></td>';return'<td>'+esc(String(v))+'</td>';}).join('')+'</tr>';});
-    html+='</tbody></table>';wrap.innerHTML=html;
+function renderResponse(area, status, data, raw) {
+  area.innerHTML = '<div class="status ok">Status ' + status + ' — success</div>';
+  if (!data) { addRaw(area, raw); return; }
+  const rows = extractRows(data);
+  const wrap = document.createElement('div'); wrap.className = 'resp-table-wrap';
+  if (rows.length) {
+    const cols = Array.from(new Set(rows.flatMap(r => Object.keys(r))));
+    let html = '<table class="resp-table"><thead><tr>' + cols.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr></thead><tbody>';
+    rows.forEach(r => {
+      html += '<tr>' + cols.map(c => {
+        const v = r[c];
+        if (v===null||v===undefined) return '<td style="color:var(--color-text-tertiary)">—</td>';
+        if (typeof v==='boolean') return '<td><span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span></td>';
+        if (typeof v==='object') return '<td><span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)">'+esc(JSON.stringify(v))+'</span></td>';
+        return '<td>'+esc(String(v))+'</td>';
+      }).join('') + '</tr>';
+    });
+    html += '</tbody></table>'; wrap.innerHTML = html;
   } else {
-    const flat=flattenObj(data);
-    let html='<table class="resp-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-    Object.entries(flat).forEach(([k,v])=>{const isBool=typeof v==='boolean';html+='<tr><td style="color:var(--color-text-secondary);white-space:nowrap">'+esc(k)+'</td><td>'+(isBool?'<span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span>':esc(String(v??'—')))+'</td></tr>';});
-    html+='</tbody></table>';wrap.innerHTML=html;
+    const flat = flattenObj(data);
+    let html = '<table class="resp-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+    Object.entries(flat).forEach(([k,v]) => {
+      const isBool = typeof v==='boolean';
+      html += '<tr><td style="color:var(--color-text-secondary);white-space:nowrap">'+esc(k)+'</td><td>'+(isBool?'<span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span>':esc(String(v??'—')))+'</td></tr>';
+    });
+    html += '</tbody></table>'; wrap.innerHTML = html;
   }
   area.appendChild(wrap);
-  const tog=document.createElement('span');tog.className='raw-toggle';tog.textContent='Show raw JSON';
-  const pre=document.createElement('div');pre.className='raw-pre';pre.textContent=JSON.stringify(data,null,2);
-  tog.onclick=()=>{const open=pre.style.display==='block';pre.style.display=open?'none':'block';tog.textContent=open?'Show raw JSON':'Hide raw JSON';};
-  area.appendChild(tog);area.appendChild(pre);
+  const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw JSON';
+  const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = JSON.stringify(data, null, 2);
+  tog.onclick = () => { const open = pre.style.display==='block'; pre.style.display = open?'none':'block'; tog.textContent = open?'Show raw JSON':'Hide raw JSON'; };
+  area.appendChild(tog); area.appendChild(pre);
 }
 
-function extractRows(data){
-  if(Array.isArray(data)&&data.length&&typeof data[0]==='object')return data;
-  for(const k of Object.keys(data)){if(Array.isArray(data[k])&&data[k].length&&typeof data[k][0]==='object')return data[k];}
-  return[];
+function extractRows(data) {
+  if (Array.isArray(data) && data.length && typeof data[0]==='object') return data;
+  for (const k of Object.keys(data)) { if (Array.isArray(data[k]) && data[k].length && typeof data[k][0]==='object') return data[k]; }
+  return [];
 }
 
-function flattenObj(obj,prefix=''){
-  return Object.entries(obj).reduce((acc,[k,v])=>{const key=prefix?prefix+'.'+k:k;if(v&&typeof v==='object'&&!Array.isArray(v))Object.assign(acc,flattenObj(v,key));else if(Array.isArray(v))acc[key]='['+v.length+' items]';else acc[key]=v;return acc;},{});
+function flattenObj(obj, prefix='') {
+  return Object.entries(obj).reduce((acc,[k,v]) => {
+    const key = prefix ? prefix+'.'+k : k;
+    if (v && typeof v==='object' && !Array.isArray(v)) Object.assign(acc, flattenObj(v, key));
+    else if (Array.isArray(v)) acc[key] = '['+v.length+' items]';
+    else acc[key] = v;
+    return acc;
+  }, {});
 }
 
-function addRaw(area,txt){
-  const tog=document.createElement('span');tog.className='raw-toggle';tog.textContent='Show raw response';
-  const pre=document.createElement('div');pre.className='raw-pre';pre.textContent=txt;
-  tog.onclick=()=>{const open=pre.style.display==='block';pre.style.display=open?'none':'block';tog.textContent=open?'Show raw response':'Hide raw response';};
-  area.appendChild(tog);area.appendChild(pre);
+function addRaw(area, txt) {
+  const tog = document.createElement('span'); tog.className = 'raw-toggle'; tog.textContent = 'Show raw response';
+  const pre = document.createElement('div'); pre.className = 'raw-pre'; pre.textContent = txt;
+  tog.onclick = () => { const open = pre.style.display==='block'; pre.style.display = open?'none':'block'; tog.textContent = open?'Show raw response':'Hide raw response'; };
+  area.appendChild(tog); area.appendChild(pre);
 }
 
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 </script>
 </body>
 </html>
