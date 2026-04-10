@@ -1,0 +1,322 @@
+<html>
+  
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{max-width:680px;padding:1.5rem 0;font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.wizard-nav{display:flex;align-items:center;margin-bottom:2rem}
+.wstep-wrap{display:flex;flex-direction:column;align-items:center}
+.wdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);transition:all .2s}
+.wdot.active{background:#042C53;color:#fff;border-color:#042C53}
+.wdot.done{background:#173404;color:#C0DD97;border-color:#173404}
+.wline{flex:1;height:1px;background:var(--color-border-tertiary);margin:0 4px;transition:background .3s}
+.wline.done{background:#3B6D11}
+.wlabel{font-size:11px;color:var(--color-text-tertiary);white-space:nowrap;margin-top:3px}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem}
+h3{font-size:15px;font-weight:500;margin-bottom:1rem}
+label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.mono{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);padding:1px 5px;border-radius:3px;color:var(--color-text-tertiary);margin-left:2px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:460px){.two-col,.step3-layout{grid-template-columns:1fr}}
+.field{margin-bottom:0}
+.verr{font-size:11px;color:var(--color-text-danger);margin-top:3px;min-height:14px}
+.btn-row{display:flex;align-items:center;gap:10px;margin-top:1.25rem}
+.btn-primary{background:#042C53;color:#fff;border:none;border-radius:var(--border-radius-md);padding:9px 22px;font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+.btn-primary:hover{background:#0C447C}
+.btn-ghost{background:transparent;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 18px;font-size:13px;cursor:pointer;font-family:var(--font-sans);color:var(--color-text-secondary)}
+.btn-ghost:hover{background:var(--color-background-secondary)}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px}
+.cat-btn{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:9px 11px;text-align:left;cursor:pointer;font-size:13px;color:var(--color-text-primary);font-family:var(--font-sans);transition:border-color .12s;width:100%}
+.cat-btn:hover{border-color:var(--color-border-primary)}
+.breadcrumb{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:.75rem;font-size:12px;color:var(--color-text-secondary)}
+.crumb{cursor:pointer;color:var(--color-text-info)}
+.crumb:hover{text-decoration:underline}
+.bsep{color:var(--color-text-tertiary)}
+.loading{font-size:13px;color:var(--color-text-secondary);padding:6px 0;display:flex;align-items:center;gap:7px}
+.spin{width:13px;height:13px;border:2px solid var(--color-border-secondary);border-top-color:#185FA5;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1rem 0}
+.selected-badge{display:inline-flex;align-items:center;gap:6px;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:var(--border-radius-md);padding:5px 10px;font-size:12px;color:#042C53;margin-bottom:1rem}
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.status{font-size:13px;padding:8px 12px;border-radius:var(--border-radius-md);margin-bottom:.875rem}
+.status.ok{background:var(--color-background-success);color:var(--color-text-success)}
+.status.err{background:var(--color-background-danger);color:var(--color-text-danger)}
+.resp-table-wrap{overflow-x:auto;margin-top:.875rem}
+.resp-table{width:100%;border-collapse:collapse;font-size:13px}
+.resp-table th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:7px 10px;border-bottom:0.5px solid var(--color-border-secondary);white-space:nowrap}
+.resp-table td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top;word-break:break-word}
+.resp-table tr:last-child td{border-bottom:none}
+.resp-table tr:hover td{background:var(--color-background-secondary)}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.pill.yes{background:#EAF3DE;color:#27500A}
+.pill.no{background:#F1EFE8;color:#5F5E5A}
+.raw-toggle{font-size:12px;color:var(--color-text-info);cursor:pointer;margin-top:.75rem;display:inline-block}
+.raw-toggle:hover{text-decoration:underline}
+.raw-pre{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.875rem;margin-top:.5rem;font-family:var(--font-mono);font-size:12px;white-space:pre-wrap;word-break:break-all;color:var(--color-text-primary);max-height:260px;overflow-y:auto;display:none}
+.hint{font-size:11px;color:var(--color-text-tertiary);margin-top:6px}
+.step3-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.info-icon{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--color-border-secondary);color:var(--color-text-tertiary);font-size:9px;font-style:normal;cursor:default;flex-shrink:0;position:relative}
+.info-icon:hover{border-color:var(--color-border-primary);color:var(--color-text-secondary)}
+.info-icon .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 9px;font-size:11px;color:var(--color-text-primary);white-space:normal;width:200px;line-height:1.4;z-index:10;pointer-events:none;font-style:normal;font-weight:400}
+.info-icon:hover .tip{display:block}
+</style>
+
+<div class="app">
+  <div class="wizard-nav">
+    <div class="wstep-wrap"><div class="wdot active" id="wd1">1</div><div class="wlabel">Auth</div></div>
+    <div class="wline" id="wl1"></div>
+    <div class="wstep-wrap"><div class="wdot" id="wd2">2</div><div class="wlabel">Category</div></div>
+    <div class="wline" id="wl2"></div>
+    <div class="wstep-wrap"><div class="wdot" id="wd3">3</div><div class="wlabel">Attributes</div></div>
+  </div>
+
+  <div id="panel1" class="panel active">
+    <div class="card">
+      <h3>Authorization</h3>
+      <div class="two-col">
+        <div class="field"><label for="auth-user">Username</label><input type="text" id="auth-user" placeholder="Enter username" autocomplete="username"></div>
+        <div class="field"><label for="auth-pass">Password</label><input type="password" id="auth-pass" placeholder="Enter password" autocomplete="current-password"></div>
+      </div>
+      <div class="hint">Credentials are encoded as Basic Auth and sent only to the resolve endpoint.</div>
+      <div class="btn-row"><button class="btn-primary" onclick="saveAuth()">Save &amp; continue</button></div>
+      <div id="auth-err" class="verr" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div id="panel2" class="panel">
+    <div class="card">
+      <h3>Select a category</h3>
+      <div id="bc" class="breadcrumb" style="display:none"></div>
+      <div id="cat-loading" class="loading" style="display:none"><div class="spin"></div>Loading…</div>
+      <div id="cat-grid" class="cat-grid"></div>
+      <div class="btn-row"><button class="btn-ghost" onclick="goTo(1)">Back</button></div>
+    </div>
+  </div>
+
+  <div id="panel3" class="panel">
+    <div class="card">
+      <div id="cat-badge" class="selected-badge" style="display:none"></div>
+      <div class="step3-layout">
+        <div>
+          <h3>Attributes</h3>
+          <div id="attr-loading" class="loading" style="display:none"><div class="spin"></div>Loading attributes…</div>
+          <div id="attr-form"></div>
+        </div>
+        <div>
+          <h3>Result</h3>
+          <div id="result-area"><p style="font-size:13px;color:var(--color-text-secondary)">Submit to see results.</p></div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="btn-row">
+        <button class="btn-primary" onclick="submitForm()">Submit to resolve API</button>
+        <button class="btn-ghost" onclick="goTo(2)">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE='https://api.getquipt.com/v2/categories';
+const RESOLVE='http://localhost/Quipt.WebAPIv2/inventory/groupandenrich/resolve';
+let authToken='',path=[],leafId=null,leafAttrs=[];
+
+function goTo(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('panel'+i).className='panel'+(i===n?' active':'');
+    document.getElementById('wd'+i).className='wdot'+(i===n?' active':i<n?' done':'');
+  });
+  document.getElementById('wl1').className='wline'+(n>1?' done':'');
+  document.getElementById('wl2').className='wline'+(n>2?' done':'');
+}
+
+function saveAuth(){
+  const u=document.getElementById('auth-user').value.trim();
+  const p=document.getElementById('auth-pass').value;
+  const err=document.getElementById('auth-err');
+  if(!u||!p){err.textContent='Both username and password are required.';return;}
+  err.textContent='';
+  authToken=btoa(u+':'+p);
+  goTo(2);
+  renderCatGrid(null);
+}
+
+async function fetchCats(id){
+  try{const r=await fetch(id?BASE+'/'+id:BASE);const j=await r.json();return j.Result||[];}catch(e){return[];}
+}
+
+async function fetchAttrs(id){
+  try{const r=await fetch(BASE+'/'+id+'/Attributes');const j=await r.json();return j.Result||[];}catch(e){return[];}
+}
+
+function renderBc(){
+  const el=document.getElementById('bc');
+  if(!path.length){el.style.display='none';return;}
+  el.style.display='flex';
+  el.innerHTML='<span class="crumb" onclick="navTo(-1)">Root</span>';
+  path.forEach((p,i)=>el.innerHTML+='<span class="bsep">›</span><span class="crumb" onclick="navTo('+i+')">'+esc(p.n)+'</span>');
+}
+
+function navTo(i){
+  if(i===-1)path=[];else path=path.slice(0,i+1);
+  renderBc();
+  renderCatGrid(path.length?path[path.length-1].id:null);
+}
+
+async function renderCatGrid(pid){
+  const g=document.getElementById('cat-grid'),ld=document.getElementById('cat-loading');
+  g.innerHTML='';ld.style.display='flex';
+  const cats=await fetchCats(pid);
+  ld.style.display='none';
+  if(!cats.length){g.innerHTML='<p style="font-size:13px;color:var(--color-text-secondary)">No subcategories found.</p>';return;}
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='cat-btn';b.textContent=c.Name+(c.IsLeaf?'':' ›');
+    b.onclick=()=>pickCat(c);g.appendChild(b);
+  });
+}
+
+async function pickCat(c){
+  if(!c.IsLeaf){
+    path.push({id:c.Id,n:c.Name});renderBc();renderCatGrid(c.Id);
+  } else {
+    leafId=c.Id;
+    goTo(3);
+    const badge=document.getElementById('cat-badge');
+    badge.style.display='inline-flex';
+    const fullPath=[...path.map(p=>p.n),c.Name].join(' › ');
+    badge.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'+esc(fullPath);
+    await loadAttrs(c.Id);
+  }
+}
+
+async function loadAttrs(id){
+  const ld=document.getElementById('attr-loading'),frm=document.getElementById('attr-form');
+  frm.innerHTML='';ld.style.display='flex';
+  const all=await fetchAttrs(id);
+  const attrs=all.filter(a=>a.InUniqueSearch===true);
+  ld.style.display='none';
+  leafAttrs=attrs;
+  if(!attrs.length){frm.innerHTML='<p style="font-size:13px;color:var(--color-text-secondary)">No unique-search attributes for this category.</p>';return;}
+  buildForm(attrs,frm);
+}
+
+function buildForm(attrs,frm){
+  const grid=document.createElement('div');grid.className='attr-grid';
+  attrs.forEach(a=>{
+    const wrap=document.createElement('div');wrap.className='field';
+
+    const lbl=document.createElement('label');
+    const nameSpan=document.createElement('span');
+    nameSpan.textContent=a.Text;
+    lbl.appendChild(nameSpan);
+
+    const codeSpan=document.createElement('span');
+    codeSpan.className='mono';codeSpan.textContent=a.Code;
+    lbl.appendChild(codeSpan);
+
+    if(a.Tooltip){
+      const icon=document.createElement('i');
+      icon.className='info-icon';
+      icon.textContent='i';
+      const tip=document.createElement('span');
+      tip.className='tip';
+      tip.textContent=a.Tooltip;
+      icon.appendChild(tip);
+      lbl.appendChild(icon);
+    }
+
+    wrap.appendChild(lbl);
+
+    if(a.Options&&a.Options.length){
+      const sel=document.createElement('select');sel.id='f_'+a.Code;
+      sel.innerHTML='<option value="">— select —</option>';
+      a.Options.forEach(o=>{const op=document.createElement('option');op.value=o.Value||o;op.textContent=o.Label||o.Value||o;sel.appendChild(op);});
+      wrap.appendChild(sel);
+    } else {
+      const inp=document.createElement('input');inp.type='text';inp.id='f_'+a.Code;
+      inp.placeholder=a.DataType==='Decimal'||a.DataType==='Integer'?'Number':'Value';
+      if(a.Regex){
+        inp.addEventListener('blur',()=>{
+          const e=document.getElementById('e_'+a.Code);if(!inp.value){e.textContent='';return;}
+          try{if(!new RegExp(a.Regex).test(inp.value))e.textContent='Invalid format';else e.textContent='';}catch(_){e.textContent='';}
+        });
+      }
+      wrap.appendChild(inp);
+    }
+
+    const err=document.createElement('div');err.className='verr';err.id='e_'+a.Code;wrap.appendChild(err);
+    grid.appendChild(wrap);
+  });
+  frm.appendChild(grid);
+}
+
+async function submitForm(){
+  let hasErr=false;
+  const attrPayload=[];
+  leafAttrs.forEach(a=>{
+    const el=document.getElementById('f_'+a.Code);if(!el)return;
+    const val=el.value;
+    if(a.Regex&&val){try{if(!new RegExp(a.Regex).test(val)){const e=document.getElementById('e_'+a.Code);if(e)e.textContent='Invalid format';hasErr=true;}}catch(_){}}
+    if(val)attrPayload.push({Key:a.Code,Value:val});
+  });
+  if(hasErr)return;
+  const payload={Category:{Id:leafId},Attributes:attrPayload};
+  const area=document.getElementById('result-area');
+  area.innerHTML='<div class="loading"><div class="spin"></div>Submitting…</div>';
+  try{
+    const r=await fetch(RESOLVE,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Basic '+authToken},body:JSON.stringify(payload)});
+    const txt=await r.text();
+    let parsed=null;try{parsed=JSON.parse(txt);}catch(_){}
+    if(r.ok)renderResponse(area,r.status,parsed,txt);
+    else{area.innerHTML='<div class="status err">Error '+r.status+(parsed&&parsed.message?' — '+esc(parsed.message):'')+'</div>';if(txt)addRaw(area,txt);}
+  }catch(e){
+    area.innerHTML='<div class="status err">Request failed: '+esc(e.message)+'<br><span style="font-size:11px;opacity:.75">Ensure the server is running and CORS is enabled.</span></div>';
+  }
+}
+
+function renderResponse(area,status,data,raw){
+  area.innerHTML='<div class="status ok">Status '+status+' — success</div>';
+  if(!data){addRaw(area,raw);return;}
+  const rows=extractRows(data);
+  const wrap=document.createElement('div');wrap.className='resp-table-wrap';
+  if(rows.length){
+    const cols=Array.from(new Set(rows.flatMap(r=>Object.keys(r))));
+    let html='<table class="resp-table"><thead><tr>'+cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
+    rows.forEach(r=>{html+='<tr>'+cols.map(c=>{const v=r[c];if(v===null||v===undefined)return'<td style="color:var(--color-text-tertiary)">—</td>';if(typeof v==='boolean')return'<td><span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span></td>';if(typeof v==='object')return'<td><span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)">'+esc(JSON.stringify(v))+'</span></td>';return'<td>'+esc(String(v))+'</td>';}).join('')+'</tr>';});
+    html+='</tbody></table>';wrap.innerHTML=html;
+  } else {
+    const flat=flattenObj(data);
+    let html='<table class="resp-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+    Object.entries(flat).forEach(([k,v])=>{const isBool=typeof v==='boolean';html+='<tr><td style="color:var(--color-text-secondary);white-space:nowrap">'+esc(k)+'</td><td>'+(isBool?'<span class="pill '+(v?'yes':'no')+'">'+(v?'Yes':'No')+'</span>':esc(String(v??'—')))+'</td></tr>';});
+    html+='</tbody></table>';wrap.innerHTML=html;
+  }
+  area.appendChild(wrap);
+  const tog=document.createElement('span');tog.className='raw-toggle';tog.textContent='Show raw JSON';
+  const pre=document.createElement('div');pre.className='raw-pre';pre.textContent=JSON.stringify(data,null,2);
+  tog.onclick=()=>{const open=pre.style.display==='block';pre.style.display=open?'none':'block';tog.textContent=open?'Show raw JSON':'Hide raw JSON';};
+  area.appendChild(tog);area.appendChild(pre);
+}
+
+function extractRows(data){
+  if(Array.isArray(data)&&data.length&&typeof data[0]==='object')return data;
+  for(const k of Object.keys(data)){if(Array.isArray(data[k])&&data[k].length&&typeof data[k][0]==='object')return data[k];}
+  return[];
+}
+
+function flattenObj(obj,prefix=''){
+  return Object.entries(obj).reduce((acc,[k,v])=>{const key=prefix?prefix+'.'+k:k;if(v&&typeof v==='object'&&!Array.isArray(v))Object.assign(acc,flattenObj(v,key));else if(Array.isArray(v))acc[key]='['+v.length+' items]';else acc[key]=v;return acc;},{});
+}
+
+function addRaw(area,txt){
+  const tog=document.createElement('span');tog.className='raw-toggle';tog.textContent='Show raw response';
+  const pre=document.createElement('div');pre.className='raw-pre';pre.textContent=txt;
+  tog.onclick=()=>{const open=pre.style.display==='block';pre.style.display=open?'none':'block';tog.textContent=open?'Show raw response':'Hide raw response';};
+  area.appendChild(tog);area.appendChild(pre);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+
+</html>
