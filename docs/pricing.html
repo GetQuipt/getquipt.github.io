@@ -584,7 +584,7 @@ async function submitForm() {
   
   let hasErr = false;
   const attrPayload = [];
-  leafAttrs.forEach(a => {
+  [...FIXED_ATTRS, ...leafAttrs].forEach(a => {
     const val = getFieldValue(a.Code);
     if (a.Regex && val) {
       try { if (!new RegExp(a.Regex).test(val)) { const e = document.getElementById('e_' + a.Code); if (e) e.textContent = 'Invalid format'; hasErr = true; } } catch(_) {}
