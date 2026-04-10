@@ -373,6 +373,15 @@
         </div>
       </div>
       <hr class="divider">
+      <div style="display:flex;align-items:center;gap:1.5rem;margin-top:1rem">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
+          <input type="checkbox" id="chk-buybox" checked> Include buy box
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);cursor:pointer;margin-bottom:0">
+          <input type="checkbox" id="chk-channelpricing" checked> Include channel pricing
+        </label>
+      </div>
+      <hr class="divider">
       <div class="btn-row">
         <button class="btn-primary" id="submit-btn" onclick="submitForm()">Submit</button>
         <button class="btn-ghost" onclick="goTo(2)">Back</button>
@@ -593,7 +602,12 @@ async function submitForm() {
   });
   if (hasErr) return;
 
-  const payload = { Category: { Id: leafId }, Attributes: attrPayload };
+  const payload = { 
+    Category: { Id: leafId }, 
+    Attributes: attrPayload,
+    IncludeBuyBox: document.getElementById('chk-buybox').checked,
+    IncludeChannelPricing: document.getElementById('chk-channelpricing').checked 
+  };
   const area = document.getElementById('result-area');
   area.innerHTML = '<div class="loading"><div class="spin"></div>Submitting…</div>';
 
