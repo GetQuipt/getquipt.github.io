@@ -104,6 +104,7 @@ paths:
         - If the `SKU` already exists, the item is updated.
         - If the `SKU` does not exist, a new item is created.
         - Partial updates are supported (fields not included remain unchanged).
+        - When updating quantities ensure all active wareshouses for a SKU are included. Missing warehouses will be zeroed out.
         
         **Common use cases:**
         - Importing product content.
