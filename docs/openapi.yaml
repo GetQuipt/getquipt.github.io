@@ -9499,7 +9499,7 @@ components:
           - $ref: '#/components/schemas/Quantity'
         Serials:
           type: array
-          description: The serial numbers shipped. If Quipt manages the allocation of serial numbers the values here should match.
+          description: The serial numbers shipped. If Quipt manages the allocation of serial numbers the values here should match. Additionally, there is some simple format handling if a retailer requires an IMEI. Enter value as "{serial number}:{IMEI}", ex. "SAMPLESN:SAMPLEIMEI".
           x-nullable: true
           items:
             type: string
