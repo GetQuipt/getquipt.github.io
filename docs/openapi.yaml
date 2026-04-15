@@ -450,7 +450,7 @@ paths:
         - Determine the associated SKU
         - Enrich the result with pricing guidance and marketplace data
       
-        Optional response data may include:
+        Optional response data may include
         - Channel-specific pricing recommendations
         - Marketplace buy box data
         - Estimated recovery pricing
