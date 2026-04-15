@@ -437,22 +437,20 @@ paths:
         returns enriched product data including SKU identification and pricing recommendations.
         
         **Expectations**
-        Either include the "Category" and "Attributes" or "Template" and "Attributes". If you are referencing a "Template" 
+        - Either include the "Category" and "Attributes" or "Template" and "Attributes". If you are referencing a "Template" 
         mapping considerations from the template will be applied. If no template is selected the values included in "Attributes" are
-        expected to match Quipt specific values. Use ['Taxonomy'](#Taxonomy%20API) endpoints to gather those details. 
+        expected to match Quipt specific values. Use [Taxonomy](#Taxonomy%20API) endpoints to gather those details. 
        
         **Overview**
-        The Resolve Inventory Group & Enrich endpoint is used to normalize vendor product data against the Quipt catalog.
-        
-        Clients submit a category identifier along with a set of product attributes describing the item. The system attempts to:
+        - The Resolve Inventory Group & Enrich endpoint is used to normalize vendor product data against the Quipt catalog.
+        - Clients submit a category identifier along with a set of product attributes describing the item. The system attempts to:
 
-        1. Identify the best matching catalog product
-        2. Locate an existing inventory record
-        3. Determine the associated SKU
-        4. Enrich the result with pricing guidance and marketplace data
+        - Identify the best matching catalog product
+        - Locate an existing inventory record
+        - Determine the associated SKU
+        - Enrich the result with pricing guidance and marketplace data
 
         If requested, the response may also include:
-
         - Channel-specific pricing recommendations
         - Marketplace buy box data
         - Estimated recovery pricing
@@ -460,19 +458,18 @@ paths:
         This endpoint is commonly used during inventory ingestion, listing creation, and pricing analysis workflows.
 
         **Behavior**
-        When a request is received, the system performs the following steps:
-
-        1. Attribute Normalization - Submitted attributes are validated and normalized based on the schema associated with the provided category.
-        2. Catalog Matching - The normalized attributes are used to search the Quipt catalog for the closest matching product.
-        If a match is found: CatalogExists = true
-        - The corresponding CatalogId is returned.
-        If no match is found: CatalogExists = false
-        - Pricing and inventory matching may still occur depending on available attributes.
-        3. Inventory Matching - If a catalog match exists, the system attempts to locate a corresponding inventory record using: catalog identifier, product condition, other relevant attributes
-        If found: InventoryExists = true
-        - InventoryId and Sku are returned.
-        4. Pricing Enrichment - Pricing recommendations are generated using: category-specific pricing models, marketplace pricing feeds, historical sales data
-        These values are returned in: Data, ChannelPricing
+        - When a request is received, the system performs the following steps:
+        -- Attribute Normalization - Submitted attributes are validated and normalized based on the schema associated with the provided category.
+        -- Catalog Matching - The normalized attributes are used to search the Quipt catalog for the closest matching product.
+        --- If a match is found: CatalogExists = true
+        ---- The corresponding CatalogId is returned.
+        --- If no match is found: CatalogExists = false
+        ---- Pricing and inventory matching may still occur depending on available attributes.
+        -- Inventory Matching - If a catalog match exists, the system attempts to locate a corresponding inventory record using: catalog identifier, product condition, other relevant attributes
+        --- If found: InventoryExists = true
+        ---- InventoryId and Sku are returned.
+        -- Pricing Enrichment - Pricing recommendations are generated using: category-specific pricing models, marketplace pricing feeds, historical sales data
+        ---These values are returned in: Data, ChannelPricing
 
         **Common use cases**
         - A vendor submits product attributes describing inventory items. This endpoint identifies the correct Quipt SKU and catalog record.
@@ -485,7 +482,7 @@ paths:
           
           Either include the "Category" and "Attributes" or "Template" and "Attributes". If you are referencing a "Template" 
           mapping considerations from the template will be applied. If no template is selected the values included in "Attributes" are
-          expected to match Quipt specific values. Use ['Taxonomy'](#Taxonomy%20API) endpoints to gather those details. 
+          expected to match Quipt specific values. Use [Taxonomy](#Taxonomy%20API) endpoints to gather those details. 
           
           The `TransactionId` may be provided to correlate this request with other transactions for traceability.
         content:
