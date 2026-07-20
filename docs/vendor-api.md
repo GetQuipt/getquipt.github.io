@@ -78,8 +78,6 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Ship service | Include invoice details in the same request as the shipment |
 | Auto Invoice | Enable in Settings to have Quipt invoice automatically on shipment |
 
-<a id="order-meta href="#order-meta" class="anchor-heading" aria-labelledby="order-meta"></a>
-
 ## Order Line Metafield Definitions
 
 | Channel | Metafield Key | Description |
