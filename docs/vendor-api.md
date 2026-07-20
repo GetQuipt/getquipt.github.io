@@ -136,24 +136,24 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Channel | Metafield Key | Description |
 |---|---|---|
 | AliExpress | NONE ||
-| Amazon | CreatedAt | Order placed. |
-| Amazon | UpdatedAt | Last order update. |
-| Amazon | EarliestShipBy | Earliest ship by date. |
-| Amazon | LatestShipBy | Latest ship by date. |
-| Amazon | EarliestDeliveryBy | Earliest delivery date. |
-| Amazon | LatestDeliveryBy | Latest delivery date. |
+| Amazon | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Amazon | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Amazon | EarliestShipBy | Earliest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Amazon | LatestShipBy | Latest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Amazon | EarliestDeliveryBy | Earliest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Amazon | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
 | BackMarket | NONE ||
-| BestBuy | CreatedAt | Order placed. |
-| BestBuy | UpdatedAt | Last order update. |
-| BestBuy | EarliestDeliveryBy | Earliest delivery date. |
-| BestBuy | LatestDeliveryBy | Latest delivery date. |
+| BestBuy | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| BestBuy | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| BestBuy | EarliestDeliveryBy | Earliest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| BestBuy | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
 | CoreCommerce | NONE ||
 | CarltonOne | NONE ||
-| eBay | CreatedAt | Order placed. |
-| eBay | UpdatedAt | Last order update. |
-| eBay | EarliestDeliveryBy | Earliest delivery date. |
-| eBay | LatestShipBy | Latest ship by date. |
-| eBay | LatestDeliveryBy | Latest delivery date. |
+| eBay | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| eBay | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| eBay | EarliestDeliveryBy | Earliest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| eBay | LatestShipBy | Latest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| eBay | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
 | Google | NONE ||
 | Groupon | NONE ||
 | HubX | NONE ||
@@ -166,20 +166,20 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Shopify | NONE ||
 | Stack Commerce | NONE ||
 | Tanga | NONE ||
-| TikTok | CreatedAt | Order placed. |
-| TikTok | UpdatedAt | Last order update. |
-| TikTok | CanceledIfNotDeliveredBy | Cancel order if not delivered by date. |
-| TikTok | LatestShipBy | Latest ship by date. |
-| TikTok | LatestDeliveryBy | Latest delivery date. |
+| TikTok | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| TikTok | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| TikTok | CanceledIfNotDeliveredBy | Cancel order if not delivered by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| TikTok | LatestShipBy | Latest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| TikTok | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
 | Until Gone | NONE ||
-| Walmart | CreatedAt | Order placed. |
-| Walmart | UpdatedAt | Last order update. |
-| Walmart | LatestShipBy | Latest ship by date. |
-| Walmart | LatestDeliveryBy | Latest delivery date. |
-| Wish | CreatedAt | Order placed. |
-| Wish | UpdatedAt | Last order update. |
-| Wish | LatestShipBy | Latest ship by date. |
-| Wish | LatestDeliveryBy | Latest delivery date. |
+| Walmart | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Walmart | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Walmart | LatestShipBy | Latest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Walmart | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Wish | CreatedAt | Order placed. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Wish | UpdatedAt | Last order update. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Wish | LatestShipBy | Latest ship by date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
+| Wish | LatestDeliveryBy | Latest delivery date. Format: yyyy-MM-ddTHH:mm:ss(.fff)?Z? |
 
 **Use Case 1 — Get new orders cut to merchant**
 
