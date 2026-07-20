@@ -8142,7 +8142,8 @@ components:
           - $ref: '#/components/schemas/PurchaseOrderSubStatusType'
         MetaFields:
           type: array
-          description: Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties.
+          description: >-
+            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-header-meta) to review definitions.
           x-nullable: true
           items:
             $ref: '#/components/schemas/MetaField'
@@ -9018,7 +9019,8 @@ components:
           - $ref: '#/components/schemas/PurchaseOrderSubStatusType'
         MetaFields:
           type: array
-          description: Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties.
+          description: >- 
+            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-header-meta) to review definitions.
           x-nullable: true
           items:
             $ref: '#/components/schemas/MetaField'
