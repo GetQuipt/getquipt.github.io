@@ -1,4 +1,4 @@
-<img width="271" height="20" alt="image" src="https://github.com/user-attachments/assets/dac1bcef-e7e4-44f4-bbbb-b30dbe51f258" />---
+---
 title: Vendor API
 nav_order: 2
 ---
