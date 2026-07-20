@@ -78,6 +78,99 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Ship service | Include invoice details in the same request as the shipment |
 | Auto Invoice | Enable in Settings to have Quipt invoice automatically on shipment |
 
+**Order Header User Defined Definitions** 
+| Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
+|---|---|---|---|---|
+| AliExpress | {order_id}	| {status} | | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) | 
+| Amazon | {orderId} | PRIME | {latestDateTime}\|{replacementOrderId}:{origOrderId} | {} refers to order fields, 'PRIME' only set for Prime orders. |
+| BackMarket ||||
+| BestBuy ||||
+| CoreCommerce ||||
+| CarltonOne ||||
+| eBay ||||
+| Google ||||
+| Groupon ||||
+| HubX ||||
+| Ingram XVantage ||||
+| Mercari ||||
+| Newegg MP ||||
+| Newegg MP (B2B) ||||
+| Newegg (Private) ||||
+| Overstock MP ||||
+| Shopify ||||
+| Stack Commerce ||||
+| Tanga ||||
+| TikTok ||||
+| Until Gone ||||
+| Walmart ||||
+| Wish ||||
+
+**Order Line User Defined Definitions** 
+| Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
+|---|---|---|---|--|
+| AliExpress | {child_id}	| {product_id} | | {} refers to order fields. |
+| Amazon | {orderItemId} | | | {} refers to order fields. |
+| BackMarket ||||
+| BestBuy ||||
+| CoreCommerce ||||
+| CarltonOne ||||
+| eBay ||||
+| Google ||||
+| Groupon ||||
+| HubX ||||
+| Ingram XVantage ||||
+| Mercari ||||
+| Newegg MP ||||
+| Newegg MP (B2B) ||||
+| Newegg (Private) ||||
+| Overstock MP ||||
+| Shopify ||||
+| Stack Commerce ||||
+| Tanga ||||
+| TikTok ||||
+| Until Gone ||||
+| Walmart ||||
+| Wish ||||
+
+**Order Line Metafield Definitions**
+| Channel | Metafield Key | Description |
+|---|---|---|
+| AliExpress | NONE ||
+| Amazon | CreatedAt | Order placed. |
+| Amazon | UpdatedAt | Last order update. |
+| Amazon | EarliestShipBy | Earliest ship by date. |
+| Amazon | LatestShipBy | Latest ship by date. |
+| Amazon | EarliestDeliveryBy | Earliest delivery date. |
+| Amazon | LatestDeliveryBy | Latest delivery date. |
+| BackMarket | NONE ||
+| BestBuy | CreatedAt | Order placed. |
+| BestBuy | UpdatedAt | Last order update. |
+| BestBuy | EarliestDeliveryBy | Earliest delivery date. |
+| BestBuy | LatestDeliveryBy | Latest delivery date. |
+| CoreCommerce | NONE ||
+| CarltonOne | NONE ||
+| eBay | CreatedAt | Order placed. |
+| eBay | UpdatedAt | Last order update. |
+| eBay | EarliestDeliveryBy | Earliest delivery date. |
+| eBay | LatestShipBy | Latest ship by date. |
+| eBay | LatestDeliveryBy | Latest delivery date. |
+| Google | NONE ||
+| Groupon | NONE ||
+| HubX |||
+| Ingram XVantage |||
+| Mercari |||
+| Newegg MP |||
+| Newegg MP (B2B) |||
+| Newegg (Private) |||
+| Overstock MP |||
+| Shopify |||
+| Stack Commerce |||
+| Tanga |||
+| TikTok |||
+| Until Gone |||
+| Walmart |||
+| Wish |||
+
 **Use Case 1 — Get new orders cut to merchant**
 
 Poll for orders in a new or open state and store them locally for processing. Storing orders locally allows downstream processes (shipment, invoicing) to operate without redundant API calls.
