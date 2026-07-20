@@ -168,7 +168,7 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | CarltonOne | {receiptItemId} | {listingId} || {} refers to order fields. |
 | CoreCommerce | {Sku} ||| {} refers to order fields. |
 | eBay | {legacyItemId-transactionId} ||| {} refers to order fields. |
-| Google | {id} | {product/offerId}|{product/id} || {} refers to order fields. |
+| Google | {id} | {product/offerId}\|{product/id} || {} refers to order fields. |
 | Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}\|{orderId} | {} refers to order fields. |
 | HubX | {sku} | {lineNumber} || {} refers to order fields. |
 | Ingram XVantage | {lineID}\|{vendorPartNumber}\|{ingramPartNumber}\|{quantityUom} | {vendorPartDescription}\|{unitPrice}\| || {} refers to order fields. |
@@ -179,7 +179,7 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Overstock MP | {salesChannelLineNumber} | {itemId}\|{salesChannelLineNumber}\|{salesChannelLineId}\|{salesChannelSKU}\|{barcode}\|{lineId}\| || {} refers to order fields. |
 | Shopify | {id} | {sku} | {price}\|{variant_id}\| | {} refers to order fields. |
 | Stack Commerce | {VENDOR SKU} | {BATCH ID}\|{ORDER DATE}\|{ORDER NUM}\|{VENDOR SKU}\|{STACK SKU}\|{PRODUCT NAME}\|{QTY}\|{SHIPPING FIRST NAME}\|{SHIPPING LAST NAME}\|{SHIPPING ADDRESS 1}\|{SHIPPING ADDRESS 2}\|{CITY}\|{STATE}\|{ZIP}\|{COUNTRY}\|{REFUNDED}\|{CARRIER}\| || {} refers to order fields. |
-| PCWholesale | {lineID} | {sku} | {unitOfMeasure} || {} refers to order fields. 
+| PCWholesale | {lineID} | {sku} | {unitOfMeasure} | {} refers to order fields. | 
 | Tanga | {ORDER_ID} | {SKU_CODE} || {} refers to order fields. |
 | TikTok | {id} | {seller_sku}\|{product_id}\|{sku_id} || {} refers to order fields. |
 | Until Gone | {sku} ||| {} refers to order fields. |
