@@ -156,20 +156,30 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | eBay | LatestDeliveryBy | Latest delivery date. |
 | Google | NONE ||
 | Groupon | NONE ||
-| HubX |||
-| Ingram XVantage |||
-| Mercari |||
-| Newegg MP |||
-| Newegg MP (B2B) |||
-| Newegg (Private) |||
-| Overstock MP |||
-| Shopify |||
-| Stack Commerce |||
-| Tanga |||
-| TikTok |||
-| Until Gone |||
-| Walmart |||
-| Wish |||
+| HubX | NONE ||
+| Ingram XVantage | NONE ||
+| Mercari | NONE ||
+| Newegg MP | NONE ||
+| Newegg MP (B2B) | NONE ||
+| Newegg (Private) | NONE ||
+| Overstock MP | NONE ||
+| Shopify | NONE ||
+| Stack Commerce | NONE ||
+| Tanga | NONE ||
+| TikTok | CreatedAt | Order placed. |
+| TikTok | UpdatedAt | Last order update. |
+| TikTok | CanceledIfNotDeliveredBy | Cancel order if not delivered by date. |
+| TikTok | LatestShipBy | Latest ship by date. |
+| TikTok | LatestDeliveryBy | Latest delivery date. |
+| Until Gone | NONE ||
+| Walmart | CreatedAt | Order placed. |
+| Walmart | UpdatedAt | Last order update. |
+| Walmart | LatestShipBy | Latest ship by date. |
+| Walmart | LatestDeliveryBy | Latest delivery date. |
+| Wish | CreatedAt | Order placed. |
+| Wish | UpdatedAt | Last order update. |
+| Wish | LatestShipBy | Latest ship by date. |
+| Wish | LatestDeliveryBy | Latest delivery date. |
 
 **Use Case 1 — Get new orders cut to merchant**
 
