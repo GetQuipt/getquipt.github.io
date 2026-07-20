@@ -148,7 +148,7 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Newegg MP (B2B) | {OrderNumber} ||| {} refers to order fields. |
 | Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)\|REF(CO)\|{purchaseOrderDate} | {} refers to order fields. |
 | Overstock MP | {salesChannelOrderNumber} | {orderId}\|{salesChannelOrderNumber}\|{salesChannelName}\|{warehouseName/code}\| | {retailOrderNumber}\|{retailChannelCode}\|{retailerOrderCode} | {} refers to order fields. |
-| Shopify | {id} | {status} | {billing_address/name}\|{billing_address/company}\|{billing_address/address1}\|{billing_address/address2}\|{billing_address/city}\|{billing_address/province_code}\|{billing_address/zip}\|{billing_address/countryISO}\| || {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
+| Shopify | {id} | {status} | {billing_address/name}\|{billing_address/company}\|{billing_address/address1}\|{billing_address/address2}\|{billing_address/city}\|{billing_address/province_code}\|{billing_address/zip}\|{billing_address/countryISO}\| | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
 | Stack Commerce | {ORDER_NUM} ||| {} refers to order fields. |
 | PCWholesale | {purchaseOrderNumber} | {shipMethod} || {} refers to order fields. |
 | Tanga | {ORDER_ID} | {PO_ID} || {} refers to order fields. |
