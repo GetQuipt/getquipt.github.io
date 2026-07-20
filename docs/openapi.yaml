@@ -538,7 +538,7 @@ paths:
         - Results include metadata (`PageNumber`, `Total`, `HasMorePages`) for pagination.  
         - Orders are returned in a deterministic order (commonly by `createdAt` or `updatedAt`).  
         - If the requested page exceeds available results, an empty list is returned.  
-        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
+        - Review [this](vendor-api.html#order-line-metafield-definitions) if you need to references stored in User Defined Fields (UDF) or MetaFields.
         
         **Common use cases**
         - Display paginated orders in an admin portal or fulfillment dashboard.  
@@ -626,7 +626,7 @@ paths:
         **Behavior**
         - If the order exists, the full order record is returned.
         - If no order with the given `id` is found, a `404` error is returned.
-        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
+        - Review [this](vendor-api.html#order-line-metafield-definitions) if you need to references stored in User Defined Fields (UDF) or MetaFields.
      
         **Common use cases**
         - Displaying full order details in an admin portal.
@@ -692,7 +692,7 @@ paths:
         **Behavior**
         - If a matching order is found, the full order record is returned.
         - If no matching order exists for the given `channelIdOrCode` + `poNumber`, a `404` error is returned.
-        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
+        - Review [this](vendor-api.html#order-line-metafield-definitions) if you need to references stored in User Defined Fields (UDF) or MetaFields.
      
         **Common use cases**
         - Customer service lookups when a client references their PO number.
@@ -764,7 +764,7 @@ paths:
         - Orders are returned only if they belong to the specified channel.  
         - Response includes pagination metadata (`PageNumber`, `Total`, `HasMorePages`).  
         - If no orders exist for the channel, an empty list is returned.  
-        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
+        - Review [this](vendor-api.html#order-line-metafield-definitions) if you need to references stored in User Defined Fields (UDF) or MetaFields.
     
         **Common use cases**
         - Building channel-specific dashboards.  
@@ -7272,15 +7272,15 @@ components:
           - $ref: '#/components/schemas/CarrierAccount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         Lines:
           type: array
@@ -7760,15 +7760,15 @@ components:
           - $ref: '#/components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         RequestedShipDate:
           type: string
@@ -7790,7 +7790,7 @@ components:
           - $ref: '#/components/schemas/PurchaseOrderSubStatusType'
         MetaFields:
           type: array
-          description: Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-meta) to review definitions.
+          description: Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-line-metafield-definitions) to review definitions.
           x-nullable: true
           items:
             $ref: '#/components/schemas/MetaField'
@@ -8114,15 +8114,15 @@ components:
           - $ref: '#/components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         RequestedShipDate:
           type: string
@@ -8145,7 +8145,7 @@ components:
         MetaFields:
           type: array
           description: >-
-            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-meta) to review definitions.
+            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-line-metafield-definitions) to review definitions.
           x-nullable: true
           items:
             $ref: '#/components/schemas/MetaField'
@@ -8991,15 +8991,15 @@ components:
           - $ref: '#/components/schemas/Amount'
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         RequestedShipDate:
           type: string
@@ -9022,7 +9022,7 @@ components:
         MetaFields:
           type: array
           description: >- 
-            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-meta) to review definitions.
+            Meta fields provide a flexible mechanism to provide additional data about a line item that may not be captured in the standard properties. Click [here](vendor-api.html#order-line-metafield-definitions) to review definitions.
           x-nullable: true
           items:
             $ref: '#/components/schemas/MetaField'
@@ -9249,17 +9249,17 @@ components:
         UserDefined1:
           type: string
           description: >-
-            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
           description: >-
-            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
           description: >-
-            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         Lines:
           type: array
@@ -9297,15 +9297,15 @@ components:
           x-nullable: true
         UserDefined1:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-l) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-line-user-defined-definitions) to review definitions.
           x-nullable: true
         LineNumber:
           type: integer
@@ -9947,15 +9947,15 @@ components:
         UserDefined1:
           type: string
           description: >-
-            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+            Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined2:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         UserDefined3:
           type: string
-          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-udf-h) to review definitions.
+          description: Custom values provided by channel. The data provided here varies between each channel partner. Click [here](vendor-api.html#order-header-user-defined-definitions) to review definitions.
           x-nullable: true
         Lines:
           type: array
