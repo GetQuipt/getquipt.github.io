@@ -1,4 +1,4 @@
----
+<img width="271" height="20" alt="image" src="https://github.com/user-attachments/assets/dac1bcef-e7e4-44f4-bbbb-b30dbe51f258" />---
 title: Vendor API
 nav_order: 2
 ---
@@ -96,15 +96,16 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Mercari | {id} | {buyer/id}\|{buyer/username} ||
 | Newegg MP | {OrderNumber} |||
 | Newegg MP (B2B) | {OrderNumber} |||
-| Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)|REF(CO)|{purchaseOrderDate} | |
+| Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)\|REF(CO)\|{purchaseOrderDate} | |
 | Overstock MP | {salesChannelOrderNumber} | {orderId}\|{salesChannelOrderNumber}\|{salesChannelName}\|{warehouseName/code}\| | {retailOrderNumber}\|{retailChannelCode}\|{retailerOrderCode} | |
-| Shopify ||||
-| Stack Commerce ||||
-| Tanga ||||
-| TikTok ||||
-| Until Gone ||||
-| Walmart ||||
-| Wish ||||
+| Shopify | {id} |$status| (CANCELLED, PENDING, FULFILLED, or empty string | {billing_address/name}\|{billing_address/company}\|{billing_address/address1}\|{billing_address/address2}\|{billing_address/city}\|{billing_address/province_code}\|{billing_address/zip}\|{billing_address/countryISO}\| ||
+| Stack Commerce | {ORDER_NUM} |||
+| PCWholesale | {purchaseOrderNumber} | {shipMethod} ||
+| Tanga | {ORDER_ID} | {PO_ID} ||
+| TikTok | {id} | {$status|channelType|payment/shipping_fee ($status is one of: OPEN, PENDING, CANCELLED)} ||
+| Until Gone | {uli} | |||
+| Walmart | {purchaseOrderId} |||
+| Wish | {id} | {transaction_id} ||
 
 <a href="#order-header-udf-l" class="anchor-heading" aria-labelledby="order-header-udf-l"></a>
 **Order Line User Defined Definitions** 
@@ -126,13 +127,14 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Newegg MP (B2B) | {SellerPartNumber} || {UnitPrice} | |
 | Newegg (Private) | {PO1/assignedIdentification} |  itemNumber (VP) | {unitOfMeasure}\|{buyerPartNumber} | |
 | Overstock MP | {salesChannelLineNumber} | {itemId}\|{salesChannelLineNumber}\|{salesChannelLineId}\|{salesChannelSKU}\|{barcode}\|{lineId}\||||
-| Shopify ||||
-| Stack Commerce ||||
-| Tanga ||||
-| TikTok ||||
-| Until Gone ||||
-| Walmart ||||
-| Wish ||||
+| Shopify | {id} | {sku} | {price}\|{variant_id}\| ||
+| Stack Commerce | {VENDOR SKU} | {BATCH ID}\|{ORDER DATE}\|{ORDER NUM}\|{VENDOR SKU}\|{STACK SKU}\|{PRODUCT NAME}\|{QTY}\|{SHIPPING FIRST NAME}\|{SHIPPING LAST NAME}\|{SHIPPING ADDRESS 1}\|{SHIPPING ADDRESS 2}\|{CITY}\|{STATE}\|{ZIP}\|{COUNTRY}\|{REFUNDED}\|{CARRIER}\| |||
+| PCWholesale | {lineID} | {sku} | {unitOfMeasure} | |
+| Tanga | {ORDER_ID} | {SKU_CODE} ||
+| TikTok | {id} | {seller_sku}\|{product_id}\|{sku_id} |||
+| Until Gone | {sku} ||||
+| Walmart | {lineNumber} | {shipping-taxPerUnit}\|{item-taxPerUnit} | {price} | |
+| Wish | {sku} | {product_information/id} | is_wish_express:WISH_EXPRESS | (WISH_EXPRESS values: True, False) |
 
 <a href="#order-header-meta" class="anchor-heading" aria-labelledby="order-header-meta"></a>
 **Order Line Metafield Definitions**
