@@ -86,18 +86,18 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Amazon | {orderId} | PRIME | {latestDateTime}\|{replacementOrderId}:{origOrderId} | {} refers to order fields, 'PRIME' only set for Prime orders. |
 | BackMarket | {order_id} | {status} | {price}\|{shipping_price}\|{billing_address/company}\|{billing_address/first_name}\|{billing_address/last_name}\|{billing_address/street}\|{billing_address/street2}\|{billing_address/city}\|{billing_address/state_or_province}\|{billing_address/postal_code}\|{billing_address/country}\|{date_creation} | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
 | BestBuy | order_id | {endDate}\|{status}\|{fulfillment/center/code}\|{shipping_type_code}\|{customer/shipping_address/firstname}\|{customer/shipping_address/lastname}\|{customer/shipping_address/street_1}\|{customer/shipping_address/street_2}\|{customer/shipping_address/city}\|{customer/shipping_address/state}\|{customer/shipping_address/zip_code}\|{customer/shipping_address/country_iso_code} | {commercial_id}\|{created_date}\|{shipping_type_code} | {} refers to order fields, {status} = (OPEN, PENDING) |
-| CoreCommerce ||||
-| CarltonOne ||||
-| eBay ||||
-| Google ||||
-| Groupon ||||
-| HubX ||||
-| Ingram XVantage ||||
-| Mercari ||||
-| Newegg MP ||||
-| Newegg MP (B2B) ||||
-| Newegg (Private) ||||
-| Overstock MP ||||
+| CarltonOne | {RECEIPT_ID} |||
+| CoreCommerce | {Number} | {id} ||
+| eBay | {orderId} | {status}\|{legacyOrderId} | {buyer/username}\|{salesRecordReference} | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
+| Google | {id} | {status}\|{channelType} || {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
+| Groupon | {customer/name}\|{address}\|{city}\|{state}\|{zip} | {orderid}\|{date}\|{parent_orderid} |||
+| HubX | {purchaseOrderNumber} |||
+| Ingram XVantage | {ingramPurchaseOrderNumber} | {purchaseOrderDate}\|{shipMethod} |||
+| Mercari | {id} | {buyer/id}\|{buyer/username} ||
+| Newegg MP | {OrderNumber} |||
+| Newegg MP (B2B) | {OrderNumber} |||
+| Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)|REF(CO)|{purchaseOrderDate} | |
+| Overstock MP | {salesChannelOrderNumber} | {orderId}\|{salesChannelOrderNumber}\|{salesChannelName}\|{warehouseName/code}\| | {retailOrderNumber}\|{retailChannelCode}\|{retailerOrderCode} | |
 | Shopify ||||
 | Stack Commerce ||||
 | Tanga ||||
@@ -114,18 +114,18 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Amazon | {orderItemId} | | | {} refers to order fields. |
 | BackMarket | {listing} | {id} | substring({product},1,20)\|{price}\|{shipping_price}\|{sales_taxes}\|{quantity} | {} refers to order fields. |
 | BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\|| {} refers to order fields. |
-| CoreCommerce ||||
-| CarltonOne ||||
-| eBay ||||
-| Google ||||
-| Groupon ||||
-| HubX ||||
-| Ingram XVantage ||||
-| Mercari ||||
-| Newegg MP ||||
-| Newegg MP (B2B) ||||
-| Newegg (Private) ||||
-| Overstock MP ||||
+| CarltonOne | {receiptItemId} | {listingId} ||
+| CoreCommerce | {Sku} |||
+| eBay | {legacyItemId-transactionId} |||
+| Google | {id} | {product/offerId}|{product/id} |||
+| Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}|{orderId} ||
+| HubX | {sku} | {lineNumber} |||
+| Ingram XVantage | {lineID}\|{vendorPartNumber}\|{ingramPartNumber}\|{quantityUom} | {vendorPartDescription}\|{unitPrice}\| |||
+| Mercari | {listing_id} | {sku} ||
+| Newegg MP | {SellerPartNumber} || {UnitPrice} | |
+| Newegg MP (B2B) | {SellerPartNumber} || {UnitPrice} | |
+| Newegg (Private) | {PO1/assignedIdentification} |  itemNumber (VP) | {unitOfMeasure}\|{buyerPartNumber} | |
+| Overstock MP | {salesChannelLineNumber} | {itemId}\|{salesChannelLineNumber}\|{salesChannelLineId}\|{salesChannelSKU}\|{barcode}\|{lineId}\||||
 | Shopify ||||
 | Stack Commerce ||||
 | Tanga ||||
