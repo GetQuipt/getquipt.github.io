@@ -113,12 +113,12 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | AliExpress | {child_id}	| {product_id} | | {} refers to order fields. |
 | Amazon | {orderItemId} | | | {} refers to order fields. |
 | BackMarket | {listing} | {id} | substring({product},1,20)\|{price}\|{shipping_price}\|{sales_taxes}\|{quantity} | {} refers to order fields. |
-| BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\|| {} refers to order fields. |
+| BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}\|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\|| {} refers to order fields. |
 | CarltonOne | {receiptItemId} | {listingId} ||
 | CoreCommerce | {Sku} |||
 | eBay | {legacyItemId-transactionId} |||
 | Google | {id} | {product/offerId}|{product/id} |||
-| Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}|{orderId} ||
+| Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}\|{orderId} ||
 | HubX | {sku} | {lineNumber} |||
 | Ingram XVantage | {lineID}\|{vendorPartNumber}\|{ingramPartNumber}\|{quantityUom} | {vendorPartDescription}\|{unitPrice}\| |||
 | Mercari | {listing_id} | {sku} ||
