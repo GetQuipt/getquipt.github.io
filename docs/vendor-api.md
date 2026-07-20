@@ -78,13 +78,14 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Ship service | Include invoice details in the same request as the shipment |
 | Auto Invoice | Enable in Settings to have Quipt invoice automatically on shipment |
 
+<a href="#order-header-udf-h" class="anchor-heading" aria-labelledby="order-header-udf-h"></a>
 **Order Header User Defined Definitions** 
 | Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
 |---|---|---|---|---|
 | AliExpress | {order_id}	| {status} | | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) | 
 | Amazon | {orderId} | PRIME | {latestDateTime}\|{replacementOrderId}:{origOrderId} | {} refers to order fields, 'PRIME' only set for Prime orders. |
-| BackMarket ||||
-| BestBuy ||||
+| BackMarket | {order_id} | {status} | {price}\|{shipping_price}\|{billing_address/company}\|{billing_address/first_name}\|{billing_address/last_name}\|{billing_address/street}\|{billing_address/street2}\|{billing_address/city}\|{billing_address/state_or_province}\|{billing_address/postal_code}\|{billing_address/country}\|{date_creation} | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
+| BestBuy | order_id | {endDate}\|{status}\|{fulfillment/center/code}\|{shipping_type_code}\|{customer/shipping_address/firstname}\|{customer/shipping_address/lastname}\|{customer/shipping_address/street_1}\|{customer/shipping_address/street_2}\|{customer/shipping_address/city}\|{customer/shipping_address/state}\|{customer/shipping_address/zip_code}\|{customer/shipping_address/country_iso_code} | {commercial_id}\|{created_date}\|{shipping_type_code} | {} refers to order fields, {status} = (OPEN, PENDING) |
 | CoreCommerce ||||
 | CarltonOne ||||
 | eBay ||||
@@ -105,13 +106,14 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Walmart ||||
 | Wish ||||
 
+<a href="#order-header-udf-l" class="anchor-heading" aria-labelledby="order-header-udf-l"></a>
 **Order Line User Defined Definitions** 
 | Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
 |---|---|---|---|--|
 | AliExpress | {child_id}	| {product_id} | | {} refers to order fields. |
 | Amazon | {orderItemId} | | | {} refers to order fields. |
-| BackMarket ||||
-| BestBuy ||||
+| BackMarket | {listing} | {id} | substring({product},1,20)\|{price}\|{shipping_price}\|{sales_taxes}\|{quantity} | {} refers to order fields. |
+| BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\|| {} refers to order fields. |
 | CoreCommerce ||||
 | CarltonOne ||||
 | eBay ||||
@@ -132,6 +134,7 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 | Walmart ||||
 | Wish ||||
 
+<a href="#order-header-meta" class="anchor-heading" aria-labelledby="order-header-meta"></a>
 **Order Line Metafield Definitions**
 | Channel | Metafield Key | Description |
 |---|---|---|
