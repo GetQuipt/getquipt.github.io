@@ -528,16 +528,15 @@ paths:
   
         **Important**
         - `Lines[] represents what Quipt receives from a channel when orders are received. Due to sku normalization, availability, and pricing Quipt encapsulate details for the vendor within Lines[].Fulfillments[]. To ensure expected data is returned by the endpoint inclusion of '?include=Fulfillments' is required.`
-  
         **Overview**
         - Use this endpoint to retrieve orders that require picking, packing, or shipping.
         - Supports pagination with `pageSize` and `pageNumber` path parameters.
-        - Optional query parameters may filter orders (e.g., by orderStatus).
-  
+        - Optional query parameters may filter orders (e.g., by orderStatus).  
         **Behavior**
         - Results include metadata (`PageNumber`, `Total`, `HasMorePages`) for pagination.  
         - Orders are returned in a deterministic order (commonly by `createdAt` or `updatedAt`).  
         - If the requested page exceeds available results, an empty list is returned.  
+        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
         **Common use cases**
         - Display paginated orders in an admin portal or fulfillment dashboard.  
         - Integrate with a warehouse system for batch picking and packing.  
@@ -614,17 +613,15 @@ paths:
   
         **Important**
         - `Lines[] represents what Quipt receives from a channel when orders are received. Due to sku normalization, availability, and pricing Quipt encapsulate details for the vendor within Lines[].Fulfillments[]. To ensure expected data is returned by the endpoint inclusion of '?include=Fulfillments' is required.`
-        
         **Overview**
         - Use this endpoint to fetch all available information for one order.
         - The `id` corresponds to the system-assigned unique identifier for the order.
         - Commonly used to display order details in a fulfillment dashboard, verify status,
           or integrate with external systems.
-  
         **Behavior**
         - If the order exists, the full order record is returned.
         - If no order with the given `id` is found, a `404` error is returned.
-  
+        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
         **Common use cases**
         - Displaying full order details in an admin portal.
         - Looking up an order’s fulfillment status for customer service.
@@ -679,17 +676,15 @@ paths:
   
         **Important**
         - `Lines[] represents what Quipt receives from a channel when orders are received. Due to sku normalization, availability, and pricing Quipt encapsulate details for the vendor within Lines[].Fulfillments[]. To ensure expected data is returned by the endpoint inclusion of '?include=Fulfillments' is required.`
-  
         **Overview**
         - Use this endpoint when you need to fetch an order by its PO number instead of the system `id`.
         - The `channelIdOrCode` parameter identifies the sales channel, managed via partner settings.
         - The `poNumber` parameter is the purchase order number assigned within that channel.
         - Commonly used for B2B workflows where orders are tracked against PO numbers.
-  
         **Behavior**
         - If a matching order is found, the full order record is returned.
         - If no matching order exists for the given `channelIdOrCode` + `poNumber`, a `404` error is returned.
-  
+        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
         **Common use cases**
         - Customer service lookups when a client references their PO number.
         - Reconciling orders between Quipt and an external ERP or sales channel.
@@ -750,17 +745,15 @@ paths:
   
         **Important**
         - `Lines[] represents what Quipt receives from a channel when orders are received. Due to sku normalization, availability, and pricing Quipt encapsulate details for the vendor within Lines[].Fulfillments[]. To ensure expected data is returned by the endpoint inclusion of '?include=Fulfillments' is required.`
-        
         **Overview**
         - Use this endpoint to fetch only the orders associated with a given channel.  
         - Supports pagination via the `pageSize` and `pageNumber` path parameters.  
         - Optional query parameters can further filter results.  
-
         **Behavior**
         - Orders are returned only if they belong to the specified channel.  
         - Response includes pagination metadata (`PageNumber`, `Total`, `HasMorePages`).  
         - If no orders exist for the channel, an empty list is returned.  
-  
+        - Review [this](vendor-api.html#order-udf-h) if you need to references stored in User Defined Fields (UDF) or MetaFields.
         **Common use cases**
         - Building channel-specific dashboards.  
         - Synchronizing orders with a warehouse or ERP on a per-channel basis.  
