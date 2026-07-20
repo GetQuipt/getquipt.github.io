@@ -130,62 +130,61 @@ The order subsystem covers the complete lifecycle of a purchase order from the m
 
 ### Order Header User Defined Definitions
 
-| Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
+| Channel | UserDefined1 | UserDefined2 | UserDefined3 | Description |
 |---|---|---|---|---|
 | AliExpress | {order_id}	| {status} | | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) | 
 | Amazon | {orderId} | PRIME | {latestDateTime}\|{replacementOrderId}:{origOrderId} | {} refers to order fields, 'PRIME' only set for Prime orders. |
 | BackMarket | {order_id} | {status} | {price}\|{shipping_price}\|{billing_address/company}\|{billing_address/first_name}\|{billing_address/last_name}\|{billing_address/street}\|{billing_address/street2}\|{billing_address/city}\|{billing_address/state_or_province}\|{billing_address/postal_code}\|{billing_address/country}\|{date_creation} | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
 | BestBuy | order_id | {endDate}\|{status}\|{fulfillment/center/code}\|{shipping_type_code}\|{customer/shipping_address/firstname}\|{customer/shipping_address/lastname}\|{customer/shipping_address/street_1}\|{customer/shipping_address/street_2}\|{customer/shipping_address/city}\|{customer/shipping_address/state}\|{customer/shipping_address/zip_code}\|{customer/shipping_address/country_iso_code} | {commercial_id}\|{created_date}\|{shipping_type_code} | {} refers to order fields, {status} = (OPEN, PENDING) |
-| CarltonOne | {RECEIPT_ID} |||
-| CoreCommerce | {Number} | {id} ||
+| CarltonOne | {RECEIPT_ID} ||| {} refers to order fields. |
+| CoreCommerce | {Number} | {id} || {} refers to order fields. |
 | eBay | {orderId} | {status}\|{legacyOrderId} | {buyer/username}\|{salesRecordReference} | {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
 | Google | {id} | {status}\|{channelType} || {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
-| Groupon | {customer/name}\|{address}\|{city}\|{state}\|{zip} | {orderid}\|{date}\|{parent_orderid} |||
-| HubX | {purchaseOrderNumber} |||
-| Ingram XVantage | {ingramPurchaseOrderNumber} | {purchaseOrderDate}\|{shipMethod} |||
-| Mercari | {id} | {buyer/id}\|{buyer/username} ||
-| Newegg MP | {OrderNumber} |||
-| Newegg MP (B2B) | {OrderNumber} |||
-| Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)\|REF(CO)\|{purchaseOrderDate} | |
-| Overstock MP | {salesChannelOrderNumber} | {orderId}\|{salesChannelOrderNumber}\|{salesChannelName}\|{warehouseName/code}\| | {retailOrderNumber}\|{retailChannelCode}\|{retailerOrderCode} | |
-| Shopify | {id} |$status| (CANCELLED, PENDING, FULFILLED, or empty string | {billing_address/name}\|{billing_address/company}\|{billing_address/address1}\|{billing_address/address2}\|{billing_address/city}\|{billing_address/province_code}\|{billing_address/zip}\|{billing_address/countryISO}\| ||
-| Stack Commerce | {ORDER_NUM} |||
-| PCWholesale | {purchaseOrderNumber} | {shipMethod} ||
-| Tanga | {ORDER_ID} | {PO_ID} ||
-| TikTok | {id} | {$status|channelType|payment/shipping_fee ($status is one of: OPEN, PENDING, CANCELLED)} ||
-| Until Gone | {uli} | |||
-| Walmart | {purchaseOrderId} |||
-| Wish | {id} | {transaction_id} ||
+| Groupon | {customer/name}\|{address}\|{city}\|{state}\|{zip} | {orderid}\|{date}\|{parent_orderid} || {} refers to order fields. |
+| HubX | {purchaseOrderNumber} ||| {} refers to order fields. |
+| Ingram XVantage | {ingramPurchaseOrderNumber} | {purchaseOrderDate}\|{shipMethod} || {} refers to order fields. |
+| Mercari | {id} | {buyer/id}\|{buyer/username} || {} refers to order fields. |
+| Newegg MP | {OrderNumber} ||| {} refers to order fields. |
+| Newegg MP (B2B) | {OrderNumber} ||| {} refers to order fields. |
+| Newegg (Private) | {purchaseOrderNumber} | {shipMethod} | REF(EU)\|REF(CO)\|{purchaseOrderDate} | {} refers to order fields. |
+| Overstock MP | {salesChannelOrderNumber} | {orderId}\|{salesChannelOrderNumber}\|{salesChannelName}\|{warehouseName/code}\| | {retailOrderNumber}\|{retailChannelCode}\|{retailerOrderCode} | {} refers to order fields. |
+| Shopify | {id} | {status} | {billing_address/name}\|{billing_address/company}\|{billing_address/address1}\|{billing_address/address2}\|{billing_address/city}\|{billing_address/province_code}\|{billing_address/zip}\|{billing_address/countryISO}\| || {} refers to order fields, {status} = (OPEN, PENDING, CANCELLED) |
+| Stack Commerce | {ORDER_NUM} ||| {} refers to order fields. |
+| PCWholesale | {purchaseOrderNumber} | {shipMethod} || {} refers to order fields. |
+| Tanga | {ORDER_ID} | {PO_ID} || {} refers to order fields. |
+| TikTok | {id} | {status}\|{channelType}\|{payment/shipping_fee} || {} refers to order fields. |
+| Until Gone | {uli} ||| {} refers to order fields. |
+| Walmart | {purchaseOrderId} ||| {} refers to order fields. |
+| Wish | {id} | {transaction_id} || {} refers to order fields. |
 
 ### Order Line User Defined Definitions
 
 | Channel | UserDefined1 |  UserDefined2 |  UserDefined3 | Description |
 |---|---|---|---|--|
 | AliExpress | {child_id}	| {product_id} | | {} refers to order fields. |
-| Amazon | {orderItemId} | | | {} refers to order fields. |
+| Amazon | {orderItemId} ||| {} refers to order fields. |
 | BackMarket | {listing} | {id} | substring({product},1,20)\|{price}\|{shipping_price}\|{sales_taxes}\|{quantity} | {} refers to order fields. |
-| BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}\|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\|| {} refers to order fields. |
-| CarltonOne | {receiptItemId} | {listingId} ||
-| CoreCommerce | {Sku} |||
-| eBay | {legacyItemId-transactionId} |||
-| Google | {id} | {product/offerId}|{product/id} |||
-| Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}\|{orderId} ||
-| HubX | {sku} | {lineNumber} |||
-| Ingram XVantage | {lineID}\|{vendorPartNumber}\|{ingramPartNumber}\|{quantityUom} | {vendorPartDescription}\|{unitPrice}\| |||
-| Mercari | {listing_id} | {sku} ||
-| Newegg MP | {SellerPartNumber} || {UnitPrice} | |
-| Newegg MP (B2B) | {SellerPartNumber} || {UnitPrice} | |
-| Newegg (Private) | {PO1/assignedIdentification} |  itemNumber (VP) | {unitOfMeasure}\|{buyerPartNumber} | |
-| Overstock MP | {salesChannelLineNumber} | {itemId}\|{salesChannelLineNumber}\|{salesChannelLineId}\|{salesChannelSKU}\|{barcode}\|{lineId}\||||
-| Shopify | {id} | {sku} | {price}\|{variant_id}\| ||
-| Stack Commerce | {VENDOR SKU} | {BATCH ID}\|{ORDER DATE}\|{ORDER NUM}\|{VENDOR SKU}\|{STACK SKU}\|{PRODUCT NAME}\|{QTY}\|{SHIPPING FIRST NAME}\|{SHIPPING LAST NAME}\|{SHIPPING ADDRESS 1}\|{SHIPPING ADDRESS 2}\|{CITY}\|{STATE}\|{ZIP}\|{COUNTRY}\|{REFUNDED}\|{CARRIER}\| |||
-| PCWholesale | {lineID} | {sku} | {unitOfMeasure} | |
-| Tanga | {ORDER_ID} | {SKU_CODE} ||
-| TikTok | {id} | {seller_sku}\|{product_id}\|{sku_id} |||
-| Until Gone | {sku} ||||
-| Walmart | {lineNumber} | {shipping-taxPerUnit}\|{item-taxPerUnit} | {price} | |
-| Wish | {sku} | {product_information/id} | is_wish_express:WISH_EXPRESS | (WISH_EXPRESS values: True, False) |
-
+| BestBuy | {order_id}\|{order_line_id}\|{offer_id}\|\|\|{channel/code}\|{quantity} | {shipping-taxPerUnit}\|{item-taxPerUnit} | \|\|\|{order/shipping_deadline}\|{order/delivery_date/latest}\|{category_code}\|{price}\|\|{order/commercial_id}\|\| | {} refers to order fields. |
+| CarltonOne | {receiptItemId} | {listingId} || {} refers to order fields. |
+| CoreCommerce | {Sku} ||| {} refers to order fields. |
+| eBay | {legacyItemId-transactionId} ||| {} refers to order fields. |
+| Google | {id} | {product/offerId}|{product/id} || {} refers to order fields. |
+| Groupon | {ci_lineitemid} | {sku} | {fulfillment_lineitem_id}\|{orderId} | {} refers to order fields. |
+| HubX | {sku} | {lineNumber} || {} refers to order fields. |
+| Ingram XVantage | {lineID}\|{vendorPartNumber}\|{ingramPartNumber}\|{quantityUom} | {vendorPartDescription}\|{unitPrice}\| || {} refers to order fields. |
+| Mercari | {listing_id} | {sku} || {} refers to order fields. |
+| Newegg MP | {SellerPartNumber} || {UnitPrice} | {} refers to order fields. |
+| Newegg MP (B2B) | {SellerPartNumber} || {UnitPrice} | {} refers to order fields. |
+| Newegg (Private) | {PO1/assignedIdentification} | itemNumber (VP) | {unitOfMeasure}\|{buyerPartNumber} | {} refers to order fields. |
+| Overstock MP | {salesChannelLineNumber} | {itemId}\|{salesChannelLineNumber}\|{salesChannelLineId}\|{salesChannelSKU}\|{barcode}\|{lineId}\| || {} refers to order fields. |
+| Shopify | {id} | {sku} | {price}\|{variant_id}\| | {} refers to order fields. |
+| Stack Commerce | {VENDOR SKU} | {BATCH ID}\|{ORDER DATE}\|{ORDER NUM}\|{VENDOR SKU}\|{STACK SKU}\|{PRODUCT NAME}\|{QTY}\|{SHIPPING FIRST NAME}\|{SHIPPING LAST NAME}\|{SHIPPING ADDRESS 1}\|{SHIPPING ADDRESS 2}\|{CITY}\|{STATE}\|{ZIP}\|{COUNTRY}\|{REFUNDED}\|{CARRIER}\| || {} refers to order fields. |
+| PCWholesale | {lineID} | {sku} | {unitOfMeasure} || {} refers to order fields. 
+| Tanga | {ORDER_ID} | {SKU_CODE} || {} refers to order fields. |
+| TikTok | {id} | {seller_sku}\|{product_id}\|{sku_id} || {} refers to order fields. |
+| Until Gone | {sku} ||| {} refers to order fields. |
+| Walmart | {lineNumber} | {shipping-taxPerUnit}\|{item-taxPerUnit} | {price} | {} refers to order fields. |
+| Wish | {sku} | {product_information/id} | is_wish_express:{WISH_EXPRESS} | {} refers to order fields, {WISH_EXPRESS} = (True, False) |
 
 **Use Case 1 — Get new orders cut to merchant**
 
