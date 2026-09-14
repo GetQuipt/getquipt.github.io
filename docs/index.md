@@ -30,6 +30,8 @@ The [Notification API](application-api.md#notifications) is a set of endpoints t
     
 The [Carrier API](api-reference.md#tag-Carrier_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
     
-The [Taxonomy API](api-reference.md#tag-Taxonomy_API) is a set of endpoints to get the available carriers and carrier methods that are used as part of the order workflows. They are used as part of the order and shipment endpoints. 
+The [Taxonomy API](api-reference.md#tag-Taxonomy_API) is a set of endpoints to get the available taxonomy details. 
+
+The [Report API](api-reference.md#tag-Report_API) is a set of endpoints to view a few of our built-in reports. The reports consist of a inventory report and a few sales reports. 
 
 All APIs with the exception of [Carrier API](api-reference.md#tag-Carrier_API) and [Taxonomy API](api-reference.md#tag-Taxonomy_API) require OAuth 1.0a for authorization management. Learn how to [connect to Quipt](application-setup.md).   
