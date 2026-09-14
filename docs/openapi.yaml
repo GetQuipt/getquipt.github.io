@@ -87,6 +87,12 @@ tags:
     externalDocs:
       description: View taxonomy.
       url: https://getquipt.github.io/taxonomy.html  
+  - name: Report API
+    description: >-
+      Run the analytics reports Quipt maintains over your inventory and sales, or request one as an
+      XLSX workbook. Every report is scoped to the company of the authenticated caller.
+      Reports are read from an analytics store that is loaded on a schedule, so figures may trail
+      the operational endpoints by a short period.
 paths:
   /inventory/physical:
     post:
@@ -4174,6 +4180,427 @@ paths:
                 $ref: '#/components/schemas/CategoryAttributeReply'
         '400':
           description: Invalid request.
+  /categories/attribute/{codeOrId}:
+    get:
+      tags:
+        - Taxonomy API
+      summary: Get a single attribute by code or id.
+      description: >-
+        Get a single category attribute, looked up by its Quipt attribute id or by its code.
+
+
+        **Behavior**
+
+        - A value that parses as a Quipt id is treated as an id, anything else is treated as a code.
+
+        - Returns 404 when no attribute matches.
+      operationId: attributeByCodeOrId
+      parameters:
+        - name: codeOrId
+          in: path
+          description: >-
+            The attribute code or Quipt attribute Id. Use attributesByCategoryId to get available codes.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryAttributeReply2'
+        '400':
+          description: Invalid request.
+        '404':
+          description: Attribute not found.
+  /categories/availableForFillIn:
+    get:
+      tags:
+        - Taxonomy API
+      summary: Get the attributes available to drive an auto fill-in.
+      description: >-
+        Some attributes can be derived from the values picked for other attributes. This endpoint walks
+        that dependency set and returns the attributes still available to pick.
+
+
+        **Behavior**
+
+        - With no parents supplied, every attribute that acts as a parent in a dependency is returned.
+
+        - With parents supplied, only the dependencies holding all of them are considered. Each contributes
+        its remaining parent, or - when all of its parents are already selected - the children it fills in.
+
+        - Parents are supplied as an indexed query collection, identified by either `Id` or `Code`.
+
+
+        **Common use cases**
+
+        - Drive a progressive attribute picker, calling the endpoint again after each selection.
+
+        - Discover which attributes support auto fill-in before building a listing form.
+      operationId: attributesAvailableForFillIn
+      parameters:
+        - name: parents[{index}].Id
+          in: query
+          description: >-
+            The Quipt attribute id of a parent already selected. Replace {index} with a zero based position,
+            for example `parents[0].Id`. Supply either Id or Code for each parent.
+          required: false
+          schema:
+            type: string
+            format: guid
+        - name: parents[{index}].Code
+          in: query
+          description: >-
+            The attribute code of a parent already selected. Replace {index} with a zero based position,
+            for example `parents[0].Code`.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryAttributeReply'
+        '400':
+          description: Invalid request.
+  /categories/fillIn:
+    get:
+      tags:
+        - Taxonomy API
+      summary: Get the values automatically filled in for dependent attributes.
+      description: >-
+        Given the parent attributes and the values selected for each, returns the dependent (child)
+        attributes and the values they fill in with.
+
+
+        **Behavior**
+
+        - Parents are supplied as an indexed query collection, identified by either `Id` or `Code`, each
+        with the values currently selected for it.
+
+        - At least one parent must be supplied and must resolve, otherwise the request fails.
+
+        - Use availableForFillIn to discover which attributes may be supplied as parents.
+
+
+        **Common use cases**
+
+        - Auto complete an attribute once the attributes it depends on have been answered.
+
+        - Reduce the options presented for a dependent attribute to the valid set.
+      operationId: attributeFillInValues
+      parameters:
+        - name: parents[{index}].Id
+          in: query
+          description: >-
+            The Quipt attribute id of the parent. Replace {index} with a zero based position, for example
+            `parents[0].Id`. Supply either Id or Code for each parent.
+          required: false
+          schema:
+            type: string
+            format: guid
+        - name: parents[{index}].Code
+          in: query
+          description: >-
+            The attribute code of the parent. Replace {index} with a zero based position, for example
+            `parents[0].Code`.
+          required: false
+          schema:
+            type: string
+        - name: parents[{index}].Values[{valueIndex}]
+          in: query
+          description: >-
+            A value selected for the parent. Replace {index} and {valueIndex} with zero based positions,
+            for example `parents[0].Values[0]`.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryAttributeFillInReply'
+        '400':
+          description: Invalid request.
+  /reports/inventory/groupBy/{groupBy}/{pageSize}/{pageNumber}:
+    get:
+      tags:
+        - Report API
+      summary: Inventory rolled up by the requested entity (paged).
+      description: |
+        Returns a paginated inventory snapshot, rolled up by the entity named in the path and bucketed by day or week.
+
+        **Overview**
+        - Reports on the nucleus of the authenticated caller. No company identifier is supplied by the caller.
+        - Every row carries the available quantity, the cost and price breakouts for the group, the value filled out of it, and the rate of requests raised against it.
+
+        **Behavior**
+        - Filters left off are not applied. Supplying no filters reports on everything the nucleus can see.
+        - `startDate` defaults to one year ago when omitted. `endDate` is inclusive.
+        - `top` limits the report to the highest ranked groups, and is ignored when the matching id filter is supplied.
+        - Pagination is controlled with the `pageSize` and `pageNumber` path parameters. `pageSize` is capped at 200.
+
+        **Common use cases**
+        - Stock on hand and its value, by category, warehouse, or vendor.
+        - Week over week movement in cost, price, or request rates.
+      operationId: inventoryGroupByReport
+      parameters:
+        - name: groupBy
+          in: path
+          description: The entity the rows are rolled up by.
+          required: true
+          schema:
+            $ref: '#/components/schemas/InventoryReportGroupByType'
+        - $ref: '#/components/parameters/ReportPageSize'
+        - $ref: '#/components/parameters/ReportPageNumber'
+        - $ref: '#/components/parameters/ReportDateGroupBy'
+        - name: inventoryType
+          in: query
+          description: >-
+            Restricts the report to virtual and/or physical inventory. Both may be supplied as `Virtual,Physical`.
+          required: false
+          schema:
+            $ref: '#/components/schemas/InventoryReportType'
+        - $ref: '#/components/parameters/ReportTop'
+        - $ref: '#/components/parameters/ReportStartDate'
+        - $ref: '#/components/parameters/ReportEndDate'
+        - $ref: '#/components/parameters/ReportChannelIds'
+        - name: vendorIds
+          in: query
+          description: Comma separated list of Quipt vendor IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: guid
+        - $ref: '#/components/parameters/ReportCategoryIds'
+        - $ref: '#/components/parameters/ReportManufacturerIds'
+        - $ref: '#/components/parameters/ReportConditionIds'
+        - $ref: '#/components/parameters/ReportCatalogIds'
+        - $ref: '#/components/parameters/ReportWarehouseIds'
+        - $ref: '#/components/parameters/ReportTagIds'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryGroupByReply'
+        '400':
+          description: Invalid request.
+      security:
+        - quipt_auth:
+            - read:reports
+  /reports/sales/groupBy/{groupBy}/{pageSize}/{pageNumber}:
+    get:
+      tags:
+        - Report API
+      summary: Sales transactions rolled up by the requested entity (paged).
+      description: |
+        Returns paginated sales totals, rolled up by the entity named in the path and bucketed by day or week.
+
+        **Overview**
+        - Reports on the nucleus of the authenticated caller. No company identifier is supplied by the caller.
+        - Every row carries the cost, price, net profit and margin for the group, along with the per unit breakouts behind them.
+
+        **Behavior**
+        - Filters left off are not applied. Supplying no filters reports on everything the nucleus can see.
+        - `endDate` is inclusive.
+        - `top` limits the report to the highest ranked groups, and is ignored when the matching id filter is supplied.
+        - This report has no warehouse filter.
+        - Pagination is controlled with the `pageSize` and `pageNumber` path parameters. `pageSize` is capped at 200.
+
+        **Common use cases**
+        - Profitability by category, channel, or manufacturer.
+        - Weekly sales trends for a set of catalog items.
+      operationId: salesGroupByReport
+      parameters:
+        - name: groupBy
+          in: path
+          description: The entity the rows are rolled up by.
+          required: true
+          schema:
+            $ref: '#/components/schemas/SalesTransactionReportGroupByType'
+        - $ref: '#/components/parameters/ReportPageSize'
+        - $ref: '#/components/parameters/ReportPageNumber'
+        - $ref: '#/components/parameters/ReportDateGroupBy'
+        - $ref: '#/components/parameters/ReportTop'
+        - $ref: '#/components/parameters/ReportStartDate'
+        - $ref: '#/components/parameters/ReportEndDate'
+        - $ref: '#/components/parameters/ReportChannelIds'
+        - $ref: '#/components/parameters/ReportCategoryIds'
+        - $ref: '#/components/parameters/ReportManufacturerIds'
+        - $ref: '#/components/parameters/ReportConditionIds'
+        - $ref: '#/components/parameters/ReportCatalogIds'
+        - $ref: '#/components/parameters/ReportTagIds'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesTransactionGroupByReply'
+        '400':
+          description: Invalid request.
+      security:
+        - quipt_auth:
+            - read:reports
+  /reports/sales/transactions/tracking/{pageSize}/{pageNumber}:
+    get:
+      tags:
+        - Report API
+      summary: Shipped sales transactions with tracking (paged).
+      description: |
+        Returns paginated sales transactions that have shipped, each with the carrier, method, and tracking number it went out under.
+
+        **Overview**
+        - Reports on the nucleus of the authenticated caller. No company identifier is supplied by the caller.
+        - One row per package, so an order line that shipped in several packages appears once per package.
+
+        **Behavior**
+        - Filters left off are not applied. Supplying no filters reports on everything the nucleus can see.
+        - `endDate` is inclusive.
+        - This report has no tag filter.
+        - Pagination is controlled with the `pageSize` and `pageNumber` path parameters. `pageSize` is capped at 200.
+
+        **Common use cases**
+        - Reconcile shipments against carrier invoices.
+        - Audit carrier and method selection for a date range.
+      operationId: salesTransactionsTrackingReport
+      parameters:
+        - $ref: '#/components/parameters/ReportPageSize'
+        - $ref: '#/components/parameters/ReportPageNumber'
+        - $ref: '#/components/parameters/ReportStartDate'
+        - $ref: '#/components/parameters/ReportEndDate'
+        - $ref: '#/components/parameters/ReportChannelIds'
+        - $ref: '#/components/parameters/ReportCategoryIds'
+        - $ref: '#/components/parameters/ReportManufacturerIds'
+        - $ref: '#/components/parameters/ReportConditionIds'
+        - $ref: '#/components/parameters/ReportCatalogIds'
+        - $ref: '#/components/parameters/ReportWarehouseIds'
+        - name: carrierIds
+          in: query
+          description: Comma separated list of Quipt carrier IDs. Use carriers to get available IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: guid
+        - name: carrierMethodIds
+          in: query
+          description: Comma separated list of Quipt carrier method IDs. Use carrierMethods to get available IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: guid
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesTransactionTrackingReply'
+        '400':
+          description: Invalid request.
+      security:
+        - quipt_auth:
+            - read:reports
+  /reports/sales/transactions/{pageSize}/{pageNumber}:
+    get:
+      tags:
+        - Report API
+      summary: Sales transactions (paged).
+      description: |
+        Returns paginated sales transactions, one row per order line.
+
+        **Overview**
+        - Reports on the nucleus of the authenticated caller. No company identifier is supplied by the caller.
+        - Every row carries the order, the item sold, the warehouse it came from, what it sold for, and the current state of the feed behind it.
+
+        **Behavior**
+        - Filters left off are not applied. Supplying no filters reports on everything the nucleus can see.
+        - `endDate` is inclusive.
+        - Feed values on each row reflect the feed as it stands now, not as it stood at the time of sale.
+        - Pagination is controlled with the `pageSize` and `pageNumber` path parameters. `pageSize` is capped at 200.
+
+        **Common use cases**
+        - Line level sales extracts for accounting or BI.
+        - Investigate margin on individual orders.
+      operationId: salesTransactionsReport
+      parameters:
+        - $ref: '#/components/parameters/ReportPageSize'
+        - $ref: '#/components/parameters/ReportPageNumber'
+        - $ref: '#/components/parameters/ReportStartDate'
+        - $ref: '#/components/parameters/ReportEndDate'
+        - $ref: '#/components/parameters/ReportChannelIds'
+        - $ref: '#/components/parameters/ReportCategoryIds'
+        - $ref: '#/components/parameters/ReportManufacturerIds'
+        - $ref: '#/components/parameters/ReportConditionIds'
+        - $ref: '#/components/parameters/ReportCatalogIds'
+        - $ref: '#/components/parameters/ReportWarehouseIds'
+        - $ref: '#/components/parameters/ReportTagIds'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesTransactionReply'
+        '400':
+          description: Invalid request.
+      security:
+        - quipt_auth:
+            - read:reports
+  /reports/export:
+    post:
+      tags:
+        - Report API
+      summary: Request a report as an XLSX workbook.
+      description: |
+        Queues any of the reports for generation as an XLSX workbook and returns the id of the batch that will carry it.
+
+        **Overview**
+        - `Report` selects which report to generate, and which filter block is read. Send only the block that matches.
+        - The filters are the same ones the paged report endpoints take.
+
+        **Asynchronous Processing**
+        - The request creates a background job rather than returning the workbook.
+        - The response includes a `ReportId` which uniquely identifies the job.
+        - The workbook covers the whole report. Any `Paging` supplied on the filter block is ignored.
+
+        **Common use cases**
+        - Extract a full report that is too large to page through.
+        - Hand a finished workbook to a team that does not integrate with the API.
+      operationId: reportExport
+      requestBody:
+        description: The report to generate and the filters to generate it with.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportExportJob'
+        required: true
+      responses:
+        '202':
+          description: Successful operation. The report has been queued for generation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportExportJobReply'
+        '400':
+          description: Invalid input
+      security:
+        - quipt_auth:
+            - write:reports
 components:
   schemas:
     InventoryReply:
@@ -16549,7 +16976,1098 @@ components:
           format: date-time
           nullable: true
           description: Timestamp when the buy box price was last updated.          
+    CategoryAttributeBase:
+      type: object
+      description: An attribute identified by its Quipt id or its code.
+      additionalProperties: false
+      properties:
+        Id:
+          type: string
+          format: guid
+          x-nullable: true
+        Code:
+          type: string
+          x-nullable: true
+    CategoryAttributeReply2:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Result:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/CategoryAttribute'
+    CategoryAttributeFillInValue:
+      type: object
+      description: A child attribute and the values automatically filled in for it.
+      additionalProperties: false
+      properties:
+        Attribute:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/CategoryAttributeBase'
+        Values:
+          type: array
+          description: The values filled in for the attribute.
+          x-nullable: true
+          items:
+            type: string
+    CategoryAttributeFillInReply:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Result:
+          type: array
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/CategoryAttributeFillInValue'
+    ReportEntity:
+      type: object
+      description: A named entity a report row belongs to or references.
+      additionalProperties: false
+      properties:
+        Id:
+          type: string
+          format: guid
+          x-nullable: true
+        Name:
+          type: string
+          x-nullable: true
+    AmountStatistics:
+      type: object
+      description: >-
+        The minimum, maximum and average of a monetary column. Extended is only populated where the
+        report extends the amount across the available quantity.
+      additionalProperties: false
+      properties:
+        Minimum:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Maximum:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Average:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Extended:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+    InventoryRequestRates:
+      type: object
+      description: Percentage of requests raised against the inventory in a group, broken out by reason.
+      additionalProperties: false
+      properties:
+        Total:
+          type: number
+          format: decimal
+        Return:
+          type: number
+          format: decimal
+        LostShipment:
+          type: number
+          format: decimal
+        Intercept:
+          type: number
+          format: decimal
+        MissingAccessory:
+          type: number
+          format: decimal
+        Credit:
+          type: number
+          format: decimal
+        Claim:
+          type: number
+          format: decimal
+    InventoryGroupByPricing:
+      type: object
+      description: Every monetary breakout the report carries for the group.
+      additionalProperties: false
+      properties:
+        Cost:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        MSRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        Price:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        SRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        SalePrice:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        PurchasePrice:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+    InventoryGroupByFilled:
+      type: object
+      description: The value of the requests filled out of the group, split by where the stock came from.
+      additionalProperties: false
+      properties:
+        Physical:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Virtual:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+    InventoryGroupByRequests:
+      type: object
+      description: Request rates for the group, split by where the stock came from.
+      additionalProperties: false
+      properties:
+        Physical:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryRequestRates'
+        Virtual:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryRequestRates'
+        Total:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryRequestRates'
+    InventoryGroupByResult:
+      type: object
+      additionalProperties: false
+      properties:
+        Group:
+          description: The entity the row is grouped by, for example the category or the warehouse.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        CreatedAt:
+          type: string
+          description: The day, or the first day of the week, the row covers.
+          format: date-time
+        Available:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Pricing:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryGroupByPricing'
+        Filled:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryGroupByFilled'
+        Requests:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryGroupByRequests'
+    InventoryGroupByReply:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Paging:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PagingReply'
+        Result:
+          type: array
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/InventoryGroupByResult'
+    SalesTransactionGroupByTotals:
+      type: object
+      description: The group totals the report is built to answer.
+      additionalProperties: false
+      properties:
+        Cost:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Price:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        NetProfit:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Margin:
+          type: number
+          description: Net profit as a percentage of the total price.
+          format: decimal
+        TransactionCount:
+          type: integer
+          format: int32
+        Quantity:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+    SalesTransactionGroupByPricing:
+      type: object
+      description: The per unit monetary breakouts behind the group totals.
+      additionalProperties: false
+      properties:
+        Cost:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        Price:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        MSRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+        SRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AmountStatistics'
+    SalesTransactionGroupByResult:
+      type: object
+      additionalProperties: false
+      properties:
+        Group:
+          description: The entity the row is grouped by, for example the category or the channel.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        CreatedAt:
+          type: string
+          description: The day, or the first day of the week, the row covers.
+          format: date-time
+        Totals:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionGroupByTotals'
+        Pricing:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionGroupByPricing'
+        Stock:
+          description: Quantity still on hand for the group. Not populated by every group by option.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+    SalesTransactionGroupByReply:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Paging:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PagingReply'
+        Result:
+          type: array
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/SalesTransactionGroupByResult'
+    SalesTransactionPurchaseOrder:
+      type: object
+      description: The order line a sales transaction was recorded against.
+      additionalProperties: false
+      properties:
+        Id:
+          type: string
+          format: guid
+        LineId:
+          type: string
+          format: guid
+        CreatedAt:
+          type: string
+          format: date-time
+        Number:
+          type: string
+          x-nullable: true
+        ReferenceNumber:
+          type: string
+          x-nullable: true
+    SalesTransactionItem:
+      type: object
+      description: The catalog item a sales transaction was placed against.
+      additionalProperties: false
+      properties:
+        FeedId:
+          type: string
+          format: guid
+        CatalogId:
+          type: string
+          format: guid
+        InventoryId:
+          type: string
+          format: guid
+        PhysicalInventoryId:
+          type: string
+          format: guid
+          x-nullable: true
+        SKU:
+          type: string
+          x-nullable: true
+        PhysicalSKU:
+          type: string
+          x-nullable: true
+        MPN:
+          type: string
+          x-nullable: true
+        UPC:
+          type: string
+          x-nullable: true
+        Title:
+          type: string
+          x-nullable: true
+        Category:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        Manufacturer:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        Condition:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+    SalesTransactionWarehouse:
+      type: object
+      description: The warehouse the physical stock was held in.
+      additionalProperties: false
+      properties:
+        Id:
+          type: string
+          format: guid
+          x-nullable: true
+        Code:
+          type: string
+          x-nullable: true
+        Location:
+          type: string
+          description: State, postal code and country of the warehouse.
+          x-nullable: true
+    SalesTransactionPricing:
+      type: object
+      description: What the line was sold for and what it cost.
+      additionalProperties: false
+      properties:
+        Cost:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Price:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Freight:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Miscellaneous:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Tax:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        Discount:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        MSRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+    SalesTransactionFeedState:
+      type: object
+      description: The state of the feed as it stands now, not as it stood at the time of sale.
+      additionalProperties: false
+      properties:
+        IsOn:
+          type: boolean
+        Status:
+          description: The catalog status of the feed.
+          oneOf:
+          - $ref: '#/components/schemas/CatalogAdvStatusType'
+        PromotionalPrice:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        PromotionalSRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        CurrentPrice:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+        CurrentSRP:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+    SalesTransactionFulfillment:
+      type: object
+      description: How the order line was serviced.
+      additionalProperties: false
+      properties:
+        FilledById:
+          type: string
+          description: The partner the line was filled by, when it was not filled from own stock.
+          format: guid
+          x-nullable: true
+        Filled:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Ordered:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Shipped:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Canceled:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+    SalesTransactionShipment:
+      type: object
+      description: How the package left the warehouse.
+      additionalProperties: false
+      properties:
+        Id:
+          type: string
+          format: guid
+        PurchaseOrderLineFillId:
+          type: string
+          format: guid
+        Shipped:
+          description: The number of packages the line went out in.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        TrackingNumber:
+          type: string
+          x-nullable: true
+        Carrier:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        CarrierMethod:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+    SalesTransactionResult:
+      type: object
+      additionalProperties: false
+      properties:
+        Status:
+          description: The status of the order line.
+          oneOf:
+          - $ref: '#/components/schemas/PurchaseOrderStatusType'
+        PurchaseOrder:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionPurchaseOrder'
+        Channel:
+          description: The channel the order was taken on.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        EndChannel:
+          description: The channel the order was ultimately destined for, where the sale was brokered.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        Item:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionItem'
+        Warehouse:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionWarehouse'
+        Pricing:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionPricing'
+        Feed:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionFeedState'
+        Fulfillment:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionFulfillment'
+    SalesTransactionReply:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Paging:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PagingReply'
+        Result:
+          type: array
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/SalesTransactionResult'
+    SalesTransactionTrackingResult:
+      type: object
+      additionalProperties: false
+      properties:
+        Status:
+          description: The status of the order line.
+          oneOf:
+          - $ref: '#/components/schemas/PurchaseOrderStatusType'
+        PurchaseOrder:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionPurchaseOrder'
+        Channel:
+          description: The channel the order was taken on.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        EndChannel:
+          description: The channel the order was ultimately destined for, where the sale was brokered.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReportEntity'
+        Item:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionItem'
+        Warehouse:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionWarehouse'
+        Pricing:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionPricing'
+        Feed:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionFeedState'
+        Shipment:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionShipment'
+    SalesTransactionTrackingReply:
+      type: object
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+        Paging:
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PagingReply'
+        Result:
+          type: array
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/SalesTransactionTrackingResult'
+    ReportFilters:
+      type: object
+      description: Filters shared by every report.
+      additionalProperties: false
+      properties:
+        StartDate:
+          type: string
+          format: date-time
+          x-nullable: true
+        EndDate:
+          type: string
+          description: Inclusive.
+          format: date-time
+          x-nullable: true
+        ChannelIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        CategoryIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        ManufacturerIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        ConditionIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        CatalogIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        WarehouseIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+        TagIds:
+          type: array
+          x-nullable: true
+          items:
+            type: string
+            format: guid
+    InventoryGroupByFilters:
+      description: Filters for the inventory group by report.
+      allOf:
+      - $ref: '#/components/schemas/ReportFilters'
+      - type: object
+        additionalProperties: false
+        properties:
+          GroupBy:
+            $ref: '#/components/schemas/InventoryReportGroupByType'
+          DateGroupBy:
+            $ref: '#/components/schemas/ReportDateGroupByType'
+          InventoryType:
+            $ref: '#/components/schemas/InventoryReportType'
+          Top:
+            type: integer
+            description: Restricts the report to the top N groups. Leave unset to return all of them.
+            format: int32
+            x-nullable: true
+          VendorIds:
+            type: array
+            x-nullable: true
+            items:
+              type: string
+              format: guid
+    SalesTransactionFilters:
+      description: Filters for the sales transaction report.
+      allOf:
+      - $ref: '#/components/schemas/ReportFilters'
+    SalesTransactionGroupByFilters:
+      description: >-
+        Filters for the sales group by report. The report has no warehouse filter, so WarehouseIds is ignored.
+      allOf:
+      - $ref: '#/components/schemas/ReportFilters'
+      - type: object
+        additionalProperties: false
+        properties:
+          GroupBy:
+            $ref: '#/components/schemas/SalesTransactionReportGroupByType'
+          DateGroupBy:
+            $ref: '#/components/schemas/ReportDateGroupByType'
+          Top:
+            type: integer
+            description: Restricts the report to the top N groups. Leave unset to return all of them.
+            format: int32
+            x-nullable: true
+    SalesTransactionTrackingFilters:
+      description: >-
+        Filters for the sales tracking report. The report has no tag filter, so TagIds is ignored.
+      allOf:
+      - $ref: '#/components/schemas/ReportFilters'
+      - type: object
+        additionalProperties: false
+        properties:
+          CarrierIds:
+            type: array
+            x-nullable: true
+            items:
+              type: string
+              format: guid
+          CarrierMethodIds:
+            type: array
+            x-nullable: true
+            items:
+              type: string
+              format: guid
+    ReportExportJob:
+      type: object
+      description: >-
+        The report to generate as an XLSX workbook and the filters to generate it with. Supply only the
+        filter block matching Report, the others are ignored.
+      additionalProperties: false
+      properties:
+        TransactionId:
+          type: string
+          x-nullable: true
+        Report:
+          $ref: '#/components/schemas/ReportExportType'
+        InventoryGroupBy:
+          description: Required when Report is InventoryGroupBy.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InventoryGroupByFilters'
+        SalesTransactions:
+          description: Required when Report is SalesTransactions.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionFilters'
+        SalesTransactionsGroupBy:
+          description: Required when Report is SalesTransactionsGroupBy.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionGroupByFilters'
+        SalesTransactionsWithTracking:
+          description: Required when Report is SalesTransactionsWithTracking.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SalesTransactionTrackingFilters'
+    ReportExportJobReply:
+      type: object
+      additionalProperties: false
+      properties:
+        ReportId:
+          type: string
+          description: Identifies the queued job. Use it to monitor the job and download the workbook.
+          format: guid
+        RecordsReceived:
+          type: integer
+          format: int32
+        TransactionId:
+          type: string
+          x-nullable: true
+        TransactionTime:
+          type: string
+          format: date-time
+        Success:
+          type: boolean
+          description: Gets a value indicating whether the operation completed without any fatal errors.
+        Messages:
+          type: array
+          description: Collection of messages.
+          x-nullable: true
+          items:
+            $ref: '#/components/schemas/JobReplyMessage'
+    ReportExportType:
+      type: integer
+      description: >-
+        Values:
+        * `0` - InventoryGroupBy
+        * `1` - SalesTransactions
+        * `2` - SalesTransactionsGroupBy
+        * `3` - SalesTransactionsWithTracking
+      x-enumNames:
+      - InventoryGroupBy
+      - SalesTransactions
+      - SalesTransactionsGroupBy
+      - SalesTransactionsWithTracking
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+    InventoryReportGroupByType:
+      type: integer
+      description: >-
+        The entity the inventory report rolls its rows up into.
+        Values:
+        * `0` - Category
+        * `1` - Vendor
+        * `2` - Channel
+        * `3` - ManufacturerAndCategory
+        * `4` - Manufacturer
+        * `5` - Condition
+        * `6` - CatalogItem
+        * `7` - Warehouse
+      x-enumNames:
+      - Category
+      - Vendor
+      - Channel
+      - ManufacturerAndCategory
+      - Manufacturer
+      - Condition
+      - CatalogItem
+      - Warehouse
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+    SalesTransactionReportGroupByType:
+      type: integer
+      description: >-
+        The entity the sales report rolls its rows up into.
+        Values:
+        * `0` - Category
+        * `1` - Channel
+        * `2` - ManufacturerAndCategory
+        * `3` - Manufacturer
+        * `4` - Condition
+        * `5` - CatalogItem
+      x-enumNames:
+      - Category
+      - Channel
+      - ManufacturerAndCategory
+      - Manufacturer
+      - Condition
+      - CatalogItem
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    ReportDateGroupByType:
+      type: integer
+      description: >-
+        The date bucket a grouped report collapses its rows into.
+        Values:
+        * `0` - Day
+        * `1` - Week
+      x-enumNames:
+      - Day
+      - Week
+      enum:
+      - 0
+      - 1
+    InventoryReportType:
+      type: integer
+      description: >-
+        Restricts an inventory report to virtual and/or physical inventory.
+        Values:
+        * `0` - Any
+        * `1` - Virtual
+        * `2` - Physical
+      x-enumFlags: true
+      x-enumNames:
+      - Any
+      - Virtual
+      - Physical
+      enum:
+      - 0
+      - 1
+      - 2
 ### schemas end ###   
+  parameters:
+    ReportPageSize:
+      name: pageSize
+      in: path
+      description: The number of rows to return. Capped at 200.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    ReportPageNumber:
+      name: pageNumber
+      in: path
+      description: The page of rows to return.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    ReportDateGroupBy:
+      name: dateGroupBy
+      in: query
+      description: The date bucket the rows are collapsed into. Defaults to Day.
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReportDateGroupByType'
+    ReportTop:
+      name: top
+      in: query
+      description: >-
+        Restricts the report to the top N groups. Ignored when the matching id filter is supplied.
+      required: false
+      schema:
+        type: integer
+        format: int32
+    ReportStartDate:
+      name: startDate
+      in: query
+      description: >-
+        The first day to report on. Defaults to one year ago for the inventory report, unbounded for the sales reports.
+      required: false
+      schema:
+        type: string
+        format: date
+    ReportEndDate:
+      name: endDate
+      in: query
+      description: The last day to report on. Inclusive.
+      required: false
+      schema:
+        type: string
+        format: date
+    ReportChannelIds:
+      name: channelIds
+      in: query
+      description: Comma separated list of Quipt channel IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportCategoryIds:
+      name: categoryIds
+      in: query
+      description: Comma separated list of Quipt category IDs. Use the Taxonomy API to get available IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportManufacturerIds:
+      name: manufacturerIds
+      in: query
+      description: Comma separated list of Quipt manufacturer IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportConditionIds:
+      name: conditionIds
+      in: query
+      description: Comma separated list of Quipt condition IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportCatalogIds:
+      name: catalogIds
+      in: query
+      description: Comma separated list of Quipt catalog IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportWarehouseIds:
+      name: warehouseIds
+      in: query
+      description: Comma separated list of Quipt warehouse IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
+    ReportTagIds:
+      name: tagIds
+      in: query
+      description: Comma separated list of Quipt inventory tag IDs.
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: guid
   securitySchemes:
     quipt_auth:
       type: http
