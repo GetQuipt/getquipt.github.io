@@ -8504,6 +8504,21 @@ components:
           x-nullable: true
           oneOf:
           - $ref: '#/components/schemas/Quantity'
+        Acknowledged:
+          description: The total quantity acknowledged (Accepted + Rejected).
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Accepted:
+          description: The quantity accepted.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'
+        Rejected:
+          description: The quantity rejected.
+          x-nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Quantity'    
         LineNumber:
           type: integer
           description: The Quipt generated line number.
